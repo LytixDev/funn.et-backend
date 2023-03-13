@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.exceptions;
+package edu.ntnu.idatt2105.placeholder.exceptions.user;
 
 /**
  * Exception thrown when a user does not exist.

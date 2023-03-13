@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.model;
+package edu.ntnu.idatt2105.placeholder.model.user;
 
 /**
  * Enum representing the role of a user.

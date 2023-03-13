@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.model;
+package edu.ntnu.idatt2105.placeholder.model.user;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,32 +32,32 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "`user`")
 public class User implements UserDetails {
     
     @Id
-    @Column(name = "username", length = 64, nullable = false)
+    @Column(name = "`username`", length = 64, nullable = false)
     @NonNull
     private String username;
 
-    @Column(name = "email", unique = true, length = 64, nullable = false)
+    @Column(name = "`email`", unique = true, length = 64, nullable = false)
     @NonNull
     private String email;
 
-    @Column(name = "first_name", length = 64, nullable = false)
+    @Column(name = "`first_name`", length = 64, nullable = false)
     @NonNull
     private String firstName;
 
-    @Column(name = "last_name", length = 64, nullable = false)
+    @Column(name = "`last_name`", length = 64, nullable = false)
     @NonNull
     private String lastName;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "`password`", nullable = false)
     @NonNull
     private String password;
     
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "`role`", nullable = false)
     @NonNull
     private Role role;
 

@@ -1,15 +1,16 @@
-package edu.ntnu.idatt2105.placeholder.service;
+package edu.ntnu.idatt2105.placeholder.service.user;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
-import edu.ntnu.idatt2105.placeholder.exceptions.EmailAlreadyExistsException;
-import edu.ntnu.idatt2105.placeholder.exceptions.UserDoesNotExistsException;
-import edu.ntnu.idatt2105.placeholder.exceptions.UsernameAlreadyExistsException;
-import edu.ntnu.idatt2105.placeholder.model.User;
-import edu.ntnu.idatt2105.placeholder.repository.UserRepository;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.EmailAlreadyExistsException;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.placeholder.model.user.User;
+import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +22,10 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     
-    @NonNull
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Checks if a user with the given username exists.
@@ -79,9 +80,9 @@ public class UserService {
         try {
             return userRepository.save(user);
         } catch (Exception e) {
-            if (e.getMessage().contains("username")) {
+            if (e.getMessage().toLowerCase().contains("username")) {
                 throw new UsernameAlreadyExistsException("A user with the username "+ user.getUsername() + " already exists.");
-            } else if (e.getMessage().contains("email")) {
+            } else if (e.getMessage().toLowerCase().contains("email")) {
                 throw new EmailAlreadyExistsException("A user with the email "+ user.getEmail() + " already exists.");
             } else {
                 throw new DatabaseException("An error occurred while saving the user.");
@@ -106,47 +107,32 @@ public class UserService {
     /**
      * Deletes a user from the database by username.
      * @param username the username of the user to delete.
-     * @throws DatabaseException if an error occurred while deleting the user.
      * @throws UserDoesNotExistsException if the user does not exist.
      * @throws NullPointerException if username is null.
      */
-    public void deleteUserByUsername(@NonNull String username) throws DatabaseException, UserDoesNotExistsException {
-        try {
-            userRepository.delete(getUserByUsername(username));
-        } catch (Exception e) {
-            throw new DatabaseException("An error occurred while deleting the user with username " + username + ", are you sure it exists?");
-        }
+    public void deleteUserByUsername(@NonNull String username) throws UserDoesNotExistsException {
+        userRepository.delete(getUserByUsername(username));
     }
 
     /**
      * Deletes a user from the database by email.
      * @param email the email of the user to delete.
-     * @throws DatabaseException if an error occurred while deleting the user.
      * @throws UserDoesNotExistsException if the user does not exist.
      * @throws NullPointerException if email is null.
      */
-    public void deleteUserByEmail(@NonNull String email) throws DatabaseException, UserDoesNotExistsException {
-        try {
-            userRepository.delete(getUserByEmail(email));
-        } catch (Exception e) {
-            throw new DatabaseException("An error occurred while deleting the user with email " + email + ", are you sure it exists?");
-        }
+    public void deleteUserByEmail(@NonNull String email) throws UserDoesNotExistsException {
+        userRepository.delete(getUserByEmail(email));
     }
 
     /**
      * Updates a user in the database.
      * @param user the user to update.
      * @return the updated user.
-     * @throws DatabaseException if an error occurred while updating the user.
      * @throws UserDoesNotExistsException if the user does not exist.
      * @throws NullPointerException if user is null.
      */
-    public User updateUser(@NonNull User user) throws DatabaseException, UserDoesNotExistsException {
-        try {
-            return userRepository.save(user);
-        } catch (Exception e) {
-            throw new DatabaseException("An error occurred while updating the user.");
-        }
+    public User updateUser(@NonNull User user) throws UserDoesNotExistsException {
+        return userRepository.save(getUserByUsername(user.getUsername()));
     }
 
     /**

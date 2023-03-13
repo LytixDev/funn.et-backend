@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.dto;
+package edu.ntnu.idatt2105.placeholder.dto.user;
 
 import lombok.NonNull;
 import lombok.AllArgsConstructor;

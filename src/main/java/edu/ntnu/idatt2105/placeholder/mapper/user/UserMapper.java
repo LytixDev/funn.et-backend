@@ -1,10 +1,9 @@
-package edu.ntnu.idatt2105.placeholder.mapper;
+package edu.ntnu.idatt2105.placeholder.mapper.user;
 
-import edu.ntnu.idatt2105.placeholder.dto.UserDTO;
-import edu.ntnu.idatt2105.placeholder.model.User;
+import edu.ntnu.idatt2105.placeholder.dto.user.UserDTO;
+import edu.ntnu.idatt2105.placeholder.model.user.User;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -13,7 +12,9 @@ import org.mapstruct.factory.Mappers;
  * @version 1.0
  * @date 13.3.2023
  */
-@Mapper
+@Mapper(
+    componentModel = "spring"
+)
 public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
@@ -24,6 +25,5 @@ public interface UserMapper {
      * @param user The User to map.
      * @return The mapped UserDTO.
      */
-    @Mapping(target = "password", ignore = true)
     UserDTO userToUserDTO(User user);
 }

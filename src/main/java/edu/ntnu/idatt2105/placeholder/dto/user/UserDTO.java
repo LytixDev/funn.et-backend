@@ -1,6 +1,6 @@
-package edu.ntnu.idatt2105.placeholder.dto;
+package edu.ntnu.idatt2105.placeholder.dto.user;
 
-import edu.ntnu.idatt2105.placeholder.model.Role;
+import edu.ntnu.idatt2105.placeholder.model.user.Role;
 
 import lombok.NonNull;
 import lombok.AllArgsConstructor;

@@ -1,11 +1,11 @@
-package edu.ntnu.idatt2105.placeholder.repository;
+package edu.ntnu.idatt2105.placeholder.repository.user;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.ntnu.idatt2105.placeholder.model.User;
+import edu.ntnu.idatt2105.placeholder.model.user.User;
 import lombok.NonNull;
 
 /**
