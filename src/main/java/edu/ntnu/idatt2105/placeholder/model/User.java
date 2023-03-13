@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @NonNull
     private String username;
 
-    @Column(name = "email", length = 64, nullable = false)
+    @Column(name = "email", unique = true, length = 64, nullable = false)
     @NonNull
     private String email;
 
