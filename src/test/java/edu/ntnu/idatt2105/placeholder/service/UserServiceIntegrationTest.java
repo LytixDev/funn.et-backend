@@ -53,6 +53,7 @@ public class UserServiceIntegrationTest {
 
     @Before
     public void setUp() {
+        // Positive tests setup
         user = new User("username", "email", "firstName", "lastName", "password", Role.USER);
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
@@ -65,6 +66,7 @@ public class UserServiceIntegrationTest {
 
         when(userRepository.findAll()).thenReturn(List.of(user));
 
+        // Negative tests setup
         badUser = new User("badUsername", "badEmail", "badFirstName", "badLastName", "badPassword", Role.USER);
         
         when(userRepository.findByUsername(badUser.getUsername())).thenReturn(Optional.empty());
