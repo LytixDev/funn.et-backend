@@ -4,6 +4,8 @@ import edu.ntnu.idatt2105.placeholder.dto.UserDTO;
 import edu.ntnu.idatt2105.placeholder.model.User;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 /**
  * Class used to map between User and UserDTO.
