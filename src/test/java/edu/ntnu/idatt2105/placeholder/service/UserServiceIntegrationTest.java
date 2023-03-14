@@ -47,59 +47,59 @@ public class UserServiceIntegrationTest {
     @MockBean 
     UserRepository userRepository;
 
-    User user;
+    User existingUser;
 
-    User badUser;
+    User nonExistingUser;
 
     @Before
     public void setUp() {
         // Positive tests setup
-        user = new User("username", "email", "firstName", "lastName", "password", Role.USER);
+        existingUser = new User("username", "email", "firstName", "lastName", "password", Role.USER);
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(existingUser.getUsername())).thenReturn(Optional.of(existingUser));
 
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(existingUser.getEmail())).thenReturn(Optional.of(existingUser));
 
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(existingUser)).thenReturn(existingUser);
 
-        doNothing().when(userRepository).delete(user);
+        doNothing().when(userRepository).delete(existingUser);
 
-        when(userRepository.findAll()).thenReturn(List.of(user));
+        when(userRepository.findAll()).thenReturn(List.of(existingUser));
 
-        // Negative tests setup
-        badUser = new User("badUsername", "badEmail", "badFirstName", "badLastName", "badPassword", Role.USER);
+        nonExistingUser = new User("newUsername", "newEmail", "newFirstName", "newLastName", "newPassword", Role.USER);
         
-        when(userRepository.findByUsername(badUser.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(nonExistingUser.getUsername())).thenReturn(Optional.empty());
 
-        when(userRepository.findByEmail(badUser.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(nonExistingUser.getEmail())).thenReturn(Optional.empty());
 
-        when(userRepository.save(badUser)).thenThrow(new RuntimeException("Username already exists"));
+        when(userRepository.save(nonExistingUser)).thenReturn(nonExistingUser);
 
-        doNothing().when(userRepository).delete(badUser);
+        doNothing().when(userRepository).delete(nonExistingUser);
     }
 
     @Test
     public void testSaveUser() {
         User newUser;
         try {
-            newUser = userService.saveUser(user);
+            newUser = userService.saveUser(nonExistingUser);
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
             return;
         }
         
-        assertEquals(user.getUsername(), newUser.getUsername());
-        assertEquals(user.getEmail(), newUser.getEmail());
-        assertEquals(user.getFirstName(), newUser.getFirstName());
-        assertEquals(user.getLastName(), newUser.getLastName());
-        assertEquals(user.getPassword(), newUser.getPassword());
-        assertEquals(user.getRole(), newUser.getRole());
+        assertEquals(nonExistingUser.getUsername(), newUser.getUsername());
+        assertEquals(nonExistingUser.getEmail(), newUser.getEmail());
+        assertEquals(nonExistingUser.getFirstName(), newUser.getFirstName());
+        assertEquals(nonExistingUser.getLastName(), newUser.getLastName());
+        assertEquals(nonExistingUser.getPassword(), newUser.getPassword());
+        assertEquals(nonExistingUser.getRole(), newUser.getRole());
     }
 
     @Test
     public void testSaveUserBadUsername() {
         try {
-            userService.saveUser(badUser);
+            userService.saveUser(existingUser);
             fail();
         } catch (Exception e) {
             assertEquals(UsernameAlreadyExistsException.class, e.getClass());
@@ -108,25 +108,25 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void testUsernameExists() {
-        boolean exists = userService.usernameExists(user.getUsername());
+        boolean exists = userService.usernameExists(existingUser.getUsername());
         assertTrue(exists);
     }
 
     @Test
     public void testUsernameExistsBadUsername() {
-        boolean exists = userService.usernameExists(badUser.getUsername());
+        boolean exists = userService.usernameExists(nonExistingUser.getUsername());
         assertFalse(exists);
     }
 
     @Test
     public void testEmailExists() {
-        boolean exists = userService.emailExists(user.getEmail());
+        boolean exists = userService.emailExists(existingUser.getEmail());
         assertTrue(exists);
     }
 
     @Test
     public void testEmailExistsBadEmail() {
-        boolean exists = userService.emailExists(badUser.getEmail());
+        boolean exists = userService.emailExists(nonExistingUser.getEmail());
         assertFalse(exists);
     }
 
@@ -134,24 +134,24 @@ public class UserServiceIntegrationTest {
     public void testGetUserByUsername() {
         User newUser;
         try {
-            newUser = userService.getUserByUsername(user.getUsername());
+            newUser = userService.getUserByUsername(existingUser.getUsername());
         } catch (Exception e) {
             fail();
             return;
         }
         
-        assertEquals(user.getUsername(), newUser.getUsername());
-        assertEquals(user.getEmail(), newUser.getEmail());
-        assertEquals(user.getFirstName(), newUser.getFirstName());
-        assertEquals(user.getLastName(), newUser.getLastName());
-        assertEquals(user.getPassword(), newUser.getPassword());
-        assertEquals(user.getRole(), newUser.getRole());
+        assertEquals(existingUser.getUsername(), newUser.getUsername());
+        assertEquals(existingUser.getEmail(), newUser.getEmail());
+        assertEquals(existingUser.getFirstName(), newUser.getFirstName());
+        assertEquals(existingUser.getLastName(), newUser.getLastName());
+        assertEquals(existingUser.getPassword(), newUser.getPassword());
+        assertEquals(existingUser.getRole(), newUser.getRole());
     }
 
     @Test
     public void testGetUserByUsernameBadUsername() {
         try {
-            userService.getUserByUsername(badUser.getUsername());
+            userService.getUserByUsername(nonExistingUser.getUsername());
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), UserDoesNotExistsException.class);
@@ -162,24 +162,24 @@ public class UserServiceIntegrationTest {
     public void testGetUserByEmail() {
         User newUser;
         try {
-            newUser = userService.getUserByEmail(user.getEmail());
+            newUser = userService.getUserByEmail(existingUser.getEmail());
         } catch (Exception e) {
             fail();
             return;
         }
         
-        assertEquals(user.getUsername(), newUser.getUsername());
-        assertEquals(user.getEmail(), newUser.getEmail());
-        assertEquals(user.getFirstName(), newUser.getFirstName());
-        assertEquals(user.getLastName(), newUser.getLastName());
-        assertEquals(user.getPassword(), newUser.getPassword());
-        assertEquals(user.getRole(), newUser.getRole());
+        assertEquals(existingUser.getUsername(), newUser.getUsername());
+        assertEquals(existingUser.getEmail(), newUser.getEmail());
+        assertEquals(existingUser.getFirstName(), newUser.getFirstName());
+        assertEquals(existingUser.getLastName(), newUser.getLastName());
+        assertEquals(existingUser.getPassword(), newUser.getPassword());
+        assertEquals(existingUser.getRole(), newUser.getRole());
     }
 
     @Test
     public void testGetUserByEmailBadEmail() {
         try {
-            userService.getUserByEmail(badUser.getEmail());
+            userService.getUserByEmail(nonExistingUser.getEmail());
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), UserDoesNotExistsException.class);
@@ -189,7 +189,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testDeleteUser() {
         try {
-            userService.deleteUser(user);
+            userService.deleteUser(existingUser);
         } catch (Exception e) {
             fail();
         }
@@ -198,7 +198,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testDeleteUserByUsername() {
         try {
-            userService.deleteUserByUsername(user.getUsername());
+            userService.deleteUserByUsername(existingUser.getUsername());
         } catch (Exception e) {
             fail();
         }
@@ -207,7 +207,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testDeleteUserByUsernameBadUsername() {
         try {
-            userService.deleteUserByUsername(badUser.getUsername());
+            userService.deleteUserByUsername(nonExistingUser.getUsername());
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), UserDoesNotExistsException.class);
@@ -217,7 +217,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testDeleteUserByEmail() {
         try {
-            userService.deleteUserByEmail(user.getEmail());
+            userService.deleteUserByEmail(existingUser.getEmail());
         } catch (Exception e) {
             fail();
         }
@@ -226,7 +226,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testDeleteUserByEmailBadEmail() {
         try {
-            userService.deleteUserByEmail(badUser.getEmail());
+            userService.deleteUserByEmail(nonExistingUser.getEmail());
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), UserDoesNotExistsException.class);
@@ -237,25 +237,25 @@ public class UserServiceIntegrationTest {
     public void testUpdateUser() {
         User newUser;
         try {
-            newUser = userService.updateUser(user);
+            newUser = userService.updateUser(existingUser);
         } catch (Exception e) {
             fail();
             return;
         }
         
-        assertEquals(user.getUsername(), newUser.getUsername());
-        assertEquals(user.getEmail(), newUser.getEmail());
-        assertEquals(user.getFirstName(), newUser.getFirstName());
-        assertEquals(user.getLastName(), newUser.getLastName());
-        assertEquals(user.getPassword(), newUser.getPassword());
-        assertEquals(user.getRole(), newUser.getRole());
+        assertEquals(existingUser.getUsername(), newUser.getUsername());
+        assertEquals(existingUser.getEmail(), newUser.getEmail());
+        assertEquals(existingUser.getFirstName(), newUser.getFirstName());
+        assertEquals(existingUser.getLastName(), newUser.getLastName());
+        assertEquals(existingUser.getPassword(), newUser.getPassword());
+        assertEquals(existingUser.getRole(), newUser.getRole());
     }
 
     @Test
     public void testUpdateUserBadUsername() {
-        assertFalse(userService.usernameExists(badUser.getUsername()));
+        assertFalse(userService.usernameExists(nonExistingUser.getUsername()));
         try {
-            userService.updateUser(badUser);
+            userService.updateUser(nonExistingUser);
             fail();
         } catch (Exception e) {
             assertEquals(UserDoesNotExistsException.class, e.getClass());

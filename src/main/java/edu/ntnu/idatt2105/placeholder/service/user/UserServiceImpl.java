@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserDoesNotExistsException if user does not exist.
      */
     public User getUserByUsername(@NonNull String username) throws UserDoesNotExistsException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UserDoesNotExistsException());
+        return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistsException::new);
     }
 
     /**
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserDoesNotExistsException if user does not exist.
      */
     public User getUserByEmail(@NonNull String email) throws UserDoesNotExistsException {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserDoesNotExistsException());
+        return userRepository.findByEmail(email).orElseThrow(UserDoesNotExistsException::new);
     }
     
     /**
@@ -77,16 +77,16 @@ public class UserServiceImpl implements UserService {
      * @throws NullPointerException if user is null.
      */
     public User saveUser(@NonNull User user) throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, NullPointerException {
+        if (usernameExists(user.getUsername()))
+            throw new UsernameAlreadyExistsException("A user with the username "+ user.getUsername() + " already exists.");
+
+        if (emailExists(user.getEmail()))
+            throw new EmailAlreadyExistsException("A user with the email "+ user.getEmail() + " already exists.");
+        
         try {
             return userRepository.save(user);
         } catch (Exception e) {
-            if (e.getMessage().toLowerCase().contains("username")) {
-                throw new UsernameAlreadyExistsException("A user with the username "+ user.getUsername() + " already exists.");
-            } else if (e.getMessage().toLowerCase().contains("email")) {
-                throw new EmailAlreadyExistsException("A user with the email "+ user.getEmail() + " already exists.");
-            } else {
-                throw new DatabaseException("An error occurred while saving the user.");
-            }
+            throw new DatabaseException("An error occurred while saving the user.");
         }
     }
 
