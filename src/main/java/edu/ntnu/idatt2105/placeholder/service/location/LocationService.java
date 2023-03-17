@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.NonNull;
 
 /**
- * Interface for the location service.
+ * Interface for the service class for the location repository.
  * @author Callum G.
  * @version 1.0 - 17.03.2023
  */
@@ -20,8 +20,8 @@ public interface LocationService {
   Location saveLocation(@NonNull Location location)
     throws LocationAlreadyExistsException, DatabaseException, NullPointerException;
 
-  Location getLocationById(@NonNull Long id)
-    throws LocationDoesntExistException, DatabaseException, NullPointerException;
+  Location getLocationById(Long id)
+    throws LocationDoesntExistException, DatabaseException;
 
   Location updateLocation(@NonNull Location location)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
@@ -29,8 +29,8 @@ public interface LocationService {
   void deleteLocation(@NonNull Location location)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  void deleteLocation(@NonNull Long id)
-    throws LocationDoesntExistException, DatabaseException, NullPointerException;
+  void deleteLocation(Long id)
+    throws LocationDoesntExistException, DatabaseException;
 
   List<Location> getLocationsByPostCode(@NonNull PostCode postcode)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
@@ -41,18 +41,18 @@ public interface LocationService {
   List<Location> getLocationsByCity(@NonNull String city)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<Location> getLocationsByLongitude(@NonNull Double longitude)
+  List<Location> getLocationsByLongitude(Double longitude)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<Location> getLocationsByLatitude(@NonNull Double latitude)
+  List<Location> getLocationsByLatitude(Double latitude)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
   List<Location> getLocationsInDistance(
-    @NonNull Double latitude,
-    @NonNull Double longitude,
-    @NonNull Double distance
+    Double latitude,
+    Double longitude,
+    Double distance
   )
-    throws LocationDoesntExistException, DatabaseException, NullPointerException;
+    throws LocationDoesntExistException, DatabaseException, IllegalArgumentException;
 
   List<Location> getAllLocations() throws DatabaseException;
 }
