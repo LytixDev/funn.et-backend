@@ -11,8 +11,7 @@ import lombok.NonNull;
  * Data transfer object for user.
  * Used to transfer user data between the backend and the application.
  * @author Callum G.
- * @version 1.0
- * @date 17.3.2023
+ * @version 1.0 - 13.3.2023
  */
 @Data
 @AllArgsConstructor

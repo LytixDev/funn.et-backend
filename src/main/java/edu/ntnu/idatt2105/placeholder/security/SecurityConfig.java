@@ -10,8 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Configures spring security
  *
  * @author Carl G.
- * @version 1.0
- * @date 17.3.2023
+ * @version 1.0 - 17.3.2023
  */
 @Configuration
 @EnableWebSecurity

@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service class for user operations on the user repository.
  * @author Callum G.
- * @version 1.0
- * @date 13.3.2023
+ * @version 1.0 - 13.3.2023
  */
 @Service
 @RequiredArgsConstructor

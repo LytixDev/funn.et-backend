@@ -8,8 +8,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * Class used to map between User and UserDTO.
  * @author Callum G.
- * @version 1.0
- * @date 13.3.2023
+ * @version 1.0 - 13.3.2023
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {

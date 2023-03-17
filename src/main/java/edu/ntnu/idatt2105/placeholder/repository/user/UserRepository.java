@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Repository for user operations on the database.
  * @author Callum G.
- * @version 1.0
- * @date 13.3.2023
+ * @version 1.0 - 13.3.2023
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
