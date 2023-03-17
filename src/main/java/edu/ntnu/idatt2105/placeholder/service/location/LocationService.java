@@ -2,6 +2,8 @@ package edu.ntnu.idatt2105.placeholder.service.location;
 
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
+import lombok.NonNull;
+
 import java.util.List;
 
 /**
@@ -10,22 +12,30 @@ import java.util.List;
  * @version 1.0 - 17.03.2023
  */
 public interface LocationService {
-  Location saveLocation(Location location);
+  Location saveLocation(@NonNull Location location);
 
-  Location getLocationById(Long id);
+  Location getLocationById(@NonNull Long id);
 
-  Location updateLocation(Location location);
+  Location updateLocation(@NonNull Location location);
 
-  void deleteLocation(Location location);
+  void deleteLocation(@NonNull Location location);
 
-  void deleteLocation(Long id);
+  void deleteLocation(@NonNull Long id);
 
-  List<String> getAddressesByPostcode(PostCode postcode);
+  List<String> getAddressesByPostcode(@NonNull PostCode postcode);
+
+  List<String> getAddressesByPostcode(@NonNull String postcode);
+
+  List<String> getAddressesByCity(@NonNull String city);
+
+  List<String> getLocationsByLongitude(@NonNull Double longitude);
+
+  List<String> getLocationsByLatitude(@NonNull Double latitude);
 
   List<Location> getLocationsInDistance(
-    Double latitude,
-    Double longitude,
-    Double distance
+    @NonNull Double latitude,
+    @NonNull Double longitude,
+    @NonNull Double distance
   );
 
   List<Location> getAllLocations();

@@ -1,20 +1,25 @@
 package edu.ntnu.idatt2105.placeholder.service.location;
 
+import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
+import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeAlreadyExistsException;
+import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
+import lombok.NonNull;
+
 import java.util.List;
 
 public interface PostCodeService {
-  PostCode savePostcode(PostCode postcode);
+  PostCode savePostCode(@NonNull PostCode postcode) throws PostCodeAlreadyExistsException, DatabaseException, NullPointerException;
 
-  PostCode getPostcodeById(Long id);
+  boolean postCodeExists(@NonNull PostCode postcode) throws NullPointerException;
 
-  PostCode updatePostcode(PostCode postcode);
+  PostCode updatePostCode(@NonNull PostCode postcode) throws PostCodeDoesntExistException, DatabaseException, NullPointerException;
 
-  void deletePostcode(PostCode postcode);
+  void deletePostCode(@NonNull PostCode postcode) throws PostCodeDoesntExistException, DatabaseException, NullPointerException;
 
-  List<PostCode> getAllPostcodes();
+  List<PostCode> getAllPostCodes() throws DatabaseException;
 
-  List<String> getCitiesByPostcode(String postcode);
+  List<String> getCitiesByPostCode(@NonNull String postcode) throws DatabaseException, NullPointerException;
 
-  List<String> getPostcodesByCity(String city);
+  List<String> getPostCodesByCity(@NonNull String city) throws DatabaseException, NullPointerException;
 }
