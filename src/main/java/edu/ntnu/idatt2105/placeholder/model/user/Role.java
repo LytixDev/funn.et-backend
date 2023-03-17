@@ -7,5 +7,6 @@ package edu.ntnu.idatt2105.placeholder.model.user;
  * @date 13.3.2023
  */
 public enum Role {
-    USER, ADMIN
+  USER,
+  ADMIN,
 }

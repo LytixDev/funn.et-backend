@@ -8,19 +8,19 @@ package edu.ntnu.idatt2105.placeholder.exceptions.user;
  */
 public class EmailAlreadyExistsException extends Exception {
 
-    /**
-     * Constructor for EmailAlreadyExistsException.
-     * @param message The message to be displayed.
-     */
-    public EmailAlreadyExistsException(String message) {
-        super(message);
-    }
+  /**
+   * Constructor for EmailAlreadyExistsException.
+   * @param message The message to be displayed.
+   */
+  public EmailAlreadyExistsException(String message) {
+    super(message);
+  }
 
-    /**
-     * Constructor for EmailAlreadyExistsException.
-     * Has a default message.
-     */
-    public EmailAlreadyExistsException() {
-        super("A user with this email already exists.");
-    }
+  /**
+   * Constructor for EmailAlreadyExistsException.
+   * Has a default message.
+   */
+  public EmailAlreadyExistsException() {
+    super("A user with this email already exists.");
+  }
 }
