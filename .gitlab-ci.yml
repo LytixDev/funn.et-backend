@@ -8,7 +8,7 @@ stages:
 compile:
   stage: compile
   script:
-      - mvn build
+      - mvn compile
       - mvn clean
 
 test:
@@ -20,5 +20,5 @@ test:
 install:
   stage: install
   script:
-      - mvn build
+      - mvn install
       - mvn clean
