@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostCodeRepository
   extends JpaRepository<PostCode, PostCodeId> {
-  Optional<List<String>> findCitiesByPostCode(String postCode);
+  // Optional<List<String>> findCitiesByPostCode(String postCode);
 
-  Optional<List<String>> findPostCodesByCity(String city);
+  // Optional<List<String>> findPostCodesByCity(String city);
 }

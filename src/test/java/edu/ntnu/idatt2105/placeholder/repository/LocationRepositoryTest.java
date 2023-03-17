@@ -26,6 +26,8 @@ public class LocationRepositoryTest {
   public void testFindByPostCode() {
     PostCode postCode = new PostCode("postCode", "city");
 
+    entityManager.persist(postCode);
+
     Location location = Location
       .builder()
       .address("address")
@@ -34,14 +36,13 @@ public class LocationRepositoryTest {
       .longitude(1.0)
       .build();
 
-    entityManager.persist(location);
+    location = entityManager.persist(location);
 
     entityManager.flush();
 
     Location found = locationRepository
-      .findByPostCode(postCode.getPostCode())
-      .get()
-      .get(0);
+      .findById(location.getId())
+      .get();
 
     assertEquals(location.getPostCode(), found.getPostCode());
     assertEquals(location.getAddress(), found.getAddress());
