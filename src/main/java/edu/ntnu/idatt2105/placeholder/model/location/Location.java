@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Table(
   name = "`location`",
   uniqueConstraints = @UniqueConstraint(
-    columnNames = { "location_id", "address", "postcode" }
+    columnNames = { "`location_id`", "`address`", "`postcode`" }
   )
 )
 public class Location {

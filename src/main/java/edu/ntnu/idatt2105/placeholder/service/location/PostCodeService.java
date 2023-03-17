@@ -1,8 +1,7 @@
 package edu.ntnu.idatt2105.placeholder.service.location;
 
-import java.util.List;
-
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
+import java.util.List;
 
 public interface PostCodeService {
   PostCode savePostcode(PostCode postcode);

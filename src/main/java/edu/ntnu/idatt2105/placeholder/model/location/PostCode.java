@@ -3,6 +3,7 @@ package edu.ntnu.idatt2105.placeholder.model.location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "`postcode_city`")
+@IdClass(PostCodeId.class)
 public class PostCode {
 
   @Id
