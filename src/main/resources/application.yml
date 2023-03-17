@@ -1,10 +1,10 @@
-server.port: [INSERT_SERVER_PORT_HERE]
+server.port: 8080
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:[INSERT_PORT_HERE]/[INSERT_ROUTE_HERE]/ 
-    username: [INSERT_USERNAME_HERE]
-    password: [INSERT_PASSWORD_HERE]
+    url: jdbc:mysql://localhost:3306/db
+    username: springuser
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
