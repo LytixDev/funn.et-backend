@@ -1,9 +1,15 @@
 image: maven:latest
 
 stages:
+  - checkstyle
   - compile
   - test
   - install
+
+checkstyle:
+  stage: checkstyle
+  script:
+    - mvn prettier:check
 
 compile:
   stage: compile

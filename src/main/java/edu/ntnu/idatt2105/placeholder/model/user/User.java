@@ -1,24 +1,21 @@
 package edu.ntnu.idatt2105.placeholder.model.user;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-
-import lombok.NonNull;
+import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Class representing a user in the system.
@@ -34,60 +31,60 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "`user`")
 public class User implements UserDetails {
-    
-    @Id
-    @Column(name = "`username`", length = 64, nullable = false)
-    @NonNull
-    private String username;
 
-    @Column(name = "`email`", unique = true, length = 64, nullable = false)
-    @NonNull
-    private String email;
+  @Id
+  @Column(name = "`username`", length = 64, nullable = false)
+  @NonNull
+  private String username;
 
-    @Column(name = "`first_name`", length = 64, nullable = false)
-    @NonNull
-    private String firstName;
+  @Column(name = "`email`", unique = true, length = 64, nullable = false)
+  @NonNull
+  private String email;
 
-    @Column(name = "`last_name`", length = 64, nullable = false)
-    @NonNull
-    private String lastName;
+  @Column(name = "`first_name`", length = 64, nullable = false)
+  @NonNull
+  private String firstName;
 
-    @Column(name = "`password`", nullable = false)
-    @NonNull
-    private String password;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name = "`role`", nullable = false)
-    @NonNull
-    private Role role;
+  @Column(name = "`last_name`", length = 64, nullable = false)
+  @NonNull
+  private String lastName;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
+  @Column(name = "`password`", nullable = false)
+  @NonNull
+  private String password;
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+  @Enumerated(EnumType.STRING)
+  @Column(name = "`role`", nullable = false)
+  @NonNull
+  private Role role;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role.name()));
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public String getPassword() {
+    return password;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

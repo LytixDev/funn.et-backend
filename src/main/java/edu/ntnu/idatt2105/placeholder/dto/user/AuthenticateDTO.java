@@ -1,10 +1,10 @@
 package edu.ntnu.idatt2105.placeholder.dto.user;
 
-import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Data transfer object for authentication.
@@ -18,9 +18,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class AuthenticateDTO {
-    @NonNull
-    private String username;
-    
-    @NonNull
-    private String password;
+
+  @NonNull
+  private String username;
+
+  @NonNull
+  private String password;
 }

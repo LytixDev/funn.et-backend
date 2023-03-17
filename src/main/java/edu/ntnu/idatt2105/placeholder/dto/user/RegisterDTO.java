@@ -1,10 +1,10 @@
 package edu.ntnu.idatt2105.placeholder.dto.user;
 
-import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Data transfer object for registration.
@@ -18,18 +18,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class RegisterDTO {
-    @NonNull
-    private String username;
-    
-    @NonNull
-    private String email;
-    
-    @NonNull
-    private String firstName;
-    
-    @NonNull
-    private String lastName;
-    
-    @NonNull
-    private String password;
+
+  @NonNull
+  private String username;
+
+  @NonNull
+  private String email;
+
+  @NonNull
+  private String firstName;
+
+  @NonNull
+  private String lastName;
+
+  @NonNull
+  private String password;
 }

@@ -1,12 +1,11 @@
 package edu.ntnu.idatt2105.placeholder.dto.user;
 
 import edu.ntnu.idatt2105.placeholder.model.user.Role;
-
-import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Data transfer object for user.
@@ -20,19 +19,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class UserDTO {
-        
-    @NonNull
-    private String username;
 
-    @NonNull
-    private String email;
+  @NonNull
+  private String username;
 
-    @NonNull
-    private String firstName;
+  @NonNull
+  private String email;
 
-    @NonNull
-    private String lastName;
+  @NonNull
+  private String firstName;
 
-    @NonNull
-    private Role role;
+  @NonNull
+  private String lastName;
+
+  @NonNull
+  private Role role;
 }
