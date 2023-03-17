@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.placeholder.repository.location;
 
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
-
 import java.util.List;
 import java.util.Optional;
 import lombok.NonNull;
