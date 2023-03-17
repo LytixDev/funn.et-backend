@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
  * @version 1.0 - 17.03.2023
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class PostCodeId implements Serializable {
 
   private String postCode;
