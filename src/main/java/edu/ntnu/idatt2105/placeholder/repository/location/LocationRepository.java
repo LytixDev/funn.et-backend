@@ -2,6 +2,7 @@ package edu.ntnu.idatt2105.placeholder.repository.location;
 
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
+
 import java.util.List;
 import java.util.Optional;
 import lombok.NonNull;
@@ -25,6 +26,14 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
   @Query("SELECT l FROM Location l WHERE l.postCode.city = ?1")
   Optional<List<Location>> findByCity(@NonNull String city);
+
+  Optional<List<Location>> findLocationsByPostCode(@NonNull PostCode postCode);
+
+  @Query("SELECT l FROM Location l WHERE l.postCode.postCode = ?1")
+  Optional<List<Location>> findLocationsByPostCode(@NonNull String postCode);
+
+  @Query("SELECT l FROM Location l WHERE l.postCode.city = ?1")
+  Optional<List<Location>> findLocationsByCity(@NonNull String city);
 
   Optional<List<Location>> findByLatitude(@NonNull Double latitude);
 

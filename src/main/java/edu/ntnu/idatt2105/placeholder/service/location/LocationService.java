@@ -27,21 +27,21 @@ public interface LocationService {
 
   void deleteLocation(@NonNull Long id) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<String> getAddressesByPostcode(@NonNull PostCode postcode) throws DatabaseException, NullPointerException;
+  List<Location> getLocationsByPostCode(@NonNull PostCode postcode) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<String> getAddressesByPostcode(@NonNull String postcode) throws DatabaseException, NullPointerException;
+  List<Location> getLocationsByPostCode(@NonNull String postcode) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<String> getAddressesByCity(@NonNull String city) throws DatabaseException, NullPointerException;
+  List<Location> getLocationsByCity(@NonNull String city) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<String> getLocationsByLongitude(@NonNull Double longitude) throws DatabaseException, NullPointerException;
+  List<Location> getLocationsByLongitude(@NonNull Double longitude) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<String> getLocationsByLatitude(@NonNull Double latitude) throws DatabaseException, NullPointerException;
+  List<Location> getLocationsByLatitude(@NonNull Double latitude) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
   List<Location> getLocationsInDistance(
     @NonNull Double latitude,
     @NonNull Double longitude,
     @NonNull Double distance
-  ) throws DatabaseException, NullPointerException;
+  ) throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
   List<Location> getAllLocations() throws DatabaseException;
 }
