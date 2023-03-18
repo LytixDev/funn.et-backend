@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Configures spring security
  *
  * @author Carl G.
- * @version 1.0 - 17.3.2023
+ * @version 1.1 - 18.03.2023
  */
 @Configuration
 @EnableWebSecurity
@@ -25,10 +25,11 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-      .securityMatcher("/swagger-ui/index.html", "v3/api-docs")
-      .csrf()
-      .disable()
-      .authorizeHttpRequests(request -> request.anyRequest().permitAll());
+      .authorizeHttpRequests()
+      .requestMatchers("/swagger/**")
+      .permitAll()
+      .anyRequest()
+      .permitAll();
     return http.build();
   }
 }

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service class for the location repository.
- * @author Callum G.
- * @version 1.1 - 18.03.2023
+ * @author Callum G., Carl G.
+ * @version 1.2 - 18.03.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -47,9 +47,7 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public Location saveLocation(@NonNull Location location)
     throws LocationAlreadyExistsException, DatabaseException, NullPointerException {
-    if (locationExists(location)) throw new LocationAlreadyExistsException(
-      "Location already exists"
-    );
+    if (locationExists(location)) throw new LocationAlreadyExistsException();
 
     try {
       return locationRepository.save(location);
@@ -72,9 +70,7 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository
         .findById(id)
-        .orElseThrow(() ->
-          new LocationDoesntExistException("Location does not exist")
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -93,9 +89,7 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public Location updateLocation(@NonNull Location location)
     throws LocationDoesntExistException, DatabaseException, NullPointerException {
-    if (!locationExists(location)) throw new LocationDoesntExistException(
-      "Location does not exist"
-    );
+    if (!locationExists(location)) throw new LocationDoesntExistException();
 
     try {
       return locationRepository.save(location);
@@ -114,9 +108,7 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public void deleteLocation(@NonNull Location location)
     throws LocationDoesntExistException, DatabaseException, NullPointerException {
-    if (!locationExists(location)) throw new LocationDoesntExistException(
-      "Location does not exist"
-    );
+    if (!locationExists(location)) throw new LocationDoesntExistException();
 
     try {
       locationRepository.delete(location);
@@ -136,7 +128,7 @@ public class LocationServiceImpl implements LocationService {
     throws LocationDoesntExistException, DatabaseException {
     if (
       !locationRepository.existsById(id)
-    ) throw new LocationDoesntExistException("Location does not exist");
+    ) throw new LocationDoesntExistException();
 
     try {
       locationRepository.deleteById(id);
@@ -160,9 +152,7 @@ public class LocationServiceImpl implements LocationService {
       return locationRepository
         .findLocationsByPostCode(postCode)
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException("No locations found for " + postCode)
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -185,14 +175,7 @@ public class LocationServiceImpl implements LocationService {
       return locationRepository
         .findLocationsByPostCode(postCode)
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException(
-            "No locations found for " +
-            postCode.getCity() +
-            ":" +
-            postCode.getPostCode()
-          )
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -215,9 +198,7 @@ public class LocationServiceImpl implements LocationService {
       return locationRepository
         .findLocationsByCity(city)
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException("No locations found for " + city)
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -239,11 +220,7 @@ public class LocationServiceImpl implements LocationService {
       return locationRepository
         .findByLongitude(longitude)
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException(
-            "No locations found for " + longitude
-          )
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -261,15 +238,11 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public List<Location> getLocationsByLatitude(double latitude)
     throws LocationDoesntExistException, DatabaseException {
-    System.out.println("Getting locations by latitude" + latitude);
-    System.out.println("Wishing for latitude" + 59.12);
     try {
       return locationRepository
         .findByLatitude(latitude)
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException("No locations found for " + latitude)
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -310,16 +283,7 @@ public class LocationServiceImpl implements LocationService {
           maxLongitude
         )
         .filter(l -> !l.isEmpty())
-        .orElseThrow(() ->
-          new LocationDoesntExistException(
-            "No locations found in radius: " +
-            distance +
-            " from longitude: " +
-            longitude +
-            " and latitude: " +
-            latitude
-          )
-        );
+        .orElseThrow(() -> new LocationDoesntExistException());
     } catch (Exception e) {
       if (
         e instanceof LocationDoesntExistException
@@ -337,7 +301,7 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository.findAll();
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      throw new DatabaseException("canNotGetLocation");
     }
   }
 }
