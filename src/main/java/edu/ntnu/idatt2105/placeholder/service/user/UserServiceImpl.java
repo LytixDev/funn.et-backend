@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
       !usernameExists(user.getUsername()) || !emailExists(user.getEmail())
     ) throw new UserDoesNotExistsException();
 
-    return userRepository.save(getUserByUsername(user.getUsername()));
+    return userRepository.save(user);
   }
 
   /**
