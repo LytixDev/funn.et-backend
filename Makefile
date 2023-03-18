@@ -9,3 +9,6 @@ database-down:
 
 spring:
 	mvn spring-boot:run
+
+prettier:
+	mvn prettier:write
