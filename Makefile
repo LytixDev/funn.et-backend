@@ -12,3 +12,12 @@ spring:
 
 prettier:
 	mvn prettier:write
+
+test:
+	mvn clean test
+
+install:
+	mvn clean install
+
+compile:
+	mvn clean compile
