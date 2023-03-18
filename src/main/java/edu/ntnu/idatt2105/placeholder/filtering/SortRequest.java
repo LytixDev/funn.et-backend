@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.filtering;
 
 import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +17,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SortRequest implements Serializable {
-    
-    private static final long serialVersionUID = 987654321L;
 
-    private String keyWord;
+  private static final long serialVersionUID = 987654321L;
 
-    private SortDirection sortDirection;
+  private String keyWord;
+
+  private SortDirection sortDirection;
 }

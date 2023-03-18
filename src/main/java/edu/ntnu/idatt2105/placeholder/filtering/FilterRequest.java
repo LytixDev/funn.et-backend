@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.placeholder.filtering;
 
 import java.io.Serializable;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,17 +19,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FilterRequest implements Serializable {
 
-    private static final long serialVersionUID = 123456789L;
+  private static final long serialVersionUID = 123456789L;
 
-    private String keyWord;
+  private String keyWord;
 
-    private Operator operator;
+  private Operator operator;
 
-    private FieldType fieldType;
+  private FieldType fieldType;
 
-    private transient Object value;
+  private transient Object value;
 
-    private transient Object valueTo;
+  private transient Object valueTo;
 
-    private transient List<Object> values;
+  private transient List<Object> values;
 }

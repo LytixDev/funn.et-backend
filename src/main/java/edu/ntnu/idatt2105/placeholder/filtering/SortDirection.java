@@ -11,17 +11,28 @@ import jakarta.persistence.criteria.Root;
  * @version 1.0 - 18.3.2023
  */
 public enum SortDirection {
-    
-    ASC {
-        public <T> Order build(Root<T> root, CriteriaBuilder builder, SortRequest request) {
-            return builder.asc(root.get(request.getKeyWord()));
-        }
-    },
-    DESC {
-        public <T> Order build(Root<T> root, CriteriaBuilder builder, SortRequest request) {
-            return builder.desc(root.get(request.getKeyWord()));
-        }
-    };
+  ASC {
+    public <T> Order build(
+      Root<T> root,
+      CriteriaBuilder builder,
+      SortRequest request
+    ) {
+      return builder.asc(root.get(request.getKeyWord()));
+    }
+  },
+  DESC {
+    public <T> Order build(
+      Root<T> root,
+      CriteriaBuilder builder,
+      SortRequest request
+    ) {
+      return builder.desc(root.get(request.getKeyWord()));
+    }
+  };
 
-    public abstract <T> Order build(Root<T> root, CriteriaBuilder builder, SortRequest request);
+  public abstract <T> Order build(
+    Root<T> root,
+    CriteriaBuilder builder,
+    SortRequest request
+  );
 }

@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.placeholder.filtering;
 
 import java.io.Serializable;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,28 +12,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchRequest implements Serializable {
-    
-    private static final long serialVersionUID = 543216789L;
 
-    private List<FilterRequest> filterRequests;
+  private static final long serialVersionUID = 543216789L;
 
-    private List<SortRequest> sortRequests;
+  private List<FilterRequest> filterRequests;
 
-    private int page;
+  private List<SortRequest> sortRequests;
 
-    private int size;
+  private int page;
 
-    public List<FilterRequest> getFilterRequests() {
-        if (filterRequests == null) {
-            filterRequests = List.of();
-        }
-        return filterRequests;
+  private int size;
+
+  public List<FilterRequest> getFilterRequests() {
+    if (filterRequests == null) {
+      filterRequests = List.of();
     }
+    return filterRequests;
+  }
 
-    public List<SortRequest> getSortRequests() {
-        if (sortRequests == null) {
-            sortRequests = List.of();
-        }
-        return sortRequests;
+  public List<SortRequest> getSortRequests() {
+    if (sortRequests == null) {
+      sortRequests = List.of();
     }
+    return sortRequests;
+  }
 }

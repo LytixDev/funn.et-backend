@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.repository.listing;
 
 import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @version 1.1 - 18.3.2023
  */
 @Repository
-public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpecificationExecutor<Listing> {}
-
+public interface ListingRepository
+  extends JpaRepository<Listing, Long>, JpaSpecificationExecutor<Listing> {}
