@@ -10,11 +10,13 @@ import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 /**
  * Service class for user operations on the user repository.
- * @author Callum G.
+ * @author Callum G, Thomas S.
  * @version 1.0
  * @date 13.3.2023
  */
@@ -94,6 +96,8 @@ public class UserServiceImpl implements UserService {
       "A user with the email " + user.getEmail() + " already exists."
     );
 
+    user.setPassword(hashPassword(user.getPassword()));
+
     try {
       return userRepository.save(user);
     } catch (Exception e) {
@@ -147,6 +151,8 @@ public class UserServiceImpl implements UserService {
    * @throws NullPointerException if user is null.
    */
   public User updateUser(@NonNull User user) throws UserDoesNotExistsException {
+    user.setPassword(hashPassword(user.getPassword()));
+
     return userRepository.save(getUserByUsername(user.getUsername()));
   }
 
@@ -163,5 +169,33 @@ public class UserServiceImpl implements UserService {
     );
 
     return users;
+  }
+
+  @Override
+  public boolean authenticateUser(String username, String password)
+    throws UserDoesNotExistsException, BadCredentialsException {
+    User user = getUserByUsername(username);
+    if (user == null) {
+      throw new UserDoesNotExistsException();
+    }
+    if (!checkPassword(password, user.getPassword())) {
+      throw new BadCredentialsException("Invalid password");
+    }
+
+    return true;
+  }
+
+  public static String hashPassword(String password) {
+    String salt = BCrypt.gensalt(); // generate a random salt value
+    return salt + ":" + BCrypt.hashpw(password, salt);
+  }
+
+  public static boolean checkPassword(String password, String hashedPassword) {
+    String[] parts = hashedPassword.split(":");
+    String salt = parts[0];
+    String hashedPasswordFromDB = parts[1];
+    String hashedPasswordToCheck = BCrypt.hashpw(password, salt);
+
+    return BCrypt.checkpw(hashedPasswordFromDB, hashedPasswordToCheck);
   }
 }
