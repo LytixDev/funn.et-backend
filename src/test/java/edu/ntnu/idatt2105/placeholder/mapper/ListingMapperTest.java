@@ -18,7 +18,6 @@ import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
-
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,10 +33,11 @@ public class ListingMapperTest {
 
   @TestConfiguration
   static class ListingMapperTestContextConfiguration {
-      @Bean
-      public ListingMapper listingMapper() {
-        return new ListingMapperImpl();
-      }
+
+    @Bean
+    public ListingMapper listingMapper() {
+      return new ListingMapperImpl();
+    }
   }
 
   @Autowired
@@ -81,7 +81,8 @@ public class ListingMapperTest {
         .role(Role.USER)
         .build();
 
-    when(locationService.getLocationById(location.getId())).thenReturn(location);
+    when(locationService.getLocationById(location.getId()))
+      .thenReturn(location);
     when(userService.getUserByUsername(user.getUsername())).thenReturn(user);
   }
 
@@ -130,23 +131,23 @@ public class ListingMapperTest {
       .expirationDate(LocalDate.of(2013, 6, 12))
       .build();
 
-      Listing listing;
+    Listing listing;
 
-      try {
-        listing = listingMapper.listingDTOToListing(dto);
-      } catch (Exception e) {
-        fail(e.getMessage());
-        return;
-      }
+    try {
+      listing = listingMapper.listingDTOToListing(dto);
+    } catch (Exception e) {
+      fail(e.getMessage());
+      return;
+    }
 
-      assertEquals(dto.getTitle(), listing.getTitle());
-      assertEquals(dto.getFullDescription(), listing.getFullDescription());
-      assertEquals(dto.getPrice(), listing.getPrice());
-      assertEquals(dto.getLocationId(), listing.getLocation().getId());
-      assertEquals(dto.getUsername(), listing.getUser().getUsername());
-      assertEquals(dto.getCategory(), listing.getCategory());
-      assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
-      assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
-      assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
+    assertEquals(dto.getTitle(), listing.getTitle());
+    assertEquals(dto.getFullDescription(), listing.getFullDescription());
+    assertEquals(dto.getPrice(), listing.getPrice());
+    assertEquals(dto.getLocationId(), listing.getLocation().getId());
+    assertEquals(dto.getUsername(), listing.getUser().getUsername());
+    assertEquals(dto.getCategory(), listing.getCategory());
+    assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
+    assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
+    assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
   }
 }

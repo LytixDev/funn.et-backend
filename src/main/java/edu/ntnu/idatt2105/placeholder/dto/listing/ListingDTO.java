@@ -11,7 +11,7 @@ import lombok.NonNull;
 /**
  * Data transfer object for listing.
  * Used to transfer listing data between the backend and the application.
- * @author Nicolai H. B.
+ * @author Nicolai H. B., Callum G.
  * @version 1.0 - 18.3.2023
  */
 @Data

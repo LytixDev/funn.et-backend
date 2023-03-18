@@ -6,10 +6,8 @@ import edu.ntnu.idatt2105.placeholder.exceptions.location.LocationDoesntExistExc
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 /**
  * Interface for the service class for the location repository.

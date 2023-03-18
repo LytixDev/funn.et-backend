@@ -10,7 +10,6 @@ import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -26,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequiredArgsConstructor
 @Mapper(componentModel = "spring")
 public abstract class ListingMapper {
+
   public static ListingMapper INSTANCE = Mappers.getMapper(ListingMapper.class);
 
   @Autowired
@@ -64,8 +64,7 @@ public abstract class ListingMapper {
    * @throws UserDoesNotExistsException If the user does not exist.
    */
   @Named("getUser")
-  public User getUser(String username)
-    throws UserDoesNotExistsException {
+  public User getUser(String username) throws UserDoesNotExistsException {
     return userService.getUserByUsername(username);
   }
 

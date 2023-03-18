@@ -6,7 +6,6 @@ import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 /**
