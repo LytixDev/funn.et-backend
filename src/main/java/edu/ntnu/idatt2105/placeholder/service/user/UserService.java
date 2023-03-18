@@ -7,6 +7,11 @@ import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsExcep
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import java.util.List;
 
+/**
+ * Interface for the user service.
+ * @author Callum G.
+ * @version 1.0 - 13.3.2023
+ */
 public interface UserService {
   public boolean usernameExists(String username) throws NullPointerException;
 

@@ -53,7 +53,6 @@ public class Listing {
 
   @DecimalMin(value = "0.0")
   @Column(name = "`price`", nullable = false)
-  @NonNull
   private double price;
 
   @Column(name = "`publication_date`", nullable = false)
