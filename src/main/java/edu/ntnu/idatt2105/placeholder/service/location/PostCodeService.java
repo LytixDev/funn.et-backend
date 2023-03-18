@@ -5,6 +5,9 @@ import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeAlreadyExistsE
 import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import lombok.NonNull;
 
 /**
@@ -12,6 +15,7 @@ import lombok.NonNull;
  * @author Callum G.
  * @version 1.0 - 17.03.2023
  */
+@Service
 public interface PostCodeService {
   PostCode savePostCode(@NonNull PostCode postcode)
     throws PostCodeAlreadyExistsException, DatabaseException, NullPointerException;

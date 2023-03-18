@@ -7,11 +7,14 @@ import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsExcep
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Interface for the user service.
  * @author Callum G.
  * @version 1.0 - 13.3.2023
  */
+@Service
 public interface UserService {
   public boolean usernameExists(String username) throws NullPointerException;
 

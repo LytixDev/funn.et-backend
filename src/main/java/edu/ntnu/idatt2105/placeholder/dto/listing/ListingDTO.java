@@ -2,10 +2,10 @@ package edu.ntnu.idatt2105.placeholder.dto.listing;
 
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
 import java.time.LocalDate;
-import lombok.Data;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**

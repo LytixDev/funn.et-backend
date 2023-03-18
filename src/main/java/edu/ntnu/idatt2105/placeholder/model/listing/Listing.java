@@ -4,7 +4,6 @@ import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

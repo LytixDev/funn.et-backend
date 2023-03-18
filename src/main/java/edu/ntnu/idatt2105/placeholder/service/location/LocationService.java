@@ -6,6 +6,9 @@ import edu.ntnu.idatt2105.placeholder.exceptions.location.LocationDoesntExistExc
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import lombok.NonNull;
 
 /**
@@ -13,6 +16,7 @@ import lombok.NonNull;
  * @author Callum G.
  * @version 1.0 - 17.03.2023
  */
+@Service
 public interface LocationService {
   boolean locationExists(@NonNull Location location)
     throws NullPointerException;

@@ -4,13 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
-
 import edu.ntnu.idatt2105.placeholder.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.mapper.listing.ListingMapper;
+import edu.ntnu.idatt2105.placeholder.mapper.listing.ListingMapperImpl;
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
 import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
@@ -19,16 +18,30 @@ import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
+
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class ListingMapperTest {
+
+  @TestConfiguration
+  static class ListingMapperTestContextConfiguration {
+      @Bean
+      public ListingMapper listingMapper() {
+        return new ListingMapperImpl();
+      }
+  }
+
+  @Autowired
+  private ListingMapper listingMapper;
 
   @MockBean
   private LocationService locationService;
@@ -68,8 +81,8 @@ public class ListingMapperTest {
         .role(Role.USER)
         .build();
 
-    when(locationService.getLocationById(1L)).thenReturn(location);
-    when(userService.getUserByUsername("username")).thenReturn(user);
+    when(locationService.getLocationById(location.getId())).thenReturn(location);
+    when(userService.getUserByUsername(user.getUsername())).thenReturn(user);
   }
 
   @Test
@@ -87,7 +100,7 @@ public class ListingMapperTest {
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
       .build();
-    ListingDTO dto = ListingMapper.INSTANCE.listingToListingDTO(listing);
+    ListingDTO dto = listingMapper.listingToListingDTO(listing);
 
     assertEquals(listing.getId(), dto.getId());
     assertEquals(listing.getTitle(), dto.getTitle());
@@ -95,10 +108,45 @@ public class ListingMapperTest {
     assertEquals(listing.getPrice(), dto.getPrice());
     assertEquals(listing.getLocation().getId(), dto.getLocationId());
     assertEquals(listing.getUser().getUsername(), dto.getUsername());
+    assertEquals(listing.getCategory(), dto.getCategory());
+    assertEquals(listing.getPublicationDate(), dto.getPublicationDate());
+    assertEquals(listing.getExpirationDate(), dto.getExpirationDate());
+    assertEquals(listing.getBriefDescription(), dto.getBriefDescription());
   }
 
   @Test
   public void testMapDTOToListing() {
-    ListingDTO dto = ListingDTO.builder().title("title").price(1000).locationId(1L).username("username").briefDescription("description").fullDescription("description").category(Category.OTHER).publicationDate(LocalDate.of(2012, 12, 12)).expirationDate(LocalDate.of(2013, 6, 12)).build();
+    ListingDTO dto = ListingDTO
+      .builder()
+      .id(1L)
+      .title("title")
+      .price(1000)
+      .locationId(1L)
+      .username("username")
+      .briefDescription("description")
+      .fullDescription("description")
+      .category(Category.OTHER)
+      .publicationDate(LocalDate.of(2012, 12, 12))
+      .expirationDate(LocalDate.of(2013, 6, 12))
+      .build();
+
+      Listing listing;
+
+      try {
+        listing = listingMapper.listingDTOToListing(dto);
+      } catch (Exception e) {
+        fail(e.getMessage());
+        return;
+      }
+
+      assertEquals(dto.getTitle(), listing.getTitle());
+      assertEquals(dto.getFullDescription(), listing.getFullDescription());
+      assertEquals(dto.getPrice(), listing.getPrice());
+      assertEquals(dto.getLocationId(), listing.getLocation().getId());
+      assertEquals(dto.getUsername(), listing.getUser().getUsername());
+      assertEquals(dto.getCategory(), listing.getCategory());
+      assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
+      assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
+      assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
   }
 }
