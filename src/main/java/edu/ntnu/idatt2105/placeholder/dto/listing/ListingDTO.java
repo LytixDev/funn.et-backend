@@ -8,8 +8,7 @@ import lombok.*;
  * Data transfer object for listing.
  * Used to transfer listing data between the backend and the application.
  * @author Nicolai H. B.
- * @version 1.0
- * @date 18.3.2023
+ * @version 1.0 - 18.3.2023
  */
 @Data
 @AllArgsConstructor

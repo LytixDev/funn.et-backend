@@ -8,8 +8,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * Class used to map between Listing and ListingDTO.
  * @author Nicolai H. B
- * @version 1.0
- * @date 18.3.2023
+ * @version 1.0 - 18.3.2023
  */
 @Mapper(componentModel = "spring")
 public interface ListingMapper {

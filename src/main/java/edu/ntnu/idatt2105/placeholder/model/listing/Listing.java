@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.model.listing;
 
+import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -12,9 +13,8 @@ import lombok.NonNull;
 
 /**
  * Entity class for listing.
- * @author Nicolai H. B.
- * @version 1.0
- * @date 18.3.2023
+ * @author Nicolai H. B., Callum G.
+ * @version 1.1 - 18.3.2023
  */
 @Data
 @AllArgsConstructor
@@ -34,7 +34,9 @@ public class Listing {
   @NonNull
   private User user;
 
-  /* location: have to wait for location class to be implemented */
+  @ManyToOne
+  @JoinColumn(name = "`location`", referencedColumnName = "`location_id`")
+  private Location location;
 
   @Column(name = "`title`", length = 64, nullable = false)
   @NonNull
