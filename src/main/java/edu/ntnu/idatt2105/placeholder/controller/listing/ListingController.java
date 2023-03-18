@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.controller.listing;
 
 import edu.ntnu.idatt2105.placeholder.dto.listing.ListingDTO;
-import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 import edu.ntnu.idatt2105.placeholder.service.listing.ListingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

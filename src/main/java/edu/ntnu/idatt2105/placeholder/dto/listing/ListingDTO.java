@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.dto.listing;
 
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
-import edu.ntnu.idatt2105.placeholder.model.user.User;
 import java.util.Date;
 import lombok.*;
 
@@ -35,7 +34,6 @@ public class ListingDTO {
   @NonNull
   private Category category;
 
-  @NonNull
   private double price;
 
   @NonNull
