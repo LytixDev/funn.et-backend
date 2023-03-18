@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service class for user operations on the user repository.
- * @author Callum G.
- * @version 1.0 - 13.3.2023
+ * @author Callum G., Carl G.
+ * @version 1.1 - 18.03.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -85,18 +85,14 @@ public class UserServiceImpl implements UserService {
     throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, NullPointerException {
     if (
       usernameExists(user.getUsername())
-    ) throw new UsernameAlreadyExistsException(
-      "A user with the username " + user.getUsername() + " already exists."
-    );
+    ) throw new UsernameAlreadyExistsException();
 
-    if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException(
-      "A user with the email " + user.getEmail() + " already exists."
-    );
+    if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException();
 
     try {
       return userRepository.save(user);
     } catch (Exception e) {
-      throw new DatabaseException("An error occurred while saving the user.");
+      throw new DatabaseException("canNotSaveUser");
     }
   }
 
@@ -110,9 +106,7 @@ public class UserServiceImpl implements UserService {
     try {
       userRepository.delete(user);
     } catch (Exception e) {
-      throw new DatabaseException(
-        "An error occurred while deleting the user, are you sure it exists?"
-      );
+      throw new DatabaseException("canNotDeleteUser");
     }
   }
 

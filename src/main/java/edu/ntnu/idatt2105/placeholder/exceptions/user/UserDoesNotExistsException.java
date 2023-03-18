@@ -2,8 +2,8 @@ package edu.ntnu.idatt2105.placeholder.exceptions.user;
 
 /**
  * Exception thrown when a user does not exist.
- * @author Callum G.
- * @version 1.0 - 13.3.2023
+ * @author Callum G., Carl G.
+ * @version 1.1 - 18.03.2023
  */
 public class UserDoesNotExistsException extends Exception {
 
@@ -20,6 +20,6 @@ public class UserDoesNotExistsException extends Exception {
    * Has a default message.
    */
   public UserDoesNotExistsException() {
-    super("A user with this username does not exist.");
+    super("userDoesNotExists");
   }
 }

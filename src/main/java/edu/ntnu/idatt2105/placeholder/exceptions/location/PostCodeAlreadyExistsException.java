@@ -20,6 +20,6 @@ public class PostCodeAlreadyExistsException extends Exception {
    * Has a default message.
    */
   public PostCodeAlreadyExistsException() {
-    super("Postcode already exists in the database.");
+    super("postCodeAlreadyExists");
   }
 }
