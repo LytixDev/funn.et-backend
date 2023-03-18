@@ -1,18 +1,15 @@
 package edu.ntnu.idatt2105.placeholder.service.listing;
 
-import edu.ntnu.idatt2105.placeholder.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.placeholder.filtering.SearchRequest;
 import edu.ntnu.idatt2105.placeholder.filtering.SearchSpecification;
-import edu.ntnu.idatt2105.placeholder.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 import edu.ntnu.idatt2105.placeholder.repository.listing.ListingRepository;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
