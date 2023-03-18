@@ -41,16 +41,16 @@ public interface LocationService {
   List<Location> getLocationsByCity(@NonNull String city)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<Location> getLocationsByLongitude(Double longitude)
+  List<Location> getLocationsByLongitude(double longitude)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<Location> getLocationsByLatitude(Double latitude)
+  List<Location> getLocationsByLatitude(double latitude)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
   List<Location> getLocationsInDistance(
-    Double latitude,
-    Double longitude,
-    Double distance
+    double latitude,
+    double longitude,
+    double distance
   )
     throws LocationDoesntExistException, DatabaseException, IllegalArgumentException;
 

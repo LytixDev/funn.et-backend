@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service class for the location repository.
  * @author Callum G.
- * @version 1.0 - 17.03.2023
+ * @version 1.1 - 18.03.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -28,12 +28,12 @@ public class LocationServiceImpl implements LocationService {
    * Checks if a location exists in the database.
    * @param location The location to check.
    * @return True if the location exists, false otherwise.
-   *     @throws NullPointerException If the location is null.
+   * @throws NullPointerException If the location is null.
    */
   @Override
   public boolean locationExists(@NonNull Location location)
     throws NullPointerException {
-    return locationRepository.existsById(location.getId());
+    return locationRepository.findById(location.getId()).isPresent();
   }
 
   /**
@@ -76,7 +76,9 @@ public class LocationServiceImpl implements LocationService {
           new LocationDoesntExistException("Location does not exist")
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting location");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting location");
     }
   }
 
@@ -157,11 +159,14 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository
         .findLocationsByPostCode(postCode)
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
           new LocationDoesntExistException("No locations found for " + postCode)
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations");
     }
   }
 
@@ -179,11 +184,19 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository
         .findLocationsByPostCode(postCode)
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
-          new LocationDoesntExistException("No locations found for " + postCode)
+          new LocationDoesntExistException(
+            "No locations found for " +
+            postCode.getCity() +
+            ":" +
+            postCode.getPostCode()
+          )
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations");
     }
   }
 
@@ -201,11 +214,14 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository
         .findLocationsByCity(city)
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
           new LocationDoesntExistException("No locations found for " + city)
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations.");
     }
   }
 
@@ -217,18 +233,21 @@ public class LocationServiceImpl implements LocationService {
    * @throws DatabaseException If there is an error getting the locations.
    */
   @Override
-  public List<Location> getLocationsByLongitude(Double longitude)
+  public List<Location> getLocationsByLongitude(double longitude)
     throws LocationDoesntExistException, DatabaseException {
     try {
       return locationRepository
         .findByLongitude(longitude)
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
           new LocationDoesntExistException(
-            "No locations found for longitude: " + longitude
+            "No locations found for " + longitude
           )
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations");
     }
   }
 
@@ -240,18 +259,21 @@ public class LocationServiceImpl implements LocationService {
    * @throws DatabaseException If there is an error getting the locations.
    */
   @Override
-  public List<Location> getLocationsByLatitude(Double latitude)
+  public List<Location> getLocationsByLatitude(double latitude)
     throws LocationDoesntExistException, DatabaseException {
+    System.out.println("Getting locations by latitude" + latitude);
+    System.out.println("Wishing for latitude" + 59.12);
     try {
       return locationRepository
         .findByLatitude(latitude)
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
-          new LocationDoesntExistException(
-            "No locations found for latitude: " + latitude
-          )
+          new LocationDoesntExistException("No locations found for " + latitude)
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations");
     }
   }
 
@@ -267,18 +289,18 @@ public class LocationServiceImpl implements LocationService {
    */
   @Override
   public List<Location> getLocationsInDistance(
-    Double longitude,
-    Double latitude,
-    Double distance
+    double longitude,
+    double latitude,
+    double distance
   )
     throws LocationDoesntExistException, DatabaseException, IllegalArgumentException {
     if (distance <= 0) throw new IllegalArgumentException(
       "Distance cannot be zero or negative"
     );
-    Double minLongitude = longitude - distance;
-    Double maxLongitude = longitude + distance;
-    Double minLatitude = latitude - distance;
-    Double maxLatitude = latitude + distance;
+    double minLongitude = longitude - distance;
+    double maxLongitude = longitude + distance;
+    double minLatitude = latitude - distance;
+    double maxLatitude = latitude + distance;
     try {
       return locationRepository
         .findByLatitudeAndLongitudeByRadius(
@@ -287,6 +309,7 @@ public class LocationServiceImpl implements LocationService {
           minLongitude,
           maxLongitude
         )
+        .filter(l -> !l.isEmpty())
         .orElseThrow(() ->
           new LocationDoesntExistException(
             "No locations found in radius: " +
@@ -298,7 +321,9 @@ public class LocationServiceImpl implements LocationService {
           )
         );
     } catch (Exception e) {
-      throw new DatabaseException("Error getting locations");
+      if (
+        e instanceof LocationDoesntExistException
+      ) throw e; else throw new DatabaseException("Error getting locations");
     }
   }
 

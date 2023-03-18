@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service class for the post code repository.
  * @author Callum G.
- * @version 1.0 - 17.03.2023
+ * @version 1.1 - 18.03.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -127,6 +127,7 @@ public class PostCodeServiceImpl implements PostCodeService {
     throws DatabaseException, NullPointerException {
     return postCodeRepository
       .findCitiesByPostCode(postcode)
+      .filter(postCodes -> !postCodes.isEmpty())
       .orElseThrow(() -> new DatabaseException("No cities found for postcode.")
       );
   }
@@ -142,6 +143,7 @@ public class PostCodeServiceImpl implements PostCodeService {
     throws DatabaseException, NullPointerException {
     return postCodeRepository
       .findPostCodesByCity(city)
+      .filter(postCodes -> !postCodes.isEmpty())
       .orElseThrow(() ->
         new DatabaseException("No postcodes found for city found.")
       );

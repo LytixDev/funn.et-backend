@@ -41,7 +41,7 @@ public class LocationRepositoryTest {
     entityManager.flush();
 
     Location found = locationRepository
-      .findByCity(postCode.getCity())
+      .findLocationsByPostCode(postCode.getPostCode())
       .get()
       .get(0);
 
@@ -69,7 +69,10 @@ public class LocationRepositoryTest {
 
     entityManager.flush();
 
-    Location found = locationRepository.findByPostCode(postCode).get().get(0);
+    Location found = locationRepository
+      .findLocationsByPostCode(postCode)
+      .get()
+      .get(0);
 
     assertEquals(location.getPostCode(), found.getPostCode());
     assertEquals(location.getAddress(), found.getAddress());
@@ -96,7 +99,7 @@ public class LocationRepositoryTest {
     entityManager.flush();
 
     Location found = locationRepository
-      .findByCity(postCode.getCity())
+      .findLocationsByCity(postCode.getCity())
       .get()
       .get(0);
 

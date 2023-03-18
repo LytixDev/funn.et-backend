@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 /**
  * Class representing a location in the system.
  * @author Callum G.
- * @version 1.0 - 17.03.2023
+ * @version 1.1 - 18.03.2023
  */
 @Data
 @NoArgsConstructor
@@ -46,8 +46,8 @@ public class Location {
   private PostCode postCode;
 
   @Column(name = "`latitude`")
-  private Double latitude;
+  private double latitude;
 
   @Column(name = "`longitude`")
-  private Double longitude;
+  private double longitude;
 }
