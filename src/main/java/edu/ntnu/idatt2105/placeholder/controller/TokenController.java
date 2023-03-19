@@ -3,27 +3,33 @@ package edu.ntnu.idatt2105.placeholder.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.idatt2105.placeholder.dto.user.AuthenticateDTO;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
 import java.time.Duration;
 import java.time.Instant;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping(value = "api/v1/token")
+@RequestMapping(value = "/api/v1/public/token")
 @EnableAutoConfiguration
 @CrossOrigin
 public class TokenController {
 
   private final UserService userService;
+
+  private final Logger logger = org.slf4j.LoggerFactory.getLogger(
+    TokenController.class
+  );
 
   @Autowired
   public TokenController(UserService userService) {
@@ -43,22 +49,39 @@ public class TokenController {
 
   @PostMapping(value = "")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public String generateToken(final @RequestBody AuthenticateDTO authenticate)
-    throws Exception {
-    // if username and password are valid, issue an access token
-    // note that subsequent requests need this token
-    if (
-      userService.authenticateUser(
-        authenticate.getUsername(),
-        authenticate.getPassword()
-      )
-    ) {
-      return generateToken(authenticate.getUsername());
+  public String generateToken(AuthenticateDTO authenticate) {
+    logger.info("Authenticating user: " + authenticate.getUsername());
+    try {
+      if (
+        userService.authenticateUser(
+          authenticate.getUsername(),
+          authenticate.getPassword()
+        )
+      ) {
+        logger.info("User authenticated: " + authenticate.getUsername());
+        return generateToken(authenticate.getUsername());
+      }
+    } catch (UserDoesNotExistsException e) {
+      logger.info("User does not exist: " + authenticate.getUsername());
+      throw new ResponseStatusException(
+        HttpStatus.UNAUTHORIZED,
+        "Access denied, user does not exist..."
+      );
+    } catch (BadCredentialsException e) {
+      logger.info("Wrong password: " + authenticate.getUsername());
+      throw new ResponseStatusException(
+        HttpStatus.UNAUTHORIZED,
+        "Access denied, wrong password..."
+      );
+    } catch (Exception e) {
+      logger.info("Unknown error: " + authenticate.getUsername());
+      e.printStackTrace();
     }
+    logger.info("Wrong credentials: " + authenticate.getUsername());
 
     throw new ResponseStatusException(
       HttpStatus.UNAUTHORIZED,
-      "Access denied, wrong credentials...."
+      "Access denied, wrong credentials..."
     );
   }
 

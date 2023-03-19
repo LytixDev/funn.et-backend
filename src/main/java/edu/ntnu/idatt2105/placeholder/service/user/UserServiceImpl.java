@@ -10,6 +10,8 @@ import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -27,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   /**
    * Checks if a user with the given username exists.
@@ -188,12 +192,13 @@ public class UserServiceImpl implements UserService {
     return salt + ":" + BCrypt.hashpw(password, salt);
   }
 
-  public static boolean checkPassword(String password, String hashedPassword) {
+  private boolean checkPassword(String password, String hashedPassword) {
+    logger.info(password + " -> " + hashedPassword);
     String[] parts = hashedPassword.split(":");
     String salt = parts[0];
     String hashedPasswordFromDB = parts[1];
     String hashedPasswordToCheck = BCrypt.hashpw(password, salt);
-
-    return BCrypt.checkpw(hashedPasswordFromDB, hashedPasswordToCheck);
+    logger.info(hashedPasswordToCheck + " == " + hashedPasswordFromDB);
+    return hashedPasswordFromDB.equals(hashedPasswordToCheck);
   }
 }

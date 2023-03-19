@@ -36,7 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     HttpServletResponse response,
     FilterChain filterChain
   ) throws ServletException, IOException {
-    LOGGER.info("doFilterInternal() called");
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
     // if Bearer auth header does not exist, continue with unauthenticated user context
