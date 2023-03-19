@@ -14,5 +14,5 @@ database-down:
 	make compose args="down"
 
 test:
-	make mvn args="test"
+	make mvn args="test $(args)"
 

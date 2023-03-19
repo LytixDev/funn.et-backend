@@ -4,6 +4,7 @@ import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import java.util.List;
@@ -97,12 +98,9 @@ public class UserServiceImpl implements UserService {
     );
 
     user.setPassword(hashPassword(user.getPassword()));
+    user.setRole(Role.USER);
 
-    try {
-      return userRepository.save(user);
-    } catch (Exception e) {
-      throw new DatabaseException("An error occurred while saving the user.");
-    }
+    return userRepository.save(user);
   }
 
   /**

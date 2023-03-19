@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping(value = "/token")
+@RequestMapping(value = "api/v1/token")
 @EnableAutoConfiguration
 @CrossOrigin
 public class TokenController {

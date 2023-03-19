@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -11,9 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Configures spring security
  *
- * @author Carl G.
+ * @author Carl G, Thomas S.
  * @version 1.0
- * @date 17.3.2023
+ * @date 19.3.2023
  */
 @Configuration
 @EnableWebSecurity
@@ -30,19 +31,19 @@ public class SecurityConfig {
     http
       .csrf()
       .disable()
-      .cors()
-      .and()
-      .authorizeHttpRequests()
-      .requestMatchers(
-        "/token",
-        "/swagger-ui/index.html",
-        "v3/api-docs",
-        "api/public"
+      .cors(AbstractHttpConfigurer::disable)
+      .authorizeHttpRequests(auth ->
+        auth
+          .requestMatchers(
+            "/token",
+            "/swagger-ui/index.html",
+            "/v3/api-docs",
+            "/api/v1/public/**"
+          )
+          .permitAll()
+          .anyRequest()
+          .authenticated()
       )
-      .permitAll()
-      .anyRequest()
-      .authenticated()
-      .and()
       .sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
