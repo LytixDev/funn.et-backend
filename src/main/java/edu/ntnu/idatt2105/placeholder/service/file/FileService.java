@@ -1,12 +1,10 @@
 package edu.ntnu.idatt2105.placeholder.service.file;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.file.FileNotFoundException;
+import java.util.List;
 import lombok.NonNull;
+import org.springframework.stereotype.Service;
 
 /**
  * Interface for file services.
@@ -16,17 +14,19 @@ import lombok.NonNull;
  */
 @Service
 public interface FileService<T> {
-    boolean fileExists(@NonNull T file) throws NullPointerException;
-    
-    T saveFile(@NonNull T file) throws DatabaseException, NullPointerException;
+  boolean fileExists(@NonNull T file) throws NullPointerException;
 
-    T getFile(Long id) throws FileNotFoundException, DatabaseException;
+  T saveFile(@NonNull T file) throws DatabaseException, NullPointerException;
 
-    T updateFile(@NonNull T file) throws FileNotFoundException, DatabaseException, NullPointerException;
+  T getFile(Long id) throws FileNotFoundException, DatabaseException;
 
-    void deleteFile(@NonNull T file) throws FileNotFoundException, DatabaseException, NullPointerException;
+  T updateFile(@NonNull T file)
+    throws FileNotFoundException, DatabaseException, NullPointerException;
 
-    void deleteFile(Long id) throws FileNotFoundException, DatabaseException;
+  void deleteFile(@NonNull T file)
+    throws FileNotFoundException, DatabaseException, NullPointerException;
 
-    List<T> getAllFiles();
+  void deleteFile(Long id) throws FileNotFoundException, DatabaseException;
+
+  List<T> getAllFiles();
 }

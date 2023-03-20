@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Class representing an image.
@@ -20,15 +21,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "image")
+@Table(name = "`image_file``")
 @Entity
 public class Image {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
-    private Long id;
 
-    @Column(name = "url")
-    private String url;
+  @Id
+  @Column(name = "`image_id`", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @NonNull
+  private Long id;
+
+  @Column(name = "`image_url`", nullable = false)
+  @NonNull
+  private String url;
+
+  @Column(name = "`image_alt`", nullable = false)
+  @NonNull
+  private String alt;
 }

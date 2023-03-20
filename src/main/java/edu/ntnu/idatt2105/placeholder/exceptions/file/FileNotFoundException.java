@@ -6,20 +6,20 @@ package edu.ntnu.idatt2105.placeholder.exceptions.file;
  * @version 1.0 - 20.03.2023
  */
 public class FileNotFoundException extends Exception {
-    
-    /**
-     * Default constructor.
-     * Has a default message.
-     */
-    public FileNotFoundException() {
-        super("File not found");
-    }
 
-    /**
-     * Constructor with message.
-     * @param message The message to be displayed.
-     */
-    public FileNotFoundException(String message) {
-        super(message);
-    }
+  /**
+   * Default constructor.
+   * Has a default message.
+   */
+  public FileNotFoundException() {
+    super("File not found");
+  }
+
+  /**
+   * Constructor with message.
+   * @param message The message to be displayed.
+   */
+  public FileNotFoundException(String message) {
+    super(message);
+  }
 }

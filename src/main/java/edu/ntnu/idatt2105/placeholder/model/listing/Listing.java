@@ -3,7 +3,6 @@ package edu.ntnu.idatt2105.placeholder.model.listing;
 import edu.ntnu.idatt2105.placeholder.model.file.Image;
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,10 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -80,8 +77,8 @@ public class Listing {
 
   @Column(name = "`expiration_date`", nullable = false)
   private LocalDate expirationDate;
-  
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
-  private List<Image> image;
+  private List<Image> images;
 }

@@ -4,7 +4,6 @@ import edu.ntnu.idatt2105.placeholder.model.file.Image;
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
 import java.time.LocalDate;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
