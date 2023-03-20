@@ -17,7 +17,7 @@ import org.springframework.core.io.Resource;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ImageDTO {
+public class ImageResponseDTO {
 
   @NonNull
   Resource image;
