@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
     user.setPassword(hashPassword(user.getPassword()));
 
     return userRepository.save(getUserByUsername(user.getUsername()));
-}
+  }
 
   /**
    * Gets all users from the database.
