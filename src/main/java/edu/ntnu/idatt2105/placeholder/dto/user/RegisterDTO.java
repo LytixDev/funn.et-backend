@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,17 +20,22 @@ import lombok.NonNull;
 public class RegisterDTO {
 
   @NonNull
+  @NotBlank
   private String username;
 
   @NonNull
+  @NotBlank
   private String email;
 
   @NonNull
+  @NotBlank
   private String firstName;
 
   @NonNull
+  @NotBlank
   private String lastName;
 
   @NonNull
+  @NotBlank
   private String password;
 }
