@@ -3,8 +3,8 @@ server.port: 8080
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/db
-    username: springuser
-    password: password
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -13,6 +13,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 springdoc:
   swagger-ui:

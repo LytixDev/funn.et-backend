@@ -4,18 +4,24 @@ import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 /**
  * Service class for user operations on the user repository.
- * @author Callum G., Carl G.
- * @version 1.1 - 18.03.2023
+ * @author Callum G, Thomas S., Carl G.
+ * @version 1.0
+ * @date 20.3.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -23,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   /**
    * Checks if a user with the given username exists.
@@ -89,11 +97,10 @@ public class UserServiceImpl implements UserService {
 
     if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException();
 
-    try {
-      return userRepository.save(user);
-    } catch (Exception e) {
-      throw new DatabaseException("canNotSaveUser");
-    }
+    user.setPassword(hashPassword(user.getPassword()));
+    user.setRole(Role.USER);
+
+    return userRepository.save(user);
   }
 
   /**
@@ -140,11 +147,10 @@ public class UserServiceImpl implements UserService {
    * @throws NullPointerException if user is null.
    */
   public User updateUser(@NonNull User user) throws UserDoesNotExistsException {
-    if (
-      !usernameExists(user.getUsername()) || !emailExists(user.getEmail())
-    ) throw new UserDoesNotExistsException();
+    // TODO: Fix This Method
+    user.setPassword(hashPassword(user.getPassword()));
 
-    return userRepository.save(user);
+    return userRepository.save(getUserByUsername(user.getUsername()));
   }
 
   /**
@@ -160,5 +166,34 @@ public class UserServiceImpl implements UserService {
     );
 
     return users;
+  }
+
+  @Override
+  public boolean authenticateUser(String username, String password)
+    throws UserDoesNotExistsException, BadCredentialsException {
+    User user = getUserByUsername(username);
+    if (user == null) {
+      throw new UserDoesNotExistsException();
+    }
+    if (!checkPassword(password, user.getPassword())) {
+      throw new BadCredentialsException("Invalid password");
+    }
+
+    return true;
+  }
+
+  public static String hashPassword(String password) {
+    String salt = BCrypt.gensalt(); // generate a random salt value
+    return salt + ":" + BCrypt.hashpw(password, salt);
+  }
+
+  private boolean checkPassword(String password, String hashedPassword) {
+    logger.info(password + " -> " + hashedPassword);
+    String[] parts = hashedPassword.split(":");
+    String salt = parts[0];
+    String hashedPasswordFromDB = parts[1];
+    String hashedPasswordToCheck = BCrypt.hashpw(password, salt);
+    logger.info(hashedPasswordToCheck + " == " + hashedPasswordFromDB);
+    return hashedPasswordFromDB.equals(hashedPasswordToCheck);
   }
 }

@@ -6,6 +6,7 @@ import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import java.util.List;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,4 +38,7 @@ public interface UserService {
   public User updateUser(User user) throws UserDoesNotExistsException;
 
   public List<User> getAllUsers() throws DatabaseException;
+
+  public boolean authenticateUser(String username, String password)
+    throws UserDoesNotExistsException, BadCredentialsException;
 }
