@@ -17,9 +17,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service for listing operations.
- * @author Nicolai H. B.
- * @version 1.0
- * @date 18.3.2023
+ * @author Nicolai H. B., Callum G.
+ * @version 1.1 - 18.3.2023
  */
 @Service
 @RequiredArgsConstructor
