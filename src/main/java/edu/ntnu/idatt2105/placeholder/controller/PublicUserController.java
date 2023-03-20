@@ -7,8 +7,6 @@ import edu.ntnu.idatt2105.placeholder.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.placeholder.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +28,7 @@ public class PublicUserController {
 
   private final UserService userService;
 
-  private Logger logger = Logger.getLogger(
+  private final Logger LOGGER = Logger.getLogger(
     PublicUserController.class.getName()
   );
 
@@ -51,7 +50,10 @@ public class PublicUserController {
   }
 
   @PostMapping
-  public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser) {
+  public ResponseEntity<String> createUser(
+    @RequestBody RegisterDTO registerUser
+  ) {
+    LOGGER.info("Register user: " + registerUser);
     User user = RegisterMapper.INSTANCE.registerDTOtoUser(registerUser);
     try {
       userService.saveUser(user);

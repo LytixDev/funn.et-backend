@@ -13,13 +13,13 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(componentModel = "spring")
 public interface RegisterMapper {
-    RegisterMapper INSTANCE = Mappers.getMapper(RegisterMapper.class);
+  RegisterMapper INSTANCE = Mappers.getMapper(RegisterMapper.class);
 
   /**
-  * Maps a registration DTO to a user.
-  * @param registerDTO A user registration in the form of a DTO
-  * @return A user object with the USER role
-  */
+   * Maps a registration DTO to a user.
+   * @param registerDTO A user registration in the form of a DTO
+   * @return A user object with the USER role
+   */
   @Mapping(target = "role", constant = "USER")
   User registerDTOtoUser(RegisterDTO registerDTO);
 }
