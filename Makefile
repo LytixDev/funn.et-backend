@@ -1,11 +1,8 @@
-run:
-	make mvn args="spring-boot:run -Dspring-boot.run.fork=false $(args)"
-
 compose:
 	docker-compose -f docker/docker-compose.yml --env-file .env -p spring $(args)
 
-mvn:
-	env $$(cat .env|xargs) mvn $(args)
+run:
+	make mvn args="spring-boot:run -Dspring-boot.run.fork=false"
 
 database:
 	make compose args="up -d"
@@ -13,14 +10,17 @@ database:
 database-down:
 	make compose args="down"
 
-test:
-	make mvn args="test $(args)"
+spring:
+	mvn spring-boot:run
 
 prettier:
-	make mvn args="prettier:write"
+	mvn prettier:write
+
+test:
+	mvn clean test
 
 install:
-	make mvn args="clean install"
+	mvn clean install
 
 compile:
-	make mvn args="clean compile"
+	mvn clean compile
