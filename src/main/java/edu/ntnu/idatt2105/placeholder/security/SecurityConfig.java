@@ -13,15 +13,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Configures spring security
  *
  * @author Carl G, Thomas S.
- * @version 1.0
- * @date 19.3.2023
+ * @version 1.1 - 20.3.2023
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
   /**
-   * Permits all requests to `swagger-ui/index.html` and `v3/api-docs`.
+   * Permits all requests to `swagger/**` and `api/v1/public/**`.
    *
    * @param http HttpSecurity - http object to build configurations on
    * @throws Exception thrown if an error occurs when permitting requests
@@ -34,12 +33,7 @@ public class SecurityConfig {
       .cors(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(auth ->
         auth
-          .requestMatchers(
-            "/token",
-            "/swagger-ui/index.html",
-            "/v3/api-docs",
-            "/api/v1/public/**"
-          )
+          .requestMatchers("/swagger/**", "/api/v1/public/**")
           .permitAll()
           .anyRequest()
           .authenticated()
