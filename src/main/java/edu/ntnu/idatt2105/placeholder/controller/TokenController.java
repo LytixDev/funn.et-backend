@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.idatt2105.placeholder.dto.user.AuthenticateDTO;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.time.Duration;
 import java.time.Instant;
 import org.slf4j.Logger;
@@ -38,12 +39,13 @@ public class TokenController {
 
   // keyStr is hardcoded here for testing purpose
   // in a real scenario, it should either be stored in a database or injected from the environment
-  public static final String JWT_TOKEN_SECRET = System.getenv(
-    "JWT_TOKEN_SECRET"
-  );
+  public static final String JWT_TOKEN_SECRET = Dotenv
+    .load()
+    .get("JWT_TOKEN_SECRET");
+
   private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(
-    System.getenv("JWT_TOKEN_VALIDITY") != null
-      ? Long.parseLong(System.getenv("JWT_TOKEN_VALIDITY"))
+    Dotenv.load().get("JWT_TOKEN_VALIDITY") != null
+      ? Long.parseLong(Dotenv.load().get("JWT_TOKEN_VALIDITY"))
       : 30
   );
 
