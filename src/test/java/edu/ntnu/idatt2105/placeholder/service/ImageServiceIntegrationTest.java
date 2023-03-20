@@ -45,7 +45,8 @@ public class ImageServiceIntegrationTest {
 
   @Before
   public void setUp() {
-    existingImage = Image.builder().id(1L).name("pic1").alt("picture 1").build();
+    existingImage =
+      Image.builder().id(1L).name("pic1").alt("picture 1").build();
 
     newImage = Image.builder().id(2L).name("pic2").alt("picture 2").build();
 

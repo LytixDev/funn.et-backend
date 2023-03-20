@@ -1,12 +1,11 @@
 package edu.ntnu.idatt2105.placeholder.dto.file;
 
-import org.springframework.core.io.Resource;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.core.io.Resource;
 
 /**
  * Data transfer object for image.

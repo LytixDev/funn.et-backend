@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,6 @@ public class ImageStorageService implements FileStorageService {
 
   @Override
   public Resource loadFile(Long id) throws IOException, MalformedURLException {
-
     Path file = root.resolve(id.toString());
     Resource resource = new UrlResource(file.toUri());
 

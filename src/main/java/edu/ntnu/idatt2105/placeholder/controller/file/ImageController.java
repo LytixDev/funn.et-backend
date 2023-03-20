@@ -7,7 +7,6 @@ import edu.ntnu.idatt2105.placeholder.service.file.ImageService;
 import edu.ntnu.idatt2105.placeholder.service.file.ImageServiceImpl;
 import edu.ntnu.idatt2105.placeholder.service.file.ImageStorageService;
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.core.io.Resource;
@@ -30,13 +29,19 @@ public class ImageController {
   private final ImageStorageService imageStorageService;
 
   @Autowired
-  public ImageController(ImageServiceImpl imageService, ImageStorageService imageStorageService) {
+  public ImageController(
+    ImageServiceImpl imageService,
+    ImageStorageService imageStorageService
+  ) {
     this.imageService = imageService;
     this.imageStorageService = imageStorageService;
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ImageResponseDTO> getImage(@PathVariable Long id, HttpServletRequest request) {
+  public ResponseEntity<ImageResponseDTO> getImage(
+    @PathVariable Long id,
+    HttpServletRequest request
+  ) {
     Image image;
 
     Resource resource;
