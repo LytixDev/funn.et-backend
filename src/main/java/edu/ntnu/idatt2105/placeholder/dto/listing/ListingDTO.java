@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.dto.listing;
 
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
-
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
