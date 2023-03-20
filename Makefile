@@ -5,7 +5,7 @@ compose:
 	docker-compose -f docker/docker-compose.yml --env-file .env -p spring $(args)
 
 mvn:
-	env $$(cat .env|xargs) mvn $(args)
+	mvn $(args)
 
 database:
 	make compose args="up -d"
