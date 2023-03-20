@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.idatt2105.placeholder.dto.user.AuthenticateDTO;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.time.Duration;
 import java.time.Instant;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import io.github.cdimascio.dotenv.Dotenv;
 
 @RestController
 @RequestMapping(value = "/api/v1/public/token")
@@ -39,7 +39,9 @@ public class TokenController {
 
   // keyStr is hardcoded here for testing purpose
   // in a real scenario, it should either be stored in a database or injected from the environment
-  public static final String JWT_TOKEN_SECRET = Dotenv.load().get("JWT_TOKEN_SECRET");
+  public static final String JWT_TOKEN_SECRET = Dotenv
+    .load()
+    .get("JWT_TOKEN_SECRET");
 
   private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(
     Dotenv.load().get("JWT_TOKEN_VALIDITY") != null
