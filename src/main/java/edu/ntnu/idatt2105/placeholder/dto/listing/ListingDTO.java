@@ -1,7 +1,7 @@
 package edu.ntnu.idatt2105.placeholder.dto.listing;
 
-import edu.ntnu.idatt2105.placeholder.model.file.Image;
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
+
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ListingDTO {
+public class ListingDTO<T> {
 
   @NonNull
   private Long id;
@@ -50,5 +50,5 @@ public class ListingDTO {
   @NonNull
   private LocalDate expirationDate;
 
-  private List<Image> image;
+  private List<T> image;
 }
