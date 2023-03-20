@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller for listing
  * @author Nicolai H. B.
- * @version 1.0
- * @date 18.3.2023
+ * @version 1.0 - 18.3.2023
  */
 @RestController
 @CrossOrigin("*")

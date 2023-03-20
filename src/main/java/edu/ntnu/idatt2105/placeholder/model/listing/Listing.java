@@ -1,9 +1,10 @@
 package edu.ntnu.idatt2105.placeholder.model.listing;
 
+import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +13,8 @@ import lombok.NonNull;
 
 /**
  * Entity class for listing.
- * @author Nicolai H. B.
- * @version 1.0
- * @date 18.3.2023
+ * @author Nicolai H. B., Callum G.
+ * @version 1.1 - 18.3.2023
  */
 @Data
 @AllArgsConstructor
@@ -34,7 +34,10 @@ public class Listing {
   @NonNull
   private User user;
 
-  /* location: have to wait for location class to be implemented */
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "`location`", referencedColumnName = "`location_id`")
+  @NonNull
+  private Location location;
 
   @Column(name = "`title`", length = 64, nullable = false)
   @NonNull
@@ -42,10 +45,10 @@ public class Listing {
 
   @Column(name = "`brief_description`", nullable = false)
   @NonNull
-  private String brief_description;
+  private String briefDescription;
 
   @Column(name = "`full_description`", length = 512)
-  private String full_description;
+  private String fullDescription;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "`category`", nullable = false)
@@ -56,12 +59,10 @@ public class Listing {
   private double price;
 
   @Column(name = "`publication_date`", nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date publication_date;
+  private LocalDate publicationDate;
 
   @Column(name = "`expiration_date`", nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date expirationDate;
+  private LocalDate expirationDate;
 
   @Column(name = "`image`")
   private byte[] image;
