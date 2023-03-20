@@ -21,12 +21,13 @@ public interface ListingService {
     throws ListingAlreadyExistsException, DatabaseException, NullPointerException;
 
   Listing updateListing(@NonNull Listing listing)
-    throws ListingNotFoundException, DatabaseException;
+    throws ListingNotFoundException, DatabaseException, NullPointerException;
 
   Listing deleteListing(@NonNull Listing listing)
-    throws ListingNotFoundException, DatabaseException;
+    throws ListingNotFoundException, DatabaseException, NullPointerException;
 
-  Listing findListingById(@NonNull Long id) throws ListingNotFoundException;
+  Listing getListing(@NonNull Long id)
+    throws ListingNotFoundException, NullPointerException;
 
   List<Listing> getAllListings();
 

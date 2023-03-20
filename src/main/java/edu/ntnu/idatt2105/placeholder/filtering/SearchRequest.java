@@ -1,6 +1,7 @@
 package edu.ntnu.idatt2105.placeholder.filtering;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,14 +26,14 @@ public class SearchRequest implements Serializable {
 
   public List<FilterRequest> getFilterRequests() {
     if (filterRequests == null) {
-      filterRequests = List.of();
+      filterRequests = new ArrayList<>();
     }
     return filterRequests;
   }
 
   public List<SortRequest> getSortRequests() {
     if (sortRequests == null) {
-      sortRequests = List.of();
+      sortRequests = new ArrayList<>();
     }
     return sortRequests;
   }

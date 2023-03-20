@@ -28,12 +28,26 @@ public class ListingServiceImpl implements ListingService {
   @Autowired
   private ListingRepository listingRepository;
 
+  /**
+   * Checks if a listing exists in the database.
+   * @param listing The listing to check.
+   * @return True if the listing exists, false otherwise.
+   * @throws NullPointerException If the listing is null.
+   */
   @Override
   public boolean listingExists(@NonNull Listing listing)
     throws NullPointerException {
     return listingRepository.existsById(listing.getId());
   }
 
+  /**
+   * Saves a listing to the database.
+   * @param listing The listing to save.
+   * @return The saved listing.
+   * @throws ListingAlreadyExistsException If the listing already exists.
+   * @throws DatabaseException If the database operation fails.
+   * @throws NullPointerException If the listing is null.
+   */
   @Override
   public Listing saveListing(@NonNull Listing listing)
     throws ListingAlreadyExistsException, DatabaseException, NullPointerException {
@@ -45,6 +59,14 @@ public class ListingServiceImpl implements ListingService {
     }
   }
 
+  /**
+   * Updates a listing in the database.
+   * @param listing The listing to update.
+   * @return The updated listing.
+   * @throws ListingNotFoundException If the listing does not exist.
+   * @throws DatabaseException If the database operation fails.
+   * @throws NullPointerException If the listing is null.
+   */
   @Override
   public Listing updateListing(@NonNull Listing listing)
     throws DatabaseException {
@@ -57,9 +79,17 @@ public class ListingServiceImpl implements ListingService {
     }
   }
 
+  /**
+   * Deletes a listing from the database.
+   * @param listing The listing to delete.
+   * @return The deleted listing.
+   * @throws ListingNotFoundException If the listing does not exist.
+   * @throws DatabaseException If the database operation fails.
+   * @throws NullPointerException If the listing is null.
+   */
   @Override
   public Listing deleteListing(@NonNull Listing listing)
-    throws DatabaseException {
+    throws ListingNotFoundException, DatabaseException, NullPointerException {
     if (!listingExists(listing)) throw new ListingNotFoundException();
 
     try {
@@ -70,19 +100,36 @@ public class ListingServiceImpl implements ListingService {
     }
   }
 
+  /**
+   * Finds a listing by id.
+   * @param id The id of the listing.
+   * @return The listing.
+   * @throws ListingNotFoundException If the listing does not exist.
+   * @throws NullPointerException If the id is null.
+   */
   @Override
-  public Listing findListingById(@NonNull Long id)
-    throws ListingNotFoundException {
+  public Listing getListing(@NonNull Long id)
+    throws ListingNotFoundException, NullPointerException {
     return listingRepository
       .findById(id)
       .orElseThrow(ListingNotFoundException::new);
   }
 
+  /**
+   * Finds all listings.
+   * @return A list of all listings.
+   */
   @Override
   public List<Listing> getAllListings() {
     return listingRepository.findAll();
   }
 
+  /**
+   * Finds all listings paginated.
+   * @param pageable The pageable object.
+   * @return A page of listings.
+   * @throws NullPointerException If the pageable object is null.
+   */
   @Override
   public Page<Listing> searchListingsPaginated(
     @NonNull SearchRequest searchRequest

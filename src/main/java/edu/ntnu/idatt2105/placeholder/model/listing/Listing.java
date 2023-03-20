@@ -59,11 +59,9 @@ public class Listing {
   private double price;
 
   @Column(name = "`publication_date`", nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
   private LocalDate publicationDate;
 
   @Column(name = "`expiration_date`", nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
   private LocalDate expirationDate;
 
   @Column(name = "`image`")

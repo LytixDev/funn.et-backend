@@ -261,8 +261,6 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public List<Location> getLocationsByLatitude(double latitude)
     throws LocationDoesntExistException, DatabaseException {
-    System.out.println("Getting locations by latitude" + latitude);
-    System.out.println("Wishing for latitude" + 59.12);
     try {
       return locationRepository
         .findByLatitude(latitude)
