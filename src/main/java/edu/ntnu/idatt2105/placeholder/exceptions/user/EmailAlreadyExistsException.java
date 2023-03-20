@@ -2,9 +2,8 @@ package edu.ntnu.idatt2105.placeholder.exceptions.user;
 
 /**
  * Exception thrown when a user with a given email already exists.
- * @author Callum G.
- * @version 1.0
- * @date 13.3.2023
+ * @author Callum G., Carl G.
+ * @version 1.1 - 18.03.2023
  */
 public class EmailAlreadyExistsException extends Exception {
 
@@ -21,6 +20,6 @@ public class EmailAlreadyExistsException extends Exception {
    * Has a default message.
    */
   public EmailAlreadyExistsException() {
-    super("A user with this email already exists.");
+    super("userEmailAlreadyExists");
   }
 }

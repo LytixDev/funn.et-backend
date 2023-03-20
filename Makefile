@@ -16,3 +16,11 @@ database-down:
 test:
 	make mvn args="test $(args)"
 
+prettier:
+	make mvn args="prettier:write"
+
+install:
+	make mvn args="clean install"
+
+compile:
+	make mvn args="clean compile"

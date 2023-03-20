@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service class for user operations on the user repository.
- * @author Callum G, Thomas S.
+ * @author Callum G, Thomas S., Carl G.
  * @version 1.0
- * @date 13.3.2023
+ * @date 20.3.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -93,13 +93,9 @@ public class UserServiceImpl implements UserService {
     throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, NullPointerException {
     if (
       usernameExists(user.getUsername())
-    ) throw new UsernameAlreadyExistsException(
-      "A user with the username " + user.getUsername() + " already exists."
-    );
+    ) throw new UsernameAlreadyExistsException();
 
-    if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException(
-      "A user with the email " + user.getEmail() + " already exists."
-    );
+    if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException();
 
     user.setPassword(hashPassword(user.getPassword()));
     user.setRole(Role.USER);
@@ -117,9 +113,7 @@ public class UserServiceImpl implements UserService {
     try {
       userRepository.delete(user);
     } catch (Exception e) {
-      throw new DatabaseException(
-        "An error occurred while deleting the user, are you sure it exists?"
-      );
+      throw new DatabaseException("canNotDeleteUser");
     }
   }
 
@@ -153,10 +147,11 @@ public class UserServiceImpl implements UserService {
    * @throws NullPointerException if user is null.
    */
   public User updateUser(@NonNull User user) throws UserDoesNotExistsException {
+    // TODO: Fix This Method
     user.setPassword(hashPassword(user.getPassword()));
 
     return userRepository.save(getUserByUsername(user.getUsername()));
-  }
+}
 
   /**
    * Gets all users from the database.
