@@ -1,5 +1,7 @@
 package edu.ntnu.idatt2105.placeholder.dto.file;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +18,10 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ImageDTO {
+public class ImageUploadDTO {
 
   @NonNull
-  byte[] image;
+  MultipartFile image;
 
   @NonNull
   String alt;

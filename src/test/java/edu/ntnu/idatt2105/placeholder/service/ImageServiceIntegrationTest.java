@@ -45,9 +45,9 @@ public class ImageServiceIntegrationTest {
 
   @Before
   public void setUp() {
-    existingImage = Image.builder().id(1L).url("images/1.jpg").build();
+    existingImage = Image.builder().id(1L).name("pic1").alt("picture 1").build();
 
-    newImage = Image.builder().id(2L).url("images/2.jpg").build();
+    newImage = Image.builder().id(2L).name("pic2").alt("picture 2").build();
 
     when(imageRepository.existsById(existingImage.getId())).thenReturn(true);
     when(imageRepository.existsById(newImage.getId())).thenReturn(false);
@@ -87,7 +87,8 @@ public class ImageServiceIntegrationTest {
       return;
     }
     assertEquals(found.getId(), newImage.getId());
-    assertEquals(found.getUrl(), newImage.getUrl());
+    assertEquals(found.getName(), newImage.getName());
+    assertEquals(found.getAlt(), newImage.getAlt());
   }
 
   @Test
@@ -110,7 +111,8 @@ public class ImageServiceIntegrationTest {
       return;
     }
     assertEquals(found.getId(), existingImage.getId());
-    assertEquals(found.getUrl(), existingImage.getUrl());
+    assertEquals(found.getName(), existingImage.getName());
+    assertEquals(found.getAlt(), existingImage.getAlt());
   }
 
   @Test
@@ -133,7 +135,8 @@ public class ImageServiceIntegrationTest {
       return;
     }
     assertEquals(found.getId(), existingImage.getId());
-    assertEquals(found.getUrl(), existingImage.getUrl());
+    assertEquals(found.getName(), existingImage.getName());
+    assertEquals(found.getAlt(), existingImage.getAlt());
   }
 
   @Test
@@ -177,6 +180,7 @@ public class ImageServiceIntegrationTest {
     }
     assertEquals(found.size(), 1);
     assertEquals(found.get(0).getId(), existingImage.getId());
-    assertEquals(found.get(0).getUrl(), existingImage.getUrl());
+    assertEquals(found.get(0).getName(), existingImage.getName());
+    assertEquals(found.get(0).getAlt(), existingImage.getAlt());
   }
 }

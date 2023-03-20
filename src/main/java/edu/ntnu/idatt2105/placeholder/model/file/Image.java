@@ -31,10 +31,6 @@ public class Image {
   @NonNull
   private Long id;
 
-  @Column(name = "`image_url`", nullable = false)
-  @NonNull
-  private String url;
-
   @Column(name = "`image_alt`", nullable = false)
   @NonNull
   private String alt;
