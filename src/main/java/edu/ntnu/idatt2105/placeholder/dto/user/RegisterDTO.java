@@ -10,8 +10,8 @@ import lombok.NonNull;
 /**
  * Data transfer object for registration.
  * Used to transfer registration data between the backend and the application.
- * @author Callum G.
- * @version 1.0 - 13.3.2023
+ * @author Callum G., Carl G.
+ * @version 1.1 - 20.3.2023
  */
 @Data
 @AllArgsConstructor
