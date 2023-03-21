@@ -5,10 +5,12 @@ import edu.ntnu.idatt2105.placeholder.dto.location.LocationResponseDTO;
 import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.LocationAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.LocationDoesntExistException;
+import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.mapper.location.LocationMapper;
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
+import edu.ntnu.idatt2105.placeholder.service.location.PostCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +52,8 @@ public class LocationController {
   private LocationMapper locationMapper;
 
   private final LocationService locationService;
+
+  private final PostCodeService postCodeService;
 
   //TODO: make this paginated with search...
   /**
@@ -153,6 +157,13 @@ public class LocationController {
 
     LOGGER.info("Found post code with code {}", postCode.getPostCode());
 
+    try {
+      postCodeService.savePostCode(postCode);
+      LOGGER.info("Saved post code with code {}", postCode.getPostCode());
+    } catch (PostCodeAlreadyExistsException e) {
+      LOGGER.info("Post code already exists");
+    }
+
     location.setPostCode(postCode);
 
     LOGGER.info("Updating location with id {}", id);
@@ -190,16 +201,25 @@ public class LocationController {
       locationCreateDTO
     );
 
-    PostCode postCode = locationMapper.locationCreateDTOTPostCode(locationCreateDTO);
+    PostCode postCode = locationMapper.locationCreateDTOTPostCode(
+      locationCreateDTO
+    );
 
     LOGGER.info("Found post code with code {}", postCode.getPostCode());
+
+    try {
+      postCodeService.savePostCode(postCode);
+      LOGGER.info("Saved post code with code {}", postCode.getPostCode());
+    } catch (PostCodeAlreadyExistsException e) {
+      LOGGER.info("Post code already exists");
+    }
 
     location.setPostCode(postCode);
 
     LOGGER.info("Creating location {}", location);
 
     location = locationService.saveLocation(location);
-    
+
     LOGGER.info("Created location {}", location);
 
     LocationResponseDTO locationResponseDTO = locationMapper.locationToLocationResponseDTO(
@@ -227,7 +247,8 @@ public class LocationController {
     summary = "Delete location by id",
     description = "Deletes a location by id."
   )
-  public ResponseEntity<Void> deleteLocation(@PathVariable Long id) throws LocationDoesntExistException, NullPointerException, DatabaseException {
+  public ResponseEntity<Void> deleteLocation(@PathVariable Long id)
+    throws LocationDoesntExistException, NullPointerException, DatabaseException {
     LOGGER.info("Received request to delete location with id {}", id);
 
     locationService.deleteLocation(id);
@@ -237,5 +258,4 @@ public class LocationController {
     LOGGER.info("Returning 204 No Content");
     return ResponseEntity.noContent().build();
   }
-
 }

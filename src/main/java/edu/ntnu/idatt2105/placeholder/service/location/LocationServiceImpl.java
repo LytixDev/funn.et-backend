@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
   @Override
   public Location saveLocation(@NonNull Location location)
     throws LocationAlreadyExistsException, DatabaseException, NullPointerException {
-    if (locationExists(location)) throw new LocationAlreadyExistsException();
+    if (location.getId() != null && locationExists(location)) throw new LocationAlreadyExistsException();
 
     try {
       return locationRepository.save(location);
