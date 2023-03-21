@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service for listing operations.
  * @author Nicolai H. B., Callum G.
- * @version 1.1 - 18.3.2023
+ * @version 1.2 - 21.3.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -50,8 +50,8 @@ public class ListingServiceImpl implements ListingService {
   @Override
   public Listing saveListing(@NonNull Listing listing)
     throws ListingAlreadyExistsException, DatabaseException, NullPointerException {
-    if (listingExists(listing)) throw new ListingAlreadyExistsException();
-    try {
+      if (listing.getId() != null && listingExists(listing)) throw new ListingAlreadyExistsException();
+      try {
       return listingRepository.save(listing);
     } catch (Exception e) {
       throw new DatabaseException();
@@ -74,6 +74,7 @@ public class ListingServiceImpl implements ListingService {
     try {
       return listingRepository.save(listing);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new DatabaseException();
     }
   }

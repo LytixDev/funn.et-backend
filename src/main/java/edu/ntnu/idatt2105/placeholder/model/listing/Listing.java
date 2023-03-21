@@ -28,7 +28,7 @@ import lombok.NonNull;
 /**
  * Entity class for listing.
  * @author Nicolai H. B., Callum G.
- * @version 1.1 - 18.3.2023
+ * @version 1.2 - 21.3.2023
  */
 @Data
 @AllArgsConstructor
@@ -49,7 +49,7 @@ public class Listing {
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`location`", referencedColumnName = "`location_id`")
+  @JoinColumn(name = "`location_id`", referencedColumnName = "`location_id`")
   @NonNull
   private Location location;
 

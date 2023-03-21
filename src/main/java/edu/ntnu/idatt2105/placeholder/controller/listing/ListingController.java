@@ -159,6 +159,8 @@ public class ListingController {
 
     Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
 
+    LOGGER.info("Mapped DTO to listing: {}", requestedListing);
+
     Listing updatedListing = listingService.updateListing(requestedListing);
 
     LOGGER.info("Saved updated listing to database");

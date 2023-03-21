@@ -87,7 +87,7 @@ public abstract class ListingMapper {
     {
       @Mapping(
         source = "location",
-        target = "locationId",
+        target = "location",
         qualifiedByName = "getLocationId"
       ),
       @Mapping(
@@ -115,7 +115,7 @@ public abstract class ListingMapper {
   @Mappings(
     {
       @Mapping(
-        source = "locationId",
+        source = "location",
         target = "location",
         qualifiedByName = "getLocation"
       ),

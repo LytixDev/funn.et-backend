@@ -3,6 +3,8 @@ package edu.ntnu.idatt2105.placeholder.unit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.HashSet;
+
 import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import org.junit.jupiter.api.Nested;
@@ -24,6 +26,7 @@ public class UserTest {
           "firstName",
           "lastName",
           "password",
+          new HashSet<>(),
           Role.USER
         );
 
@@ -38,7 +41,7 @@ public class UserTest {
     @Test
     public void testUserConstructorWithNulls() {
       try {
-        user = new User("username", "password", null, null, null, Role.USER);
+        user = new User("username", "password", null, null, null, new HashSet<>(), Role.USER);
         fail();
       } catch (NullPointerException e) {
         assertEquals(NullPointerException.class, e.getClass());

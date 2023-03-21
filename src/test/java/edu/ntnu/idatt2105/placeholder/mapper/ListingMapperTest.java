@@ -19,6 +19,8 @@ import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
 import java.time.LocalDate;
+import java.util.HashSet;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +60,7 @@ public class ListingMapperTest {
   @Before
   public void setUp()
     throws UserDoesNotExistsException, LocationDoesntExistException, DatabaseException {
-    postCode = new PostCode(0000, "Oslo");
+    postCode = new PostCode(0000, "Oslo", new HashSet<>());
 
     location =
       Location
@@ -68,6 +70,7 @@ public class ListingMapperTest {
         .postCode(postCode)
         .latitude(0.0D)
         .longitude(0.0D)
+        .listings(new HashSet<>())
         .build();
 
     user =
@@ -78,6 +81,7 @@ public class ListingMapperTest {
         .firstName("firstName")
         .lastName("lastName")
         .email("email")
+        .listings(new HashSet<>())
         .role(Role.USER)
         .build();
 
@@ -107,7 +111,7 @@ public class ListingMapperTest {
     assertEquals(listing.getTitle(), dto.getTitle());
     assertEquals(listing.getFullDescription(), dto.getFullDescription());
     assertEquals(listing.getPrice(), dto.getPrice());
-    assertEquals(listing.getLocation().getId(), dto.getLocationId());
+    assertEquals(listing.getLocation().getId(), dto.getLocation());
     assertEquals(listing.getUser().getUsername(), dto.getUsername());
     assertEquals(listing.getCategory(), dto.getCategory());
     assertEquals(listing.getPublicationDate(), dto.getPublicationDate());
@@ -122,7 +126,7 @@ public class ListingMapperTest {
       .id(1L)
       .title("title")
       .price(1000)
-      .locationId(1L)
+      .location(1L)
       .username("username")
       .briefDescription("description")
       .fullDescription("description")
@@ -143,7 +147,7 @@ public class ListingMapperTest {
     assertEquals(dto.getTitle(), listing.getTitle());
     assertEquals(dto.getFullDescription(), listing.getFullDescription());
     assertEquals(dto.getPrice(), listing.getPrice());
-    assertEquals(dto.getLocationId(), listing.getLocation().getId());
+    assertEquals(dto.getLocation(), listing.getLocation().getId());
     assertEquals(dto.getUsername(), listing.getUser().getUsername());
     assertEquals(dto.getCategory(), listing.getCategory());
     assertEquals(dto.getPublicationDate(), listing.getPublicationDate());

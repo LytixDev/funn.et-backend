@@ -2,6 +2,8 @@ package edu.ntnu.idatt2105.placeholder.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashSet;
+
 import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
@@ -30,6 +32,7 @@ public class UserRepositoryTest {
       "firstName",
       "lastName",
       "password",
+      new HashSet<>(),
       Role.USER
     );
     entityManager.persist(user);
@@ -48,6 +51,7 @@ public class UserRepositoryTest {
       "firstName",
       "lastName",
       "password",
+      new HashSet<>(),
       Role.USER
     );
     entityManager.persist(user);

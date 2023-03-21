@@ -1,5 +1,9 @@
 package edu.ntnu.idatt2105.placeholder.model.location;
 
+import java.util.Collection;
+
+import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -38,16 +43,19 @@ public class Location {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "`address`")
+  @Column(name = "`address`", nullable = false)
   private String address;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`postcode`", referencedColumnName = "`postcode`")
+  @JoinColumn(name = "`postcode`", referencedColumnName = "`postcode`", nullable = false)
   private PostCode postCode;
 
-  @Column(name = "`latitude`")
+  @Column(name = "`latitude`", nullable = false)
   private double latitude;
 
-  @Column(name = "`longitude`")
+  @Column(name = "`longitude`", nullable = false)
   private double longitude;
+
+  @OneToMany(mappedBy = "`location_id`", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Listing> listings;
 }

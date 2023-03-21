@@ -10,9 +10,13 @@ import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.repository.listing.ListingRepository;
+import edu.ntnu.idatt2105.placeholder.repository.location.LocationRepository;
+import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
+import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationServiceImpl;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Before;
@@ -43,6 +47,15 @@ public class ListingFilterTest {
   private ListingRepository listingRepository;
 
   @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired 
+  private PostCodeRepository postCodeRepository;
+
+  @Autowired
   private LocationService locationService;
 
   private SearchSpecification<Listing> searchSpecification;
@@ -57,12 +70,14 @@ public class ListingFilterTest {
 
   @Before
   public void setUp() {
+    
     User user1 = new User(
       "username",
       "email",
       "firstName",
       "lastName",
       "password",
+      new HashSet<>(),
       Role.USER
     );
 
@@ -72,10 +87,11 @@ public class ListingFilterTest {
       "firstName2",
       "lastName2",
       "password2",
+      new HashSet<>(),
       Role.USER
     );
 
-    PostCode postCode = new PostCode(0000, "Oslo");
+    PostCode postCode = new PostCode(0000, "Oslo", new HashSet<>());
 
     Location location = Location
       .builder()
@@ -84,9 +100,10 @@ public class ListingFilterTest {
       .postCode(postCode)
       .latitude(59.9127D)
       .longitude(10.7461D)
+      .listings(new HashSet<>())
       .build();
 
-    PostCode postCode2 = new PostCode(5000, "Bergen");
+    PostCode postCode2 = new PostCode(5000, "Bergen", new HashSet<>());
 
     Location location2 = Location
       .builder()
@@ -95,6 +112,7 @@ public class ListingFilterTest {
       .postCode(postCode2)
       .latitude(70.9127D)
       .longitude(10.7461D)
+      .listings(new HashSet<>())
       .build();
 
     listing1 =
@@ -156,6 +174,15 @@ public class ListingFilterTest {
         .user(user2)
         .location(location2)
         .build();
+
+    postCodeRepository.save(postCode);
+    postCodeRepository.save(postCode2);
+
+    locationRepository.save(location);
+    locationRepository.save(location2);
+
+    userRepository.save(user1);
+    userRepository.save(user2);
 
     listingRepository.save(listing1);
     listingRepository.save(listing2);

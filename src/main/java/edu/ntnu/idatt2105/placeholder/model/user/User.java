@@ -1,10 +1,12 @@
 package edu.ntnu.idatt2105.placeholder.model.user;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +18,8 @@ import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 
 /**
  * Class representing a user in the system.
@@ -52,6 +56,9 @@ public class User implements UserDetails {
   @Column(name = "`password`", nullable = false)
   @NonNull
   private String password;
+
+  @OneToMany(mappedBy = "`user`", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Listing> listings;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)

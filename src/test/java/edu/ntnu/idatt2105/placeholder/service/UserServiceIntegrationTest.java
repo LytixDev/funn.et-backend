@@ -16,6 +16,7 @@ import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
 import edu.ntnu.idatt2105.placeholder.service.user.UserServiceImpl;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
@@ -59,6 +60,7 @@ public class UserServiceIntegrationTest {
         "firstName",
         "lastName",
         "password",
+        new HashSet<>(),
         Role.USER
       );
 
@@ -81,6 +83,7 @@ public class UserServiceIntegrationTest {
         "newFirstName",
         "newLastName",
         "newPassword",
+        new HashSet<>(),
         Role.USER
       );
 

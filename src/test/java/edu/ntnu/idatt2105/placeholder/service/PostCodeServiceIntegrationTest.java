@@ -11,6 +11,8 @@ import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeService;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeServiceImpl;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
@@ -56,9 +58,9 @@ public class PostCodeServiceIntegrationTest {
 
   @Before
   public void setUp() {
-    oslo = new PostCode(0000, "Oslo");
-    trondheim = new PostCode(7000, "Trondheim");
-    bergen = new PostCode(5000, "Bergen");
+    oslo = new PostCode(0000, "Oslo", new HashSet<>());
+    trondheim = new PostCode(7000, "Trondheim", new HashSet<>());
+    bergen = new PostCode(5000, "Bergen", new HashSet<>());
 
     when(postCodeRepository.save(oslo)).thenReturn(oslo);
     when(postCodeRepository.save(trondheim)).thenReturn(trondheim);

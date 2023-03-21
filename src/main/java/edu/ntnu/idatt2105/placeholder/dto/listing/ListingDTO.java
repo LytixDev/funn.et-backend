@@ -33,7 +33,7 @@ public class ListingDTO {
   private String username;
 
   @NonNull
-  private Long locationId;
+  private Long location;
 
   @NonNull
   @NotBlank

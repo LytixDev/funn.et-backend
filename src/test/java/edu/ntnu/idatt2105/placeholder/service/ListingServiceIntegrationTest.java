@@ -17,6 +17,7 @@ import edu.ntnu.idatt2105.placeholder.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.placeholder.service.listing.ListingService;
 import edu.ntnu.idatt2105.placeholder.service.listing.ListingServiceImpl;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
@@ -58,10 +59,11 @@ public class ListingServiceIntegrationTest {
       "firstName",
       "lastName",
       "password",
+      new HashSet<>(),
       Role.USER
     );
 
-    PostCode postCode = new PostCode(1234, "Oslo");
+    PostCode postCode = new PostCode(1234, "Oslo", new HashSet<>());
 
     Location location = Location
       .builder()
@@ -70,6 +72,7 @@ public class ListingServiceIntegrationTest {
       .postCode(postCode)
       .latitude(59.9127D)
       .longitude(10.7461D)
+      .listings(new HashSet<>())
       .build();
 
     existingListing =

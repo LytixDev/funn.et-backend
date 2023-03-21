@@ -2,6 +2,8 @@ package edu.ntnu.idatt2105.placeholder.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashSet;
+
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import org.junit.Test;
@@ -23,7 +25,7 @@ public class PostCodeRepositoryTest {
 
   @Test
   public void testFindByPostCode() {
-    PostCode postCode = new PostCode(1445, "city");
+    PostCode postCode = new PostCode(1445, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -39,7 +41,7 @@ public class PostCodeRepositoryTest {
 
   @Test
   public void testFindByCity() {
-    PostCode postCode = new PostCode(1445, "city");
+    PostCode postCode = new PostCode(1445, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
