@@ -21,7 +21,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "`image_file``")
+@Table(name = "`image_file`")
 @Entity
 public class Image {
 

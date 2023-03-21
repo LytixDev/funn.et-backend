@@ -14,6 +14,7 @@ import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.LocationRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationServiceImpl;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
@@ -60,7 +61,7 @@ public class LocationServiceIntegrationTest {
   @Before
   public void setUp() {
     // Positive tests setup
-    existingPostCode = new PostCode("1234", "Oslo");
+    existingPostCode = new PostCode(1234, "Oslo", new HashSet<>());
 
     existingLocation =
       Location
@@ -70,6 +71,7 @@ public class LocationServiceIntegrationTest {
         .postCode(existingPostCode)
         .latitude(59.9127D)
         .longitude(10.7461D)
+        .listings(new HashSet<>())
         .build();
 
     existingList = List.of(existingLocation);
@@ -131,7 +133,7 @@ public class LocationServiceIntegrationTest {
 
     // Negative tests setup
 
-    nonExistingPostCode = new PostCode("1235", "Drangedal");
+    nonExistingPostCode = new PostCode(1235, "Drangedal", new HashSet<>());
 
     nonExistingLocation =
       Location

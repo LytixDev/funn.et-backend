@@ -29,9 +29,9 @@ public interface PostCodeService {
 
   List<PostCode> getAllPostCodes() throws DatabaseException;
 
-  List<String> getCitiesByPostCode(@NonNull String postcode)
+  List<String> getCitiesByPostCode(@NonNull Integer postcode)
     throws DatabaseException, NullPointerException;
 
-  List<String> getPostCodesByCity(@NonNull String city)
+  List<Integer> getPostCodesByCity(@NonNull String city)
     throws DatabaseException, NullPointerException;
 }

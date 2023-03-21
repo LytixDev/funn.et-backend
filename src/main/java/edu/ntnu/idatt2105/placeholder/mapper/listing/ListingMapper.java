@@ -87,7 +87,7 @@ public abstract class ListingMapper {
     {
       @Mapping(
         source = "location",
-        target = "locationId",
+        target = "location",
         qualifiedByName = "getLocationId"
       ),
       @Mapping(
@@ -95,6 +95,8 @@ public abstract class ListingMapper {
         target = "username",
         qualifiedByName = "getUsername"
       ),
+      @Mapping(target = "imageResponse", ignore = true),
+      @Mapping(target = "imageUpload", ignore = true),
     }
   )
   public abstract ListingDTO listingToListingDTO(Listing listing);
@@ -107,7 +109,7 @@ public abstract class ListingMapper {
   @Mappings(
     {
       @Mapping(
-        source = "locationId",
+        source = "location",
         target = "location",
         qualifiedByName = "getLocation"
       ),
@@ -116,6 +118,7 @@ public abstract class ListingMapper {
         target = "user",
         qualifiedByName = "getUser"
       ),
+      @Mapping(target = "images", ignore = true),
     }
   )
   public abstract Listing listingDTOToListing(ListingDTO listingDTO)

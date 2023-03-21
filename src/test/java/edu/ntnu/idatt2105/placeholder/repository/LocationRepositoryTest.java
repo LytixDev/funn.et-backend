@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import edu.ntnu.idatt2105.placeholder.model.location.Location;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.LocationRepository;
+import java.util.HashSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByPostCode() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(0000, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -34,6 +35,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -53,7 +55,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByPostCodeObject() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(2000, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -63,6 +65,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -82,7 +85,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByCity() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(4444, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -92,6 +95,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -111,7 +115,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByAddress() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(5555, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -121,6 +125,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -140,7 +145,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLatitudeAndLongitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(1111, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -150,6 +155,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -169,7 +175,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLatitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(6666, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -179,6 +185,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);
@@ -195,7 +202,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLongitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(8888, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -205,6 +212,7 @@ public class LocationRepositoryTest {
       .postCode(postCode)
       .latitude(1.0)
       .longitude(1.0)
+      .listings(new HashSet<>())
       .build();
 
     location = entityManager.persist(location);

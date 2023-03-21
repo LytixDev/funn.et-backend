@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
+import java.util.HashSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PostCodeRepositoryTest {
 
   @Test
   public void testFindByPostCode() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(1445, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
@@ -39,13 +40,13 @@ public class PostCodeRepositoryTest {
 
   @Test
   public void testFindByCity() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(1445, "city", new HashSet<>());
 
     entityManager.persist(postCode);
 
     entityManager.flush();
 
-    String found = postCodeRepository
+    int found = postCodeRepository
       .findPostCodesByCity(postCode.getCity())
       .get()
       .get(0);

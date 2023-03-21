@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import edu.ntnu.idatt2105.placeholder.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.placeholder.mapper.user.RegisterMapper;
+import edu.ntnu.idatt2105.placeholder.model.user.Role;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import org.junit.Test;
 import org.junit.jupiter.api.Nested;
@@ -30,7 +31,7 @@ public class RegisterMapperTest {
       assertEquals(registration.getEmail(), user.getEmail());
       assertEquals(registration.getFirstName(), user.getFirstName());
       assertEquals(registration.getLastName(), user.getLastName());
-      assertEquals("USER", user.getRole());
+      assertEquals(Role.USER, user.getRole());
     }
   }
 }

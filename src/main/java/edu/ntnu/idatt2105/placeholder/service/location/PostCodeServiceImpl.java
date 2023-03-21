@@ -4,7 +4,6 @@ import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
-import edu.ntnu.idatt2105.placeholder.model.location.PostCodeId;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import java.util.List;
 import lombok.NonNull;
@@ -32,9 +31,7 @@ public class PostCodeServiceImpl implements PostCodeService {
   @Override
   public boolean postCodeExists(@NonNull PostCode postcode)
     throws NullPointerException {
-    return postCodeRepository.existsById(
-      new PostCodeId(postcode.getPostCode(), postcode.getCity())
-    );
+    return postCodeRepository.existsById(postcode.getPostCode());
   }
 
   /**
@@ -123,7 +120,7 @@ public class PostCodeServiceImpl implements PostCodeService {
    * @throws NullPointerException If the post code is null.
    */
   @Override
-  public List<String> getCitiesByPostCode(@NonNull String postcode)
+  public List<String> getCitiesByPostCode(@NonNull Integer postcode)
     throws DatabaseException, NullPointerException {
     return postCodeRepository
       .findCitiesByPostCode(postcode)
@@ -139,7 +136,7 @@ public class PostCodeServiceImpl implements PostCodeService {
    * @throws NullPointerException If the post code is null.
    */
   @Override
-  public List<String> getPostCodesByCity(@NonNull String city)
+  public List<Integer> getPostCodesByCity(@NonNull String city)
     throws DatabaseException, NullPointerException {
     return postCodeRepository
       .findPostCodesByCity(city)
