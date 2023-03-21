@@ -55,10 +55,6 @@ public class Location {
   @Column(name = "`longitude`", nullable = false)
   private double longitude;
 
-  @OneToMany(
-    mappedBy = "location",
-    orphanRemoval = true,
-    cascade = CascadeType.ALL
-  )
+  @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 }

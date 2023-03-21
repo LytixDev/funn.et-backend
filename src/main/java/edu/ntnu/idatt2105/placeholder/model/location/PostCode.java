@@ -33,10 +33,6 @@ public class PostCode {
   @NonNull
   private String city;
 
-  @OneToMany(
-    mappedBy = "postCode",
-    orphanRemoval = true,
-    cascade = CascadeType.ALL
-  )
+  @OneToMany(mappedBy = "postCode", cascade = CascadeType.ALL)
   private Collection<Location> locations;
 }
