@@ -20,6 +20,6 @@ public class EmailAlreadyExistsException extends Exception {
    * Has a default message.
    */
   public EmailAlreadyExistsException() {
-    super("userEmailAlreadyExists");
+    super("Email already exists");
   }
 }

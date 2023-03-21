@@ -20,6 +20,6 @@ public class LocationAlreadyExistsException extends Exception {
    * Has a default message.
    */
   public LocationAlreadyExistsException() {
-    super("locationAlreadyExists");
+    super("Location already exists");
   }
 }

@@ -20,6 +20,6 @@ public class UserDoesNotExistsException extends Exception {
    * Has a default message.
    */
   public UserDoesNotExistsException() {
-    super("userDoesNotExists");
+    super("User does not exist");
   }
 }
