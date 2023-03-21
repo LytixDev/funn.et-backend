@@ -147,7 +147,7 @@ public class LocationController {
 
     LOGGER.info("Found location with id {}", id);
 
-    PostCode postCode = LocationMapper.INSTANCE.locationResponseDTOTPostCode(
+    PostCode postCode = LocationMapper.INSTANCE.locationResponseDTOToPostCode(
       locationResponseDTO
     );
 
@@ -197,7 +197,7 @@ public class LocationController {
       locationCreateDTO
     );
 
-    PostCode postCode = LocationMapper.INSTANCE.locationCreateDTOTPostCode(
+    PostCode postCode = LocationMapper.INSTANCE.locationCreateDTOToPostCode(
       locationCreateDTO
     );
 
