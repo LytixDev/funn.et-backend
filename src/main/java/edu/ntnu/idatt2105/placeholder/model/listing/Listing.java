@@ -43,12 +43,12 @@ public class Listing {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "`user`", referencedColumnName = "`username`")
   @NonNull
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "`location`", referencedColumnName = "`location_id`")
   @NonNull
   private Location location;
@@ -78,7 +78,7 @@ public class Listing {
   @Column(name = "`expiration_date`", nullable = false)
   private LocalDate expirationDate;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
   private List<Image> images;
 }

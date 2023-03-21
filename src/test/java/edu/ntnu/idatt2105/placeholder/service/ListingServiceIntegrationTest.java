@@ -61,7 +61,7 @@ public class ListingServiceIntegrationTest {
       Role.USER
     );
 
-    PostCode postCode = new PostCode("1234", "Oslo");
+    PostCode postCode = new PostCode(1234, "Oslo");
 
     Location location = Location
       .builder()

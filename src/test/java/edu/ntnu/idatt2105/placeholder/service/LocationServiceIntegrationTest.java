@@ -60,7 +60,7 @@ public class LocationServiceIntegrationTest {
   @Before
   public void setUp() {
     // Positive tests setup
-    existingPostCode = new PostCode("1234", "Oslo");
+    existingPostCode = new PostCode(1234, "Oslo");
 
     existingLocation =
       Location
@@ -131,7 +131,7 @@ public class LocationServiceIntegrationTest {
 
     // Negative tests setup
 
-    nonExistingPostCode = new PostCode("1235", "Drangedal");
+    nonExistingPostCode = new PostCode(1235, "Drangedal");
 
     nonExistingLocation =
       Location

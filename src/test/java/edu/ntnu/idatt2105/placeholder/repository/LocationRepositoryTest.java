@@ -24,7 +24,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByPostCode() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(0000, "city");
 
     entityManager.persist(postCode);
 
@@ -53,7 +53,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByPostCodeObject() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(2000, "city");
 
     entityManager.persist(postCode);
 
@@ -82,7 +82,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByCity() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(4444, "city");
 
     entityManager.persist(postCode);
 
@@ -111,7 +111,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByAddress() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(5555, "city");
 
     entityManager.persist(postCode);
 
@@ -140,7 +140,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLatitudeAndLongitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(1111, "city");
 
     entityManager.persist(postCode);
 
@@ -169,7 +169,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLatitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(6666, "city");
 
     entityManager.persist(postCode);
 
@@ -195,7 +195,7 @@ public class LocationRepositoryTest {
 
   @Test
   public void testFindByLongitude() {
-    PostCode postCode = new PostCode("postCode", "city");
+    PostCode postCode = new PostCode(8888, "city");
 
     entityManager.persist(postCode);
 

@@ -21,7 +21,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
   Optional<List<Location>> findLocationsByPostCode(@NonNull PostCode postCode);
 
   @Query("SELECT l FROM Location l WHERE l.postCode.postCode = ?1")
-  Optional<List<Location>> findLocationsByPostCode(@NonNull String postCode);
+  Optional<List<Location>> findLocationsByPostCode(@NonNull Integer postCode);
 
   @Query("SELECT l FROM Location l WHERE l.postCode.city = ?1")
   Optional<List<Location>> findLocationsByCity(@NonNull String city);

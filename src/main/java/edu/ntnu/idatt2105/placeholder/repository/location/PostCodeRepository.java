@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.repository.location;
 
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
-import edu.ntnu.idatt2105.placeholder.model.location.PostCodeId;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,10 +14,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PostCodeRepository
-  extends JpaRepository<PostCode, PostCodeId> {
+  extends JpaRepository<PostCode, Integer> {
   @Query("SELECT p.city FROM PostCode p WHERE p.postCode = ?1")
-  Optional<List<String>> findCitiesByPostCode(String postCode);
+  Optional<List<String>> findCitiesByPostCode(Integer postCode);
 
   @Query("SELECT p.postCode FROM PostCode p WHERE p.city = ?1")
-  Optional<List<String>> findPostCodesByCity(String city);
+  Optional<List<Integer>> findPostCodesByCity(String city);
 }

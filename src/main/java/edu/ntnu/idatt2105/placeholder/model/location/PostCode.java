@@ -18,15 +18,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "`postcode_city`")
-@IdClass(PostCodeId.class)
+@Table(name = "`postcode`")
 public class PostCode {
 
   @Id
   @Column(name = "`postcode`")
-  private String postCode;
+  private Integer postCode;
 
-  @Id
   @Column(name = "`city`")
   private String city;
 }

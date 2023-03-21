@@ -58,7 +58,7 @@ public class ListingMapperTest {
   @Before
   public void setUp()
     throws UserDoesNotExistsException, LocationDoesntExistException, DatabaseException {
-    postCode = new PostCode("0000", "Oslo");
+    postCode = new PostCode(0000, "Oslo");
 
     location =
       Location

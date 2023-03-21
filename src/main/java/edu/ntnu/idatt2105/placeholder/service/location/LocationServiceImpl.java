@@ -146,7 +146,7 @@ public class LocationServiceImpl implements LocationService {
    * @throws NullPointerException If the post code is null.
    */
   @Override
-  public List<Location> getLocationsByPostCode(@NonNull String postCode)
+  public List<Location> getLocationsByPostCode(@NonNull Integer postCode)
     throws LocationDoesntExistException, DatabaseException, NullPointerException {
     try {
       return locationRepository

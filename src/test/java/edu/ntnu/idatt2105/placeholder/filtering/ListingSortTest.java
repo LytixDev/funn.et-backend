@@ -56,7 +56,7 @@ public class ListingSortTest {
       Role.USER
     );
 
-    PostCode postCode = new PostCode("0000", "Oslo");
+    PostCode postCode = new PostCode(0000, "Oslo");
 
     Location location = Location
       .builder()
@@ -67,7 +67,7 @@ public class ListingSortTest {
       .longitude(10.7461D)
       .build();
 
-    PostCode postCode2 = new PostCode("5000", "Bergen");
+    PostCode postCode2 = new PostCode(5000, "Bergen");
 
     Location location2 = Location
       .builder()

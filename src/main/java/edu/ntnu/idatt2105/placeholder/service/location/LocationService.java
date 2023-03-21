@@ -37,7 +37,7 @@ public interface LocationService {
   List<Location> getLocationsByPostCode(@NonNull PostCode postcode)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
-  List<Location> getLocationsByPostCode(@NonNull String postcode)
+  List<Location> getLocationsByPostCode(@NonNull Integer postcode)
     throws LocationDoesntExistException, DatabaseException, NullPointerException;
 
   List<Location> getLocationsByCity(@NonNull String city)

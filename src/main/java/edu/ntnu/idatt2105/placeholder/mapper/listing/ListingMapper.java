@@ -95,6 +95,14 @@ public abstract class ListingMapper {
         target = "username",
         qualifiedByName = "getUsername"
       ),
+      @Mapping(
+        target = "imageResponse", 
+        ignore = true
+      ),
+      @Mapping(
+        target = "imageUpload", 
+        ignore = true
+      ),
     }
   )
   public abstract ListingDTO listingToListingDTO(Listing listing);
@@ -115,6 +123,10 @@ public abstract class ListingMapper {
         source = "username",
         target = "user",
         qualifiedByName = "getUser"
+      ),
+      @Mapping(
+        target = "images", 
+        ignore = true
       ),
     }
   )

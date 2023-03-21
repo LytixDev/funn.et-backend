@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
-import edu.ntnu.idatt2105.placeholder.model.location.PostCodeId;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeService;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeServiceImpl;
@@ -51,48 +50,50 @@ public class PostCodeServiceIntegrationTest {
 
   private List<String> foundStrings;
 
+  private List<Integer> foundIntegers;
+
   private List<PostCode> foundPostCodeList;
 
   @Before
   public void setUp() {
-    oslo = new PostCode("0000", "Oslo");
-    trondheim = new PostCode("7000", "Trondheim");
-    bergen = new PostCode("5000", "Bergen");
+    oslo = new PostCode(0000, "Oslo");
+    trondheim = new PostCode(7000, "Trondheim");
+    bergen = new PostCode(5000, "Bergen");
 
     when(postCodeRepository.save(oslo)).thenReturn(oslo);
     when(postCodeRepository.save(trondheim)).thenReturn(trondheim);
     when(postCodeRepository.save(bergen)).thenReturn(bergen);
 
-    when(postCodeRepository.existsById(new PostCodeId("0000", "Oslo")))
+    when(postCodeRepository.existsById(0000))
       .thenReturn(true);
-    when(postCodeRepository.existsById(new PostCodeId("7000", "Trondheim")))
+    when(postCodeRepository.existsById(7000))
       .thenReturn(true);
-    when(postCodeRepository.existsById(new PostCodeId("5000", "Bergen")))
+    when(postCodeRepository.existsById(5000))
       .thenReturn(false);
 
     when(postCodeRepository.findAll()).thenReturn(List.of(oslo, trondheim));
 
     doNothing()
       .when(postCodeRepository)
-      .deleteById(new PostCodeId("0000", "Oslo"));
+      .deleteById(0000);
     doNothing()
       .when(postCodeRepository)
-      .deleteById(new PostCodeId("7000", "Trondheim"));
+      .deleteById(7000);
     doNothing()
       .when(postCodeRepository)
-      .deleteById(new PostCodeId("5000", "Bergen"));
+      .deleteById(5000);
 
-    when(postCodeRepository.findCitiesByPostCode("0000"))
+    when(postCodeRepository.findCitiesByPostCode(0000))
       .thenReturn(Optional.of(List.of("Oslo")));
-    when(postCodeRepository.findCitiesByPostCode("7000"))
+    when(postCodeRepository.findCitiesByPostCode(7000))
       .thenReturn(Optional.of(List.of("Trondheim")));
-    when(postCodeRepository.findCitiesByPostCode("5000"))
+    when(postCodeRepository.findCitiesByPostCode(5000))
       .thenReturn(Optional.of(List.of()));
 
     when(postCodeRepository.findPostCodesByCity("Oslo"))
-      .thenReturn(Optional.of(List.of("0000")));
+      .thenReturn(Optional.of(List.of(0000)));
     when(postCodeRepository.findPostCodesByCity("Trondheim"))
-      .thenReturn(Optional.of(List.of("7000")));
+      .thenReturn(Optional.of(List.of(7000)));
     when(postCodeRepository.findPostCodesByCity("Bergen"))
       .thenReturn(Optional.of(List.of()));
   }
@@ -187,7 +188,7 @@ public class PostCodeServiceIntegrationTest {
   @Test
   public void testGetCitiesByPostCode() {
     try {
-      foundStrings = postCodeService.getCitiesByPostCode("0000");
+      foundStrings = postCodeService.getCitiesByPostCode(0000);
     } catch (Exception e) {
       fail();
     }
@@ -199,7 +200,7 @@ public class PostCodeServiceIntegrationTest {
   @Test
   public void testGetCitiesByNonExistingPostCode() {
     try {
-      foundStrings = postCodeService.getCitiesByPostCode("5000");
+      foundStrings = postCodeService.getCitiesByPostCode(5000);
       fail();
     } catch (Exception e) {
       return;
@@ -209,19 +210,19 @@ public class PostCodeServiceIntegrationTest {
   @Test
   public void testGetPostCodesByCity() {
     try {
-      foundStrings = postCodeService.getPostCodesByCity("Oslo");
+      foundIntegers = postCodeService.getPostCodesByCity("Oslo");
     } catch (Exception e) {
       fail();
     }
 
-    assertEquals(foundStrings.size(), 1);
-    assertEquals(foundStrings.get(0), oslo.getPostCode());
+    assertEquals(foundIntegers.size(), 1);
+    assertEquals(foundIntegers.get(0), oslo.getPostCode());
   }
 
   @Test
   public void testGetPostCodesByNonExistingCity() {
     try {
-      foundStrings = postCodeService.getPostCodesByCity("Bergen");
+      foundIntegers = postCodeService.getPostCodesByCity("Bergen");
       fail();
     } catch (Exception e) {
       return;
