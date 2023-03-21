@@ -49,7 +49,7 @@ public class Listing {
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`location_id`", referencedColumnName = "`location_id`")
+  @JoinColumn(name = "`location`", referencedColumnName = "`location_id`")
   @NonNull
   private Location location;
 

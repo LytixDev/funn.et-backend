@@ -70,7 +70,14 @@ public class ListingFilterTest {
 
   @Before
   public void setUp() {
-    
+    listingRepository.deleteAll();
+
+    userRepository.deleteAll();
+
+    locationRepository.deleteAll();
+
+    postCodeRepository.deleteAll();
+
     User user1 = new User(
       "username",
       "email",
@@ -95,7 +102,6 @@ public class ListingFilterTest {
 
     Location location = Location
       .builder()
-      .id(1L)
       .address("Testveien 1")
       .postCode(postCode)
       .latitude(59.9127D)
@@ -107,7 +113,6 @@ public class ListingFilterTest {
 
     Location location2 = Location
       .builder()
-      .id(2L)
       .address("Testveien 2")
       .postCode(postCode2)
       .latitude(70.9127D)
@@ -118,7 +123,6 @@ public class ListingFilterTest {
     listing1 =
       Listing
         .builder()
-        .id(1L)
         .title("Test")
         .briefDescription("Test")
         .fullDescription("Test")
@@ -133,7 +137,6 @@ public class ListingFilterTest {
     listing2 =
       Listing
         .builder()
-        .id(2L)
         .title("Test2")
         .briefDescription("Test2")
         .fullDescription("Test2")
@@ -148,7 +151,6 @@ public class ListingFilterTest {
     listing3 =
       Listing
         .builder()
-        .id(3L)
         .title("Test3")
         .briefDescription("Test3")
         .fullDescription("Test3")
@@ -163,7 +165,6 @@ public class ListingFilterTest {
     listing4 =
       Listing
         .builder()
-        .id(4L)
         .title("Test4")
         .briefDescription("Test4")
         .fullDescription("Test4")

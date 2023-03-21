@@ -57,7 +57,7 @@ public class User implements UserDetails {
   @NonNull
   private String password;
 
-  @OneToMany(mappedBy = "`user`", orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 
   @Enumerated(EnumType.STRING)

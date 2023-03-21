@@ -47,7 +47,7 @@ public class Location {
   private String address;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`postcode`", referencedColumnName = "`postcode`", nullable = false)
+  @JoinColumn(name = "`postcode`", referencedColumnName = "`postcode`")
   private PostCode postCode;
 
   @Column(name = "`latitude`", nullable = false)
@@ -56,6 +56,6 @@ public class Location {
   @Column(name = "`longitude`", nullable = false)
   private double longitude;
 
-  @OneToMany(mappedBy = "`location_id`", orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "location", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 }

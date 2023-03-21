@@ -77,7 +77,6 @@ public class ListingSortTest {
 
     Location location = Location
       .builder()
-      .id(1L)
       .address("Testveien 1")
       .postCode(postCode)
       .latitude(59.9127D)
@@ -89,7 +88,6 @@ public class ListingSortTest {
 
     Location location2 = Location
       .builder()
-      .id(2L)
       .address("Testveien 2")
       .postCode(postCode2)
       .latitude(70.9127D)
@@ -100,7 +98,6 @@ public class ListingSortTest {
     listing1 =
       Listing
         .builder()
-        .id(1L)
         .title("Test")
         .briefDescription("Test")
         .fullDescription("Test")
@@ -115,7 +112,6 @@ public class ListingSortTest {
     listing2 =
       Listing
         .builder()
-        .id(2L)
         .title("Test2")
         .briefDescription("Test2")
         .fullDescription("Test2")
@@ -130,7 +126,6 @@ public class ListingSortTest {
     listing3 =
       Listing
         .builder()
-        .id(3L)
         .title("Test3")
         .briefDescription("Test3")
         .fullDescription("Test3")
@@ -145,7 +140,6 @@ public class ListingSortTest {
     listing4 =
       Listing
         .builder()
-        .id(4L)
         .title("Test4")
         .briefDescription("Test4")
         .fullDescription("Test4")
