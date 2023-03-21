@@ -52,7 +52,7 @@ public class ListingFilterTest {
   @Autowired
   private UserRepository userRepository;
 
-  @Autowired 
+  @Autowired
   private PostCodeRepository postCodeRepository;
 
   @Autowired

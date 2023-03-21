@@ -11,7 +11,6 @@ import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeService;
 import edu.ntnu.idatt2105.placeholder.service.location.PostCodeServiceImpl;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -66,24 +65,15 @@ public class PostCodeServiceIntegrationTest {
     when(postCodeRepository.save(trondheim)).thenReturn(trondheim);
     when(postCodeRepository.save(bergen)).thenReturn(bergen);
 
-    when(postCodeRepository.existsById(0000))
-      .thenReturn(true);
-    when(postCodeRepository.existsById(7000))
-      .thenReturn(true);
-    when(postCodeRepository.existsById(5000))
-      .thenReturn(false);
+    when(postCodeRepository.existsById(0000)).thenReturn(true);
+    when(postCodeRepository.existsById(7000)).thenReturn(true);
+    when(postCodeRepository.existsById(5000)).thenReturn(false);
 
     when(postCodeRepository.findAll()).thenReturn(List.of(oslo, trondheim));
 
-    doNothing()
-      .when(postCodeRepository)
-      .deleteById(0000);
-    doNothing()
-      .when(postCodeRepository)
-      .deleteById(7000);
-    doNothing()
-      .when(postCodeRepository)
-      .deleteById(5000);
+    doNothing().when(postCodeRepository).deleteById(0000);
+    doNothing().when(postCodeRepository).deleteById(7000);
+    doNothing().when(postCodeRepository).deleteById(5000);
 
     when(postCodeRepository.findCitiesByPostCode(0000))
       .thenReturn(Optional.of(List.of("Oslo")));

@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.model.user;
 
+import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +19,6 @@ import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 
 /**
  * Class representing a user in the system.

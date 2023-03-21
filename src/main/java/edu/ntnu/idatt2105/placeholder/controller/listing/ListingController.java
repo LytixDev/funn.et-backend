@@ -79,7 +79,7 @@ public class ListingController {
       .stream()
       .map(l -> listingMapper.listingToListingDTO(l))
       .toList();
-      
+
     LOGGER.info("Mapped listings to DTOs and returning");
     return ResponseEntity.ok(listingDTOs);
   }
@@ -149,13 +149,15 @@ public class ListingController {
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   public ResponseEntity<ListingDTO> updateListing(
-    @RequestBody ListingDTO listingDTO, @PathVariable long id
+    @RequestBody ListingDTO listingDTO,
+    @PathVariable long id
   )
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException {
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
-    if (listingDTO.getId() != id)
-      throw new IllegalArgumentException("400 Bad Request");
+    if (listingDTO.getId() != id) throw new IllegalArgumentException(
+      "400 Bad Request"
+    );
 
     Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
 

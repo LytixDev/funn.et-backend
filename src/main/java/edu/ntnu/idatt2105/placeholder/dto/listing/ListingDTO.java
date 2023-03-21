@@ -1,18 +1,17 @@
 package edu.ntnu.idatt2105.placeholder.dto.listing;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import edu.ntnu.idatt2105.placeholder.dto.file.ImageResponseDTO;
 import edu.ntnu.idatt2105.placeholder.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.placeholder.model.listing.Category;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Data transfer object for listing.

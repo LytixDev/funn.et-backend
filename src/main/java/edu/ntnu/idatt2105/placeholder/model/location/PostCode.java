@@ -1,13 +1,12 @@
 package edu.ntnu.idatt2105.placeholder.model.location;
 
-import java.util.Collection;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +33,10 @@ public class PostCode {
   @NonNull
   private String city;
 
-  @OneToMany(mappedBy = "postCode", orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(
+    mappedBy = "postCode",
+    orphanRemoval = true,
+    cascade = CascadeType.ALL
+  )
   private Collection<Location> locations;
 }

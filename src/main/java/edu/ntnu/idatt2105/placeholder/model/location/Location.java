@@ -1,7 +1,5 @@
 package edu.ntnu.idatt2105.placeholder.model.location;
 
-import java.util.Collection;
-
 import edu.ntnu.idatt2105.placeholder.model.listing.Listing;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,6 +55,10 @@ public class Location {
   @Column(name = "`longitude`", nullable = false)
   private double longitude;
 
-  @OneToMany(mappedBy = "location", orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(
+    mappedBy = "location",
+    orphanRemoval = true,
+    cascade = CascadeType.ALL
+  )
   private Collection<Listing> listings;
 }

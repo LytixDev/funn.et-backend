@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
  * @version 1.0 - 17.03.2023
  */
 @Repository
-public interface PostCodeRepository
-  extends JpaRepository<PostCode, Integer> {
+public interface PostCodeRepository extends JpaRepository<PostCode, Integer> {
   @Query("SELECT p.city FROM PostCode p WHERE p.postCode = ?1")
   Optional<List<String>> findCitiesByPostCode(Integer postCode);
 

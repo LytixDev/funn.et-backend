@@ -14,7 +14,6 @@ import edu.ntnu.idatt2105.placeholder.model.location.PostCode;
 import edu.ntnu.idatt2105.placeholder.repository.location.LocationRepository;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationService;
 import edu.ntnu.idatt2105.placeholder.service.location.LocationServiceImpl;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;

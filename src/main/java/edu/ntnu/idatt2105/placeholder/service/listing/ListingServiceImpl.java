@@ -50,8 +50,10 @@ public class ListingServiceImpl implements ListingService {
   @Override
   public Listing saveListing(@NonNull Listing listing)
     throws ListingAlreadyExistsException, DatabaseException, NullPointerException {
-      if (listing.getId() != null && listingExists(listing)) throw new ListingAlreadyExistsException();
-      try {
+    if (
+      listing.getId() != null && listingExists(listing)
+    ) throw new ListingAlreadyExistsException();
+    try {
       return listingRepository.save(listing);
     } catch (Exception e) {
       throw new DatabaseException();

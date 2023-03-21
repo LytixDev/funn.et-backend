@@ -12,10 +12,8 @@ import edu.ntnu.idatt2105.placeholder.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.placeholder.repository.location.LocationRepository;
 import edu.ntnu.idatt2105.placeholder.repository.location.PostCodeRepository;
 import edu.ntnu.idatt2105.placeholder.repository.user.UserRepository;
-
 import java.time.LocalDate;
 import java.util.HashSet;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +36,7 @@ public class ListingSortTest {
   @Autowired
   private UserRepository userRepository;
 
-  @Autowired 
+  @Autowired
   private PostCodeRepository postCodeRepository;
 
   private SearchSpecification<Listing> searchSpecification;
@@ -150,7 +148,7 @@ public class ListingSortTest {
         .user(user2)
         .location(location2)
         .build();
-    
+
     postCodeRepository.save(postCode);
     postCodeRepository.save(postCode2);
 
@@ -164,8 +162,6 @@ public class ListingSortTest {
     listingRepository.save(listing2);
     listingRepository.save(listing3);
     listingRepository.save(listing4);
-
-    
   }
 
   @Test

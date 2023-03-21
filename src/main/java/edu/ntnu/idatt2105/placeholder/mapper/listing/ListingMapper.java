@@ -95,14 +95,8 @@ public abstract class ListingMapper {
         target = "username",
         qualifiedByName = "getUsername"
       ),
-      @Mapping(
-        target = "imageResponse", 
-        ignore = true
-      ),
-      @Mapping(
-        target = "imageUpload", 
-        ignore = true
-      ),
+      @Mapping(target = "imageResponse", ignore = true),
+      @Mapping(target = "imageUpload", ignore = true),
     }
   )
   public abstract ListingDTO listingToListingDTO(Listing listing);
@@ -124,10 +118,7 @@ public abstract class ListingMapper {
         target = "user",
         qualifiedByName = "getUser"
       ),
-      @Mapping(
-        target = "images", 
-        ignore = true
-      ),
+      @Mapping(target = "images", ignore = true),
     }
   )
   public abstract Listing listingDTOToListing(ListingDTO listingDTO)
