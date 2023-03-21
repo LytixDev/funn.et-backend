@@ -15,7 +15,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
@@ -60,7 +59,7 @@ public class ListingController {
    * @param search The search query for listing
    * @return A list of all listings in the database.
    */
-  @GetMapping(
+  @PostMapping(
     value = "/public/listings",
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
@@ -69,7 +68,7 @@ public class ListingController {
     description = "Returns all listings in the database. Possible to search for keywords in listing"
   )
   public ResponseEntity<List<ListingDTO>> getListingsByFilter(
-    @ParameterObject SearchRequest search
+    @RequestBody SearchRequest search
   ) throws NullPointerException {
     LOGGER.info("Recieved request to get all listings");
     Page<Listing> listings = listingService.searchListingsPaginated(search);
