@@ -49,7 +49,7 @@ public interface LocationMapper {
    * @return the postcode in the locationResponseDTO.
    */
   @Mappings({ @Mapping(ignore = true, target = "locations") })
-  PostCode locationResponseDTOTPostCode(
+  PostCode locationResponseDTOToPostCode(
     LocationResponseDTO locationResponseDTO
   );
 
@@ -59,7 +59,7 @@ public interface LocationMapper {
    * @return the postcode in the LocationCreateDTO.
    */
   @Mappings({ @Mapping(ignore = true, target = "locations") })
-  PostCode locationCreateDTOTPostCode(LocationCreateDTO locationCreateDTO);
+  PostCode locationCreateDTOToPostCode(LocationCreateDTO locationCreateDTO);
 
   /**
    * Maps a location to a location response DTO.

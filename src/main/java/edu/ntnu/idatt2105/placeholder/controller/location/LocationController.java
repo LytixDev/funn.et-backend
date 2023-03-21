@@ -123,7 +123,7 @@ public class LocationController {
    * @throws DatabaseException If the database is not available.
    */
   @PutMapping(
-    value = "/public/private/{id}",
+    value = "/private/locations/{id}",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @Operation(
