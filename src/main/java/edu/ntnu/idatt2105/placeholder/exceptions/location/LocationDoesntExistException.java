@@ -20,6 +20,6 @@ public class LocationDoesntExistException extends Exception {
    * Has a default message.
    */
   public LocationDoesntExistException() {
-    super("locationDoesntExist");
+    super("Location does not exist");
   }
 }

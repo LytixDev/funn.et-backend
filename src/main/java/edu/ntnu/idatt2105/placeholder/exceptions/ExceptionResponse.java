@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.placeholder.exceptions;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -13,5 +14,6 @@ import lombok.Data;
 @Data
 public class ExceptionResponse {
 
+  @NotBlank
   private final String detail;
 }

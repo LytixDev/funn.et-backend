@@ -20,6 +20,6 @@ public class PostCodeDoesntExistException extends Exception {
    * Has a default message.
    */
   public PostCodeDoesntExistException() {
-    super("postCodeDoesntExist");
+    super("Post code does not exist.");
   }
 }
