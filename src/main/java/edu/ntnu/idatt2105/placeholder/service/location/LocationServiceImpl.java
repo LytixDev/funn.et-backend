@@ -96,6 +96,7 @@ public class LocationServiceImpl implements LocationService {
     try {
       return locationRepository.save(location);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new DatabaseException("Error updating location");
     }
   }

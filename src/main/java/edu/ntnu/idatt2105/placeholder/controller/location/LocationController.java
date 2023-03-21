@@ -16,7 +16,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +47,6 @@ public class LocationController {
     LocationController.class
   );
 
-  @Autowired
-  private LocationMapper locationMapper;
-
   private final LocationService locationService;
 
   private final PostCodeService postCodeService;
@@ -78,7 +74,7 @@ public class LocationController {
 
     List<LocationResponseDTO> locationResponseDTOs = locations
       .stream()
-      .map(l -> locationMapper.locationToLocationResponseDTO(l))
+      .map(l -> LocationMapper.INSTANCE.locationToLocationResponseDTO(l))
       .toList();
 
     LOGGER.info("Returning {} locations", locationResponseDTOs.size());
@@ -109,7 +105,7 @@ public class LocationController {
 
     LOGGER.info("Found location with id {}", id);
 
-    LocationResponseDTO locationResponseDTO = locationMapper.locationToLocationResponseDTO(
+    LocationResponseDTO locationResponseDTO = LocationMapper.INSTANCE.locationToLocationResponseDTO(
       location
     );
 
@@ -127,7 +123,7 @@ public class LocationController {
    * @throws DatabaseException If the database is not available.
    */
   @PutMapping(
-    value = "/public/locations/{id}",
+    value = "/public/private/{id}",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @Operation(
@@ -145,13 +141,13 @@ public class LocationController {
     }
 
     LOGGER.info("Received request to update location with id {}", id);
-    Location location = locationMapper.locationResponseDTOToLocation(
+    Location location = LocationMapper.INSTANCE.locationResponseDTOToLocation(
       locationResponseDTO
     );
 
     LOGGER.info("Found location with id {}", id);
 
-    PostCode postCode = locationMapper.locationResponseDTOTPostCode(
+    PostCode postCode = LocationMapper.INSTANCE.locationResponseDTOTPostCode(
       locationResponseDTO
     );
 
@@ -171,7 +167,7 @@ public class LocationController {
 
     LOGGER.info("Updated location with id {}", id);
 
-    LocationResponseDTO updatedLocationResponseDTO = locationMapper.locationToLocationResponseDTO(
+    LocationResponseDTO updatedLocationResponseDTO = LocationMapper.INSTANCE.locationToLocationResponseDTO(
       location
     );
 
@@ -188,7 +184,7 @@ public class LocationController {
    * @throws DatabaseException If the database is not available.
    */
   @PostMapping(
-    value = "/public/locations",
+    value = "/private/locations",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @Operation(summary = "Create location", description = "Creates a location.")
@@ -197,11 +193,11 @@ public class LocationController {
   ) throws LocationAlreadyExistsException, DatabaseException {
     LOGGER.info("Received request to create location {}", locationCreateDTO);
 
-    Location location = locationMapper.locationCreateDTOToLocation(
+    Location location = LocationMapper.INSTANCE.locationCreateDTOToLocation(
       locationCreateDTO
     );
 
-    PostCode postCode = locationMapper.locationCreateDTOTPostCode(
+    PostCode postCode = LocationMapper.INSTANCE.locationCreateDTOTPostCode(
       locationCreateDTO
     );
 
@@ -222,7 +218,7 @@ public class LocationController {
 
     LOGGER.info("Created location {}", location);
 
-    LocationResponseDTO locationResponseDTO = locationMapper.locationToLocationResponseDTO(
+    LocationResponseDTO locationResponseDTO = LocationMapper.INSTANCE.locationToLocationResponseDTO(
       location
     );
 
@@ -240,7 +236,7 @@ public class LocationController {
    * @throws DatabaseException If the database is not available.
    */
   @DeleteMapping(
-    value = "/public/locations/{id}",
+    value = "/private/locations/{id}",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @Operation(

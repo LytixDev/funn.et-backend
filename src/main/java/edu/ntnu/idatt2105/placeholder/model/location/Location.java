@@ -57,7 +57,6 @@ public class Location {
 
   @OneToMany(
     mappedBy = "location",
-    orphanRemoval = true,
     cascade = CascadeType.ALL
   )
   private Collection<Listing> listings;

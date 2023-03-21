@@ -8,12 +8,20 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+
+// import org.mapstruct.factory.Mappers;
+
+/**
+ * Class used to map between Location and LocationResponseDTO.
+ * @author Callum G.
+ * @version 1.0 - 21.3.2023
+ */
 
 @Mapper(componentModel = "spring")
-public abstract class LocationMapper {
-
-  LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
+public interface LocationMapper {
+  LocationMapper INSTANCE = org.mapstruct.factory.Mappers.getMapper(
+    LocationMapper.class
+  );
 
   /**
    * Gets the post code from a postcode.
@@ -21,7 +29,7 @@ public abstract class LocationMapper {
    * @return The post code of the postcode.
    */
   @Named("getPostCode")
-  public Integer getPostCode(PostCode postCode) {
+  default Integer getPostCode(PostCode postCode) {
     return postCode.getPostCode();
   }
 
@@ -31,7 +39,7 @@ public abstract class LocationMapper {
    * @return The city of the postcode.
    */
   @Named("getCity")
-  public String getCity(PostCode postcode) {
+  default String getCity(PostCode postcode) {
     return postcode.getCity();
   }
 
@@ -41,7 +49,7 @@ public abstract class LocationMapper {
    * @return the postcode in the locationResponseDTO.
    */
   @Mappings({ @Mapping(ignore = true, target = "locations") })
-  public abstract PostCode locationResponseDTOTPostCode(
+  PostCode locationResponseDTOTPostCode(
     LocationResponseDTO locationResponseDTO
   );
 
@@ -51,9 +59,7 @@ public abstract class LocationMapper {
    * @return the postcode in the LocationCreateDTO.
    */
   @Mappings({ @Mapping(ignore = true, target = "locations") })
-  public abstract PostCode locationCreateDTOTPostCode(
-    LocationCreateDTO locationCreateDTO
-  );
+  PostCode locationCreateDTOTPostCode(LocationCreateDTO locationCreateDTO);
 
   /**
    * Maps a location to a location response DTO.
@@ -74,9 +80,7 @@ public abstract class LocationMapper {
       ),
     }
   )
-  public abstract LocationResponseDTO locationToLocationResponseDTO(
-    Location location
-  );
+  LocationResponseDTO locationToLocationResponseDTO(Location location);
 
   /**
    * Maps a location response DTO to a location.
@@ -89,7 +93,7 @@ public abstract class LocationMapper {
       @Mapping(target = "listings", ignore = true),
     }
   )
-  public abstract Location locationResponseDTOToLocation(
+  Location locationResponseDTOToLocation(
     LocationResponseDTO locationResponseDTO
   );
 
@@ -105,7 +109,5 @@ public abstract class LocationMapper {
       @Mapping(target = "listings", ignore = true),
     }
   )
-  public abstract Location locationCreateDTOToLocation(
-    LocationCreateDTO locationCreateDTO
-  );
+  Location locationCreateDTOToLocation(LocationCreateDTO locationCreateDTO);
 }

@@ -35,7 +35,6 @@ public class PostCode {
 
   @OneToMany(
     mappedBy = "postCode",
-    orphanRemoval = true,
     cascade = CascadeType.ALL
   )
   private Collection<Location> locations;
