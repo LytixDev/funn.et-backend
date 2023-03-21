@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -51,7 +52,7 @@ public class TokenController {
 
   @PostMapping(value = "")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public String generateToken(AuthenticateDTO authenticate) {
+  public String generateToken(@RequestBody AuthenticateDTO authenticate) {
     logger.info("Authenticating user: " + authenticate.getUsername());
     try {
       if (
