@@ -10,13 +10,14 @@ import edu.ntnu.idatt2105.placeholder.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.placeholder.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/v1/public/user")
 @EnableAutoConfiguration
-@CrossOrigin
 @RequiredArgsConstructor
 public class PublicUserController {
 
@@ -48,7 +48,15 @@ public class PublicUserController {
    * @return The user.
    * @throws UserDoesNotExistsException If the user does not exist.
    */
-  @GetMapping("/{username}")
+  @GetMapping(
+    value = "/{username}",
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @Operation(
+    summary = "Get a user by username",
+    description = "Get a user by username",
+    tags = { "user" }
+  )
   public ResponseEntity<UserDTO> getUser(@PathVariable String username)
     throws UserDoesNotExistsException {
     LOGGER.info("GET request for user: {}", username);
@@ -71,7 +79,16 @@ public class PublicUserController {
    * @throws EmailAlreadyExistsException If the email already exists.
    * @throws DatabaseException If the database fails.
    */
-  @PostMapping
+  @PostMapping(
+    value = "",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @Operation(
+    summary = "Create a new user",
+    description = "Create a new user",
+    tags = { "user" }
+  )
   public ResponseEntity<String> createUser(
     @RequestBody RegisterDTO registerUser
   )

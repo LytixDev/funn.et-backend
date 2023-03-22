@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @EnableAutoConfiguration
-@CrossOrigin
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ListingController {
@@ -185,8 +183,10 @@ public class ListingController {
     throws ListingNotFoundException, NullPointerException, DatabaseException {
     LOGGER.info("Recieved request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
+
     LOGGER.info("Found listing to delete: ", listing);
     listingService.deleteListing(listing);
+
     LOGGER.info("Deleted listing from database and returning 204");
     return ResponseEntity.noContent().build();
   }
