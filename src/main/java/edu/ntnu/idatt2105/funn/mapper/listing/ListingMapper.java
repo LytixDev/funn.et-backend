@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.funn.mapper.listing;
 
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -87,7 +88,6 @@ public abstract class ListingMapper {
       @Mapping(source = "location", target = "location", qualifiedByName = "getLocationId"),
       @Mapping(source = "user", target = "username", qualifiedByName = "getUsername"),
       @Mapping(target = "imageResponse", ignore = true),
-      @Mapping(target = "imageUpload", ignore = true),
     }
   )
   public abstract ListingDTO listingToListingDTO(Listing listing);
@@ -105,5 +105,21 @@ public abstract class ListingMapper {
     }
   )
   public abstract Listing listingDTOToListing(ListingDTO listingDTO)
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException;
+
+  /**
+   * Maps a ListingDTO to a Listing.
+   * @param listingDTO The ListingDTO to map.
+   * @return The mapped Listing.
+   */
+  @Mappings(
+    {
+      @Mapping(source = "location", target = "location", qualifiedByName = "getLocation"),
+      @Mapping(source = "username", target = "user", qualifiedByName = "getUser"),
+      @Mapping(target = "images", ignore = true),
+      @Mapping(target = "id", ignore = true),
+    }
+  )
+  public abstract Listing listingCreateDTOToListing(ListingCreateDTO listingDTO)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException;
 }

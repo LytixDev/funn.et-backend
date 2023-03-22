@@ -1,7 +1,7 @@
 package edu.ntnu.idatt2105.funn.dto.listing;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
+import edu.ntnu.idatt2105.funn.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -13,20 +13,16 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
- * Data transfer object for listing.
+ * Data transfer object for creating listing.
  * Used to transfer listing data between the backend and the application.
- * @author Nicolai H. B., Callum G.
- * @version 1.0 - 18.3.2023
+ * @author Callum G.
+ * @version 1.0 - 22.3.2023
  */
 @Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ListingDTO {
-
-  @NonNull
-  @NotBlank
-  private Long id;
+public class ListingCreateDTO {
 
   @NonNull
   @NotBlank
@@ -59,5 +55,5 @@ public class ListingDTO {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate expirationDate;
 
-  private List<ImageResponseDTO> imageResponse;
+  private List<ImageUploadDTO> imageUpload;
 }

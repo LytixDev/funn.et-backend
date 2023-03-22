@@ -12,6 +12,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Implementation of the service class for the image repository.
+ * @author Callum G.
+ * @version 1.1 - 22.03.2023
+ */
 @Service
 public class ImageStorageService implements FileStorageService {
 

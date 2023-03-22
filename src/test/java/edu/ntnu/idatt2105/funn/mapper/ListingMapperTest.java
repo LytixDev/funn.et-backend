@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -137,6 +138,41 @@ public class ListingMapperTest {
 
     try {
       listing = listingMapper.listingDTOToListing(dto);
+    } catch (Exception e) {
+      fail(e.getMessage());
+      return;
+    }
+
+    assertEquals(dto.getTitle(), listing.getTitle());
+    assertEquals(dto.getFullDescription(), listing.getFullDescription());
+    assertEquals(dto.getPrice(), listing.getPrice());
+    assertEquals(dto.getLocation(), listing.getLocation().getId());
+    assertEquals(dto.getUsername(), listing.getUser().getUsername());
+    assertEquals(dto.getCategory(), listing.getCategory());
+    assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
+    assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
+    assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
+  }
+
+  @Test
+  public void testMapCreateDTOToListing() {
+    ListingCreateDTO dto = ListingCreateDTO
+      .builder()
+      .title("title")
+      .price(1000)
+      .location(1L)
+      .username("username")
+      .briefDescription("description")
+      .fullDescription("description")
+      .category(Category.OTHER)
+      .publicationDate(LocalDate.of(2012, 12, 12))
+      .expirationDate(LocalDate.of(2013, 6, 12))
+      .build();
+
+    Listing listing;
+
+    try {
+      listing = listingMapper.listingCreateDTOToListing(dto);
     } catch (Exception e) {
       fail(e.getMessage());
       return;

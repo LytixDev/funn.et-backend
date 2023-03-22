@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.funn.controller.listing;
 
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
@@ -105,10 +106,10 @@ public class ListingController {
     consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO listingDTO)
+  public ResponseEntity<ListingDTO> createListing(@RequestBody ListingCreateDTO listingDTO)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, NullPointerException, ListingAlreadyExistsException {
     LOGGER.info("Recieved request to create listing: {}", listingDTO);
-    Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
+    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
     Listing createdListing = listingService.saveListing(requestedListing);
     LOGGER.info("Saved listing to database");
