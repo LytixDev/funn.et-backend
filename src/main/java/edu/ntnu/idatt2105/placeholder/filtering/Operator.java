@@ -23,7 +23,7 @@ public enum Operator {
       Object value = request
         .getFieldType()
         .parse(request.getValue().toString());
-      Expression<?> key = root.get(request.getKeyWord());
+      Expression<?> key = root.get(request.getKeyWord()).as(String.class);
       return builder.and(builder.equal(key, value), predicate);
     }
   },
@@ -232,7 +232,7 @@ public enum Operator {
       Predicate predicate
     ) {
       Expression<String> key = root.get(request.getKeyWord());
-      return builder.and(
+      return builder.or(
         builder.like(
           builder.upper(key),
           "%" + request.getValue().toString().toUpperCase() + "%"
