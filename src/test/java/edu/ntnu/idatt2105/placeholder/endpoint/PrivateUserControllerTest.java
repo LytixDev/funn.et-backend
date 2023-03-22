@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
-
 import edu.ntnu.idatt2105.placeholder.controller.user.PrivateUserController;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.placeholder.model.user.Role;
@@ -19,7 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +74,6 @@ public class PrivateUserControllerTest {
       fail();
     }
   }
-
   // @Test
   // @WithMockUser
   // public void testGetUserThatDoesntExist() throws Exception {
