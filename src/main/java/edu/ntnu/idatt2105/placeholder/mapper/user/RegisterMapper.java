@@ -4,6 +4,7 @@ import edu.ntnu.idatt2105.placeholder.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -20,6 +21,11 @@ public interface RegisterMapper {
    * @param registerDTO A user registration in the form of a DTO
    * @return A user object with the USER role
    */
-  @Mapping(target = "role", constant = "USER")
+  @Mappings(
+    {
+      @Mapping(target = "role", constant = "USER"),
+      @Mapping(target = "listings", ignore = true),
+    }
+  )
   User registerDTOtoUser(RegisterDTO registerDTO);
 }
