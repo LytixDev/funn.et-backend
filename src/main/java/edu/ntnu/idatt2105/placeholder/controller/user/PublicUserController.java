@@ -2,14 +2,17 @@ package edu.ntnu.idatt2105.placeholder.controller.user;
 
 import edu.ntnu.idatt2105.placeholder.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.placeholder.dto.user.UserDTO;
+import edu.ntnu.idatt2105.placeholder.exceptions.DatabaseException;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.placeholder.exceptions.user.UsernameAlreadyExistsException;
 import edu.ntnu.idatt2105.placeholder.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.placeholder.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.placeholder.model.user.User;
 import edu.ntnu.idatt2105.placeholder.service.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v1/public/user")
 @EnableAutoConfiguration
 @CrossOrigin
+@RequiredArgsConstructor
 public class PublicUserController {
 
   private final UserService userService;
@@ -38,35 +42,50 @@ public class PublicUserController {
     PrivateUserController.class
   );
 
-  @Autowired
-  public PublicUserController(UserService userService) {
-    this.userService = userService;
-  }
-
+  /**
+   * Get a user by username.
+   * @param username The username of the user.
+   * @return The user.
+   * @throws UserDoesNotExistsException If the user does not exist.
+   */
   @GetMapping("/{username}")
-  public ResponseEntity<UserDTO> getUser(@PathVariable String username) {
-    try {
-      UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(
-        userService.getUserByUsername(username)
-      );
-      return ResponseEntity.ok(userDTO);
-    } catch (UserDoesNotExistsException e) {
-      return ResponseEntity.notFound().build();
-    }
+  public ResponseEntity<UserDTO> getUser(@PathVariable String username)
+    throws UserDoesNotExistsException {
+    LOGGER.info("GET request for user: {}", username);
+    User user = userService.getUserByUsername(username);
+
+    LOGGER.info("User found: {}", user);
+
+    UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(user);
+
+    LOGGER.info("Mapped user to userDTO: {}", userDTO);
+
+    return ResponseEntity.ok(userDTO);
   }
 
+  /**
+   * Create a new user.
+   * @param registerUser The user to create.
+   * @return The created user.
+   * @throws UsernameAlreadyExistsException If the username already exists.
+   * @throws EmailAlreadyExistsException If the email already exists.
+   * @throws DatabaseException If the database fails.
+   */
   @PostMapping
   public ResponseEntity<String> createUser(
     @RequestBody RegisterDTO registerUser
-  ) {
-    LOGGER.info("Register user: " + registerUser);
+  )
+    throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
+    LOGGER.info("POST request for user: {}", registerUser);
+
     User user = RegisterMapper.INSTANCE.registerDTOtoUser(registerUser);
-    try {
-      userService.saveUser(user);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+
+    LOGGER.info("Mapped registerDTO to user: {}", user);
+
+    user = userService.saveUser(user);
+
+    LOGGER.info("User saved: {}", user);
+
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }

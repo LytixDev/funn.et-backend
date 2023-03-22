@@ -8,8 +8,9 @@ import edu.ntnu.idatt2105.placeholder.service.user.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.time.Duration;
 import java.time.Instant;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,18 +31,14 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping(value = "/api/v1/public/token")
 @EnableAutoConfiguration
 @CrossOrigin
+@RequiredArgsConstructor
 public class TokenController {
 
   private final UserService userService;
 
-  private final Logger logger = org.slf4j.LoggerFactory.getLogger(
+  private static final Logger LOGGER = LoggerFactory.getLogger(
     TokenController.class
   );
-
-  @Autowired
-  public TokenController(UserService userService) {
-    this.userService = userService;
-  }
 
   // keyStr is hardcoded here for testing purpose
   // in a real scenario, it should either be stored in a database or injected from the environment
@@ -55,48 +52,46 @@ public class TokenController {
       : 30
   );
 
+  /**
+   * Generate a JWT token for the given user.
+   * @param authenticate The user to generate a token for.
+   * @return The generated token.
+   * @throws UserDoesNotExistsException if the user does not exist.
+   * @throws BadCredentialsException if the user credentials are wrong.
+   * @throws ResponseStatusException if the user credentials are wrong.
+   */
   @PostMapping(value = "")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public String generateToken(@RequestBody AuthenticateDTO authenticate) {
-    logger.info("Authenticating user: " + authenticate.getUsername());
-    try {
-      if (
-        userService.authenticateUser(
-          authenticate.getUsername(),
-          authenticate.getPassword()
-        )
-      ) {
-        logger.info("User authenticated: " + authenticate.getUsername());
-        return generateToken(authenticate.getUsername());
-      }
-    } catch (UserDoesNotExistsException e) {
-      logger.info("User does not exist: " + authenticate.getUsername());
-      throw new ResponseStatusException(
-        HttpStatus.UNAUTHORIZED,
-        "Access denied, user does not exist..."
-      );
-    } catch (BadCredentialsException e) {
-      logger.info("Wrong password: " + authenticate.getUsername());
-      throw new ResponseStatusException(
-        HttpStatus.UNAUTHORIZED,
-        "Access denied, wrong password..."
-      );
-    } catch (Exception e) {
-      logger.info("Unknown error: " + authenticate.getUsername());
-      e.printStackTrace();
-    }
-    logger.info("Wrong credentials: " + authenticate.getUsername());
+  public String generateToken(@RequestBody AuthenticateDTO authenticate)
+    throws UserDoesNotExistsException, BadCredentialsException, ResponseStatusException {
+    LOGGER.info("Authenticating user: {}", authenticate.getUsername());
 
+    if (
+      userService.authenticateUser(
+        authenticate.getUsername(),
+        authenticate.getPassword()
+      )
+    ) {
+      LOGGER.info("User authenticated: {}", authenticate.getUsername());
+      return generateToken(authenticate.getUsername());
+    }
+
+    LOGGER.info("Wrong credentials: {}", authenticate.getUsername());
     throw new ResponseStatusException(
       HttpStatus.UNAUTHORIZED,
       "Access denied, wrong credentials..."
     );
   }
 
+  /**
+   * Generate a JWT token for the given user.
+   * @param userId The user to generate a token for.
+   * @return The generated token.
+   */
   public String generateToken(final String userId) {
     final Instant now = Instant.now();
     final Algorithm hmac512 = Algorithm.HMAC512(JWT_TOKEN_SECRET);
-    // final JWTVerifier verifier = JWT.require(hmac512).build();
+
     return JWT
       .create()
       .withSubject(userId)
