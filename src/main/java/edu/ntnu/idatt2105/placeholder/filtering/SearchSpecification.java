@@ -31,10 +31,16 @@ public class SearchSpecification<T> implements Specification<T> {
     CriteriaQuery<?> query,
     CriteriaBuilder builder
   ) {
-    Predicate predicate = builder.equal(
-      builder.literal(Boolean.TRUE),
-      Boolean.TRUE
-    );
+    Predicate predicate;
+    if (
+      this.searchRequest.getFilterRequests()
+        .stream()
+        .anyMatch(filter -> filter.getOperator() == Operator.LIKE)
+    ) {
+      predicate = builder.disjunction();
+    } else {
+      predicate = builder.conjunction();
+    }
 
     for (FilterRequest filter : this.searchRequest.getFilterRequests()) predicate =
       filter.getOperator().build(root, builder, filter, predicate);
