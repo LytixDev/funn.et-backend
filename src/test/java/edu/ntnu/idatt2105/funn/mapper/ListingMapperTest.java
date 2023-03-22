@@ -17,7 +17,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
-import edu.ntnu.idatt2105.placeholder.mapper.listing.ListingMapperImpl;
+import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapperImpl;
 import java.time.LocalDate;
 import java.util.HashSet;
 import org.junit.Before;
