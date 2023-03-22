@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.controller;
+package edu.ntnu.idatt2105.placeholder.controller.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Controller for generating JWT tokens.
+ * @author Thomas S., Callum G.
+ * @version 1.1 - 22.3.2023
+ */
 @RestController
 @RequestMapping(value = "/api/v1/public/token")
 @EnableAutoConfiguration
