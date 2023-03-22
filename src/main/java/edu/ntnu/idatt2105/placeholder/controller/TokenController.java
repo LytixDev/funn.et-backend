@@ -24,7 +24,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping(value = "/api/v1/public/token")
 @EnableAutoConfiguration
-@CrossOrigin
 public class TokenController {
 
   private final UserService userService;
