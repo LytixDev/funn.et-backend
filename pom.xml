@@ -12,9 +12,9 @@
 	</parent>
 
 	<groupId>edu.ntnu.idatt2105</groupId>
-	<artifactId>placeholder</artifactId>
+	<artifactId>funn</artifactId>
 	<version>0.0.1</version>
-	<name>placeholder</name>
+	<name>funn</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -183,7 +183,7 @@
 				<version>0.19</version>
 				<configuration>
 					<prettierJavaVersion>2.0.0</prettierJavaVersion>
-					<printWidth>80</printWidth>
+					<printWidth>100</printWidth>
 					<tabWidth>2</tabWidth>
 					<useTabs>false</useTabs>
 					<ignoreConfigFile>true</ignoreConfigFile>
