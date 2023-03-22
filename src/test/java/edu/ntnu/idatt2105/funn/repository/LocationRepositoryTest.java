@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.repository;
+package edu.ntnu.idatt2105.funn.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

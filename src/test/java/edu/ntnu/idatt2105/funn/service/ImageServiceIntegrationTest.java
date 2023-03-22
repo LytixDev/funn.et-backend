@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.service;
+package edu.ntnu.idatt2105.funn.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.endpoint;
+package edu.ntnu.idatt2105.funn.endpoint;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.doNothing;

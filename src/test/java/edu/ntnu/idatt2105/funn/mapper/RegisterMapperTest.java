@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.mapper;
+package edu.ntnu.idatt2105.funn.mapper;
 
 import static org.junit.Assert.assertEquals;
 

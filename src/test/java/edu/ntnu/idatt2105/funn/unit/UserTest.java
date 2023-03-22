@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.unit;
+package edu.ntnu.idatt2105.funn.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

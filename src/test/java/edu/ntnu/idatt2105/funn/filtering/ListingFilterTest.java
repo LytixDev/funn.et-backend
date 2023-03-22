@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.placeholder.filtering;
+package edu.ntnu.idatt2105.funn.filtering;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
