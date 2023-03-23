@@ -50,15 +50,19 @@ public class ImageStorageService implements FileStorageService {
 
   @Override
   public Resource loadFile(Long id) throws IOException, MalformedURLException {
-    Path file = root.resolve(new File(root.toString()).listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
-      }
-    })[0].getName());
+    Path file = root.resolve(
+      new File(root.toString())
+        .listFiles(
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
+            }
+          }
+        )[0].getName()
+    );
 
-    if (file == null) 
-      throw new IOException("Could not read file");
+    if (file == null) throw new IOException("Could not read file");
 
     Resource resource = new UrlResource(file.toUri());
 
@@ -71,15 +75,19 @@ public class ImageStorageService implements FileStorageService {
 
   @Override
   public void deleteFile(Long id) throws IOException {
-    Path file = root.resolve(new File(root.toString()).listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
-      }
-    })[0].getName());     
+    Path file = root.resolve(
+      new File(root.toString())
+        .listFiles(
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
+            }
+          }
+        )[0].getName()
+    );
 
-    if (file == null) 
-      throw new IOException("Could not read file");
+    if (file == null) throw new IOException("Could not read file");
 
     Files.delete(file);
   }

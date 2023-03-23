@@ -134,7 +134,9 @@ public class ImageServiceImpl implements ImageService {
   public List<Image> getAllFilesByListingId(Long listingId)
     throws DatabaseException, NullPointerException {
     try {
-      return imageRepository.findAllByListing(listingId).orElseThrow(() -> new DatabaseException());
+      return imageRepository
+        .findAllByListingId(listingId)
+        .orElseThrow(() -> new DatabaseException());
     } catch (Exception e) {
       throw new DatabaseException();
     }

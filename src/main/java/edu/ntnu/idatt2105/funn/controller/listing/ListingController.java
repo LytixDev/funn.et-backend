@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +179,7 @@ public class ListingController {
 
   /**
    * Creates a listing from a listing dto
-   * @param listingDTO The id of the listing to delete.
+   * @param listingDTO The listing dto to create a listing from
    * @return The listing created
    * @throws LocationDoesntExistException If the location does not exist
    * @throws DatabaseException If the database could not handle a sql request
@@ -228,19 +227,18 @@ public class ListingController {
    * @throws DatabaseException if an sql operation fails
    * @throws UserDoesNotExistsException if the requesting user does not exist
    */
-  @PutMapping(
-    value = "/private/listings/{id}",
-    produces = { MediaType.APPLICATION_JSON_VALUE }
-  )
+  @PutMapping(value = "/private/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ListingDTO> updateListing(
     @ModelAttribute ListingCreateDTO listingDTO,
     @PathVariable long id
-  ) throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
+  )
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
     Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
 
     requestedListing.setId(id);
+    requestedListing.setImages(imageService.getAllFilesByListingId(id));
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
@@ -248,7 +246,7 @@ public class ListingController {
 
     LOGGER.info("Saved updated listing to database");
     ListingDTO updatedListingDTO = listingMapper.listingToListingDTO(updatedListing);
-    
+
     if (listingDTO.getImages() != null) {
       if (listingDTO.getImageAlts() == null) {
         String[] imageAlts = new String[listingDTO.getImages().length];
@@ -258,9 +256,15 @@ public class ListingController {
         listingDTO.setImageAlts(imageAlts);
       }
 
-      updatedListingDTO.setImageResponse(Stream.concat(updatedListingDTO.getImageResponse().stream(),
-        uploadImages(updatedListing.getId(), listingDTO.getImages(), listingDTO.getImageAlts()).stream()
-      ).collect(Collectors.toList()));
+      updatedListingDTO.setImageResponse(
+        Stream
+          .concat(
+            updatedListingDTO.getImageResponse().stream(),
+            uploadImages(updatedListing.getId(), listingDTO.getImages(), listingDTO.getImageAlts())
+              .stream()
+          )
+          .collect(Collectors.toList())
+      );
     }
 
     LOGGER.info("Saved images to database");
@@ -283,14 +287,16 @@ public class ListingController {
     LOGGER.info("Recieved request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
-    listing.getImages().forEach(image -> {
-      try {
-        imageStorageService.init();
-        imageStorageService.deleteFile(image.getId());
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
-      }
-    });
+    listing
+      .getImages()
+      .forEach(image -> {
+        try {
+          imageStorageService.init();
+          imageStorageService.deleteFile(image.getId());
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
 
     LOGGER.info("Found listing to delete: ", listing);
     listingService.deleteListing(listing);

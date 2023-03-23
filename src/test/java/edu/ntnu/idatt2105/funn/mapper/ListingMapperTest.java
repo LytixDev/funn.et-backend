@@ -17,9 +17,11 @@ import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +52,9 @@ public class ListingMapperTest {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private ImageService imageService;
 
   User user;
 
@@ -103,6 +108,7 @@ public class ListingMapperTest {
       .category(Category.OTHER)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
+      .images(new ArrayList<>())
       .build();
     ListingDTO dto = listingMapper.listingToListingDTO(listing);
 
@@ -132,6 +138,7 @@ public class ListingMapperTest {
       .category(Category.OTHER)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
+      .imageResponse(new ArrayList<>())
       .build();
 
     Listing listing;
