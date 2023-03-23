@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,18 +230,17 @@ public class ListingController {
    */
   @PutMapping(
     value = "/private/listings/{id}",
-    consumes = { MediaType.APPLICATION_JSON_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   public ResponseEntity<ListingDTO> updateListing(
-    @RequestBody ListingDTO listingDTO,
+    @ModelAttribute ListingCreateDTO listingDTO,
     @PathVariable long id
-  ) throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException {
+  ) throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
-    if (listingDTO.getId() != id) throw new IllegalArgumentException("400 Bad Request");
+    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
 
-    Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
+    requestedListing.setId(id);
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
@@ -247,6 +248,23 @@ public class ListingController {
 
     LOGGER.info("Saved updated listing to database");
     ListingDTO updatedListingDTO = listingMapper.listingToListingDTO(updatedListing);
+    
+    if (listingDTO.getImages() != null) {
+      if (listingDTO.getImageAlts() == null) {
+        String[] imageAlts = new String[listingDTO.getImages().length];
+        for (int i = 0; i < listingDTO.getImages().length; i++) {
+          imageAlts[i] = "image";
+        }
+        listingDTO.setImageAlts(imageAlts);
+      }
+
+      updatedListingDTO.setImageResponse(Stream.concat(updatedListingDTO.getImageResponse().stream(),
+        uploadImages(updatedListing.getId(), listingDTO.getImages(), listingDTO.getImageAlts()).stream()
+      ).collect(Collectors.toList()));
+    }
+
+    LOGGER.info("Saved images to database");
+
     LOGGER.info("Mapped listing to DTO and returning");
     return ResponseEntity.ok(updatedListingDTO);
   }
@@ -264,6 +282,15 @@ public class ListingController {
     throws ListingNotFoundException, NullPointerException, DatabaseException {
     LOGGER.info("Recieved request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
+
+    listing.getImages().forEach(image -> {
+      try {
+        imageStorageService.init();
+        imageStorageService.deleteFile(image.getId());
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    });
 
     LOGGER.info("Found listing to delete: ", listing);
     listingService.deleteListing(listing);
