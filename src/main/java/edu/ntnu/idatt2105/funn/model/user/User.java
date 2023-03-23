@@ -59,6 +59,9 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 
+  @OneToMany()
+  private Collection<Listing> bookmarkedListings;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)
   @NonNull
