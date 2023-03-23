@@ -3,11 +3,6 @@ package edu.ntnu.idatt2105.funn.filtering;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import edu.ntnu.idatt2105.funn.filtering.FieldType;
-import edu.ntnu.idatt2105.funn.filtering.FilterRequest;
-import edu.ntnu.idatt2105.funn.filtering.Operator;
-import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
-import edu.ntnu.idatt2105.funn.filtering.SearchSpecification;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.location.Location;

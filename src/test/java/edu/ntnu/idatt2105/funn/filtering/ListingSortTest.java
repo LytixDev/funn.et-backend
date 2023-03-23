@@ -2,10 +2,6 @@ package edu.ntnu.idatt2105.funn.filtering;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
-import edu.ntnu.idatt2105.funn.filtering.SearchSpecification;
-import edu.ntnu.idatt2105.funn.filtering.SortDirection;
-import edu.ntnu.idatt2105.funn.filtering.SortRequest;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.location.Location;

@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
    */
   @Override
   public Image saveFile(@NonNull Image file) throws DatabaseException, NullPointerException {
-    if (fileExists(file)) throw new DatabaseException();
+    if (file.getId() != null && fileExists(file)) throw new DatabaseException();
     try {
       return imageRepository.save(file);
     } catch (Exception e) {
