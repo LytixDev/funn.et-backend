@@ -1,14 +1,7 @@
 package edu.ntnu.idatt2105.funn.model.user;
 
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -59,8 +52,13 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 
-  @OneToMany()
-  private Collection<Listing> bookmarkedListings;
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(
+    name = "favorite_listings",
+    joinColumns = @JoinColumn(name = "username"),
+    inverseJoinColumns = @JoinColumn(name = "listing_id")
+  )
+  private List<Listing> favoriteListings;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)
@@ -95,5 +93,10 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public void addFavorite(Listing listing) {
+    favoriteListings.add(listing);
+    listing.getFavoritedBy().add(this);
   }
 }
