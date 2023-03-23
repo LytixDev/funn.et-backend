@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import java.util.Arrays;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,6 +150,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     WebRequest request
   ) {
     LOGGER.error(ex.getMessage());
+    ex.printStackTrace();
     ExceptionResponse response = new ExceptionResponse(Exception.class.getSimpleName());
     return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
   }

@@ -3,13 +3,10 @@ package edu.ntnu.idatt2105.funn.model.user;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import jakarta.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @version 1.0
  * @date 13.3.2023
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -55,7 +53,7 @@ public class User implements UserDetails {
 
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(
-    name = "favorite_listings",
+    name = "listing_favorite",
     joinColumns = @JoinColumn(name = "username"),
     inverseJoinColumns = @JoinColumn(name = "listing_id")
   )
@@ -94,10 +92,5 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
-  }
-
-  public void addFavorite(Listing listing) {
-    favoriteListings.add(listing);
-    listing.getFavoritedBy().add(this);
   }
 }

@@ -14,6 +14,8 @@ import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,6 +175,19 @@ public class ListingController {
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
     userService.favoriteListing(username, listing);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping(value = "/private/listings/favorites")
+  public ResponseEntity<Set<ListingDTO>> getFavoriteListings(
+    @AuthenticationPrincipal String username
+  ) throws UserDoesNotExistsException {
+    LOGGER.info("Received request to get favorite listings by user {}", username);
+    Set<Listing> favorites = userService.getFavoriteListings(username);
+    Set<ListingDTO> listingDTOs = favorites
+      .stream()
+      .map(l -> listingMapper.listingToListingDTO(l))
+      .collect(Collectors.toSet());
+    return ResponseEntity.ok(listingDTOs);
   }
 
   /**

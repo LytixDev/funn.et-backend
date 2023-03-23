@@ -1,26 +1,23 @@
 package edu.ntnu.idatt2105.funn.model.listing;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 /**
  * Entity class for listing.
  * @author Nicolai H. B., Callum G.
  * @version 1.2 - 21.3.2023
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -72,6 +69,16 @@ public class Listing {
   @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
   private List<Image> images;
 
-  @ManyToMany(mappedBy = "favoriteListings")
+  @ManyToMany(
+    mappedBy = "favoriteListings",
+    fetch = FetchType.LAZY,
+    cascade = { CascadeType.PERSIST, CascadeType.MERGE }
+  )
+  @JsonIgnore
   private Set<User> favoritedBy;
+
+  @Override
+  public String toString() {
+    return this.title + " | " + this.user.getUsername();
+  }
 }

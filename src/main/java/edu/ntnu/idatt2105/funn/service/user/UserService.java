@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import java.util.List;
+import java.util.Set;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -42,4 +43,6 @@ public interface UserService {
     throws UserDoesNotExistsException, BadCredentialsException;
 
   public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException;
+
+  public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException;
 }
