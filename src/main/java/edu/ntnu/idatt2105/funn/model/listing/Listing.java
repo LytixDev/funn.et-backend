@@ -8,6 +8,7 @@ import jakarta.validation.constraints.DecimalMin;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -72,5 +73,5 @@ public class Listing {
   private List<Image> images;
 
   @ManyToMany(mappedBy = "favoriteListings")
-  private List<User> favoritedBy;
+  private Set<User> favoritedBy;
 }

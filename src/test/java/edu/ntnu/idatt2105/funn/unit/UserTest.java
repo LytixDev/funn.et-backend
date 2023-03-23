@@ -26,6 +26,7 @@ public class UserTest {
           "lastName",
           "password",
           new HashSet<>(),
+          new HashSet<>(),
           Role.USER
         );
 
@@ -40,7 +41,17 @@ public class UserTest {
     @Test
     public void testUserConstructorWithNulls() {
       try {
-        user = new User("username", "password", null, null, null, new HashSet<>(), Role.USER);
+        user =
+          new User(
+            "username",
+            "password",
+            null,
+            null,
+            null,
+            new HashSet<>(),
+            new HashSet<>(),
+            Role.USER
+          );
         fail();
       } catch (NullPointerException e) {
         assertEquals(NullPointerException.class, e.getClass());

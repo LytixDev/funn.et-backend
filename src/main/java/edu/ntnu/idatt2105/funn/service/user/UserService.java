@@ -4,6 +4,7 @@ import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import java.util.List;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,4 +40,6 @@ public interface UserService {
 
   public boolean authenticateUser(String username, String password)
     throws UserDoesNotExistsException, BadCredentialsException;
+
+  public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException;
 }

@@ -4,6 +4,7 @@ import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -58,7 +59,7 @@ public class User implements UserDetails {
     joinColumns = @JoinColumn(name = "username"),
     inverseJoinColumns = @JoinColumn(name = "listing_id")
   )
-  private List<Listing> favoriteListings;
+  private Set<Listing> favoriteListings;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)

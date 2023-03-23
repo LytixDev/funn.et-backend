@@ -3,7 +3,9 @@ package edu.ntnu.idatt2105.funn.controller.user;
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for private user endpoints.

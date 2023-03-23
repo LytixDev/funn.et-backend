@@ -9,7 +9,9 @@ import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
+import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.1 - 20.3.2023
+ * @version 1.2 - 23.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -49,6 +52,8 @@ public class ListingController {
 
   private final ListingService listingService;
 
+  private final UserService userService;
+
   /**
    * Returns all listings in the database.
    * Possible to search for keywords in listing
@@ -62,7 +67,7 @@ public class ListingController {
   )
   public ResponseEntity<List<ListingDTO>> getListingsByFilter(@RequestBody SearchRequest search)
     throws NullPointerException {
-    LOGGER.info("Recieved request to get all listings");
+    LOGGER.info("Received request to get all listings");
     Page<Listing> listings = listingService.searchListingsPaginated(search);
     LOGGER.info("Found {} listings", listings.getContent().size());
 
@@ -82,7 +87,7 @@ public class ListingController {
    */
   @GetMapping(value = "/public/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ListingDTO> getListing(@PathVariable long id) {
-    LOGGER.info("Recieved request to get listing with id: {}", id);
+    LOGGER.info("Received request to get listing with id: {}", id);
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
@@ -107,7 +112,7 @@ public class ListingController {
   )
   public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO listingDTO)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, NullPointerException, ListingAlreadyExistsException {
-    LOGGER.info("Recieved request to create listing: {}", listingDTO);
+    LOGGER.info("Received request to create listing: {}", listingDTO);
     Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
     Listing createdListing = listingService.saveListing(requestedListing);
@@ -134,7 +139,7 @@ public class ListingController {
     @RequestBody ListingDTO listingDTO,
     @PathVariable long id
   ) throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException {
-    LOGGER.info("Recieveed request to update listing: {}", listingDTO);
+    LOGGER.info("Received request to update listing: {}", listingDTO);
 
     if (listingDTO.getId() != id) throw new IllegalArgumentException("400 Bad Request");
 
@@ -151,6 +156,26 @@ public class ListingController {
   }
 
   /**
+   * Favorites a listing with the given id.
+   * @param username the username of the user
+   * @param id the id of the listing to favorite
+   * @return nothing
+   * @throws UserDoesNotExistsException if the user does not exist
+   * @throws ListingNotFoundException if the listing does not exist
+   */
+  @PutMapping(value = "/private/listings/{id}/favorite")
+  public ResponseEntity<Void> favoriteListing(
+    @AuthenticationPrincipal String username,
+    @PathVariable long id
+  ) throws UserDoesNotExistsException, ListingNotFoundException {
+    LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
+    Listing listing = listingService.getListing(id);
+    LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
+    userService.favoriteListing(username, listing);
+    return ResponseEntity.ok().build();
+  }
+
+  /**
    * Deletes a listing with the given id.
    * @param id the id of the listing to delete
    * @return status 204 - no content
@@ -161,10 +186,10 @@ public class ListingController {
   @DeleteMapping(value = "/private/listings/{id}")
   public ResponseEntity<Void> deleteListing(@PathVariable long id)
     throws ListingNotFoundException, NullPointerException, DatabaseException {
-    LOGGER.info("Recieved request to delete listing with id: {}", id);
+    LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
-    LOGGER.info("Found listing to delete: ", listing);
+    LOGGER.info("Found listing to delete: {}", listing);
     listingService.deleteListing(listing);
 
     LOGGER.info("Deleted listing from database and returning 204");
