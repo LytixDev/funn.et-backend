@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -81,4 +82,17 @@ public class Listing {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
   private List<Image> images;
+
+  /**
+   * Method for getting the images of a listing.
+   * If the list of images is null, a new list is created.
+   * @return List of images.
+   */
+  public List<Image> getImages() {
+    if (images == null) {
+      images = new ArrayList<>();
+    }
+
+    return images;
+  }
 }

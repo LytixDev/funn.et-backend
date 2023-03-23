@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -16,9 +17,11 @@ import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +52,9 @@ public class ListingMapperTest {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private ImageService imageService;
 
   User user;
 
@@ -102,6 +108,7 @@ public class ListingMapperTest {
       .category(Category.OTHER)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
+      .images(new ArrayList<>())
       .build();
     ListingDTO dto = listingMapper.listingToListingDTO(listing);
 
@@ -131,12 +138,48 @@ public class ListingMapperTest {
       .category(Category.OTHER)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
+      .imageResponse(new ArrayList<>())
       .build();
 
     Listing listing;
 
     try {
       listing = listingMapper.listingDTOToListing(dto);
+    } catch (Exception e) {
+      fail(e.getMessage());
+      return;
+    }
+
+    assertEquals(dto.getTitle(), listing.getTitle());
+    assertEquals(dto.getFullDescription(), listing.getFullDescription());
+    assertEquals(dto.getPrice(), listing.getPrice());
+    assertEquals(dto.getLocation(), listing.getLocation().getId());
+    assertEquals(dto.getUsername(), listing.getUser().getUsername());
+    assertEquals(dto.getCategory(), listing.getCategory());
+    assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
+    assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
+    assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
+  }
+
+  @Test
+  public void testMapCreateDTOToListing() {
+    ListingCreateDTO dto = ListingCreateDTO
+      .builder()
+      .title("title")
+      .price(1000)
+      .location(1L)
+      .username("username")
+      .briefDescription("description")
+      .fullDescription("description")
+      .category(Category.OTHER)
+      .publicationDate(LocalDate.of(2012, 12, 12))
+      .expirationDate(LocalDate.of(2013, 6, 12))
+      .build();
+
+    Listing listing;
+
+    try {
+      listing = listingMapper.listingCreateDTOToListing(dto);
     } catch (Exception e) {
       fail(e.getMessage());
       return;
