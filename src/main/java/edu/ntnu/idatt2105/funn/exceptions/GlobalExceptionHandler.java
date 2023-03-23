@@ -1,6 +1,7 @@
 package edu.ntnu.idatt2105.funn.exceptions;
 
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
+import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeAlreadyExistsException;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,6 +35,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+  @Override
+  protected ResponseEntity<Object> handleExceptionInternal(
+    Exception ex,
+    Object body,
+    HttpHeaders headers,
+    HttpStatusCode statusCode,
+    WebRequest request
+  ) {
+    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
+    return super.handleExceptionInternal(ex, response, headers, statusCode, request);
+  }
 
   /**
    * Handles exceptions that is from conflicts with the database
@@ -68,6 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(
     value = {
       UserDoesNotExistsException.class,
+      ListingNotFoundException.class,
       LocationDoesntExistException.class,
       PostCodeDoesntExistException.class,
       ObjectNotFoundException.class,
