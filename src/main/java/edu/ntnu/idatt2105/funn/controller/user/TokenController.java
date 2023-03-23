@@ -52,7 +52,6 @@ public class TokenController {
    * @return The generated token.
    * @throws UserDoesNotExistsException if the user does not exist.
    * @throws BadCredentialsException if the user credentials are wrong.
-   * @throws ResponseStatusException if the user credentials are wrong.
    */
   @PostMapping(value = "")
   @ResponseStatus(value = HttpStatus.CREATED)
@@ -66,10 +65,7 @@ public class TokenController {
     }
 
     LOGGER.info("Wrong credentials: {}", authenticate.getUsername());
-    throw new ResponseStatusException(
-      HttpStatus.UNAUTHORIZED,
-      "Access denied, wrong credentials..."
-    );
+    throw new BadCredentialsException("Access denied, wrong credentials...");
   }
 
   /**
