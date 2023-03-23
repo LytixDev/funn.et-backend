@@ -188,7 +188,11 @@ public class ListingController {
    * @throws IOException
    * @throws RuntimeException
    */
-  @PostMapping(value = "/private/listings", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PostMapping(
+    value = "/private/listings",
+    consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
   @Operation(summary = "Create listing", description = "Creates a listing from a listing dto")
   public ResponseEntity<ListingDTO> createListing(@ModelAttribute ListingCreateDTO listingDTO)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, ListingAlreadyExistsException, RuntimeException, IOException {
