@@ -49,8 +49,6 @@ public class PrivateUserController {
     LOGGER.info("GET request for user: {}", username);
     User authenticatedUser = userService.getUserByUsername(username);
 
-    LOGGER.info("User found: {}", authenticatedUser);
-
     UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(authenticatedUser);
 
     LOGGER.info("Mapped to UserDTO: {}", userDTO);

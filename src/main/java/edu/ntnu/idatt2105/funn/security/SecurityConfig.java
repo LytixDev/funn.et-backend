@@ -1,12 +1,15 @@
 package edu.ntnu.idatt2105.funn.security;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,10 +21,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * Configures spring security
  *
  * @author Carl G, Thomas S.
- * @version 1.1 - 20.3.2023
+ * @version 1.2 - 23.3.2023
  */
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
   /**
@@ -47,9 +51,34 @@ public class SecurityConfig {
       .sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
-      .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+      .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+      .exceptionHandling()
+      .authenticationEntryPoint((request, response, exception) ->
+        setAccessHandlerResponse(
+          response,
+          "AuthenticationException",
+          HttpServletResponse.SC_UNAUTHORIZED
+        )
+      );
 
     return http.build();
+  }
+
+  /**
+   * Sets the response for the AuthenticationEntryPoint
+   * Sets the message to be json object with the key "detail" and the value of the message
+   * @param response HttpServletResponse - exception response to be sent to the client
+   * @param message String - message in json to be sent to the client
+   * @param status int - status code to be sent with the response
+   * @throws IOException thrown if an error occurs when writing to the response
+   */
+  public void setAccessHandlerResponse(HttpServletResponse response, String message, int status)
+    throws IOException {
+    log.error("Sending error for invalid access and sending message: {}", message);
+    response.setStatus(status);
+    response.setHeader("Content-Type", "application/json");
+    PrintWriter writer = response.getWriter();
+    writer.print("{\"detail\": \"" + message + "\"}");
   }
 
   @Bean

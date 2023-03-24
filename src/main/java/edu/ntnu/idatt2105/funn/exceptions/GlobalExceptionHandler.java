@@ -1,5 +1,7 @@
 package edu.ntnu.idatt2105.funn.exceptions;
 
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
+import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeAlreadyExistsException;
@@ -12,8 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,12 +29,49 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * Logs the exception message to the console
  *
  * @author Carl. G
- * @version 1.1 - 20.03.2023
+ * @version 1.2 - 24.03.2023
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+  /**
+   * Overrides the default handler for creating the response entity
+   * @param ex Exception - an exception thrown that needs to be handled. Can be a subclass of Exception
+   * @param body Object - the body of the response
+   * @param headers HttpHeaders - the headers of the response
+   * @param statusCode HttpStatusCode - the http status code of the response
+   * @param request WebRequest - the request that caused the exception
+   * @return ResponseEntity - a response entity with the exception message
+   */
+  @Override
+  protected ResponseEntity<Object> handleExceptionInternal(
+    Exception ex,
+    Object body,
+    HttpHeaders headers,
+    HttpStatusCode statusCode,
+    WebRequest request
+  ) {
+    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
+    return super.handleExceptionInternal(ex, response, headers, statusCode, request);
+  }
+
+  /**
+   * Creates a response entity as an exception response
+   * The body will be a json object with the exception message in `detail`
+   * @param ex Exception - The exception that was thrown. Can be a subclass of Exception
+   * @param status HttpStatus - The status code of the response
+   * @return ResponseEntity - A response entity with the exception message
+   */
+  private ResponseEntity<ExceptionResponse> getResponseEntityWithExceptionResponse(
+    Exception ex,
+    HttpStatus status
+  ) {
+    LOGGER.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage());
+    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
+    return new ResponseEntity<>(response, new HttpHeaders(), status);
+  }
 
   /**
    * Handles exceptions that is from conflicts with the database
@@ -51,9 +91,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
   )
   public ResponseEntity<ExceptionResponse> handleConflict(Exception ex, WebRequest request) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.CONFLICT);
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.CONFLICT);
   }
 
   /**
@@ -67,18 +105,34 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(
     value = {
       UserDoesNotExistsException.class,
+      ListingNotFoundException.class,
       LocationDoesntExistException.class,
       PostCodeDoesntExistException.class,
       ObjectNotFoundException.class,
+      FileNotFoundException.class,
     }
   )
   public ResponseEntity<ExceptionResponse> handleSpecificObjectDoesNotExist(
     Exception ex,
     WebRequest request
   ) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.NOT_FOUND);
+  }
+
+  /**
+   * Handles exceptions from when logging in with wrong credentials
+   * Returns a 401 not authorized response with the message that the exception contains
+   *
+   * @param ex The exception that was thrown
+   * @param request The request that caused the exception
+   * @return A response entity with the exception message
+   */
+  @ExceptionHandler(value = { BadCredentialsException.class })
+  public ResponseEntity<ExceptionResponse> handleBadCredentialsException(
+    Exception ex,
+    WebRequest request
+  ) {
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.UNAUTHORIZED);
   }
 
   /**
@@ -95,43 +149,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     Exception ex,
     WebRequest request
   ) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  /**
-   * Handles exceptions from when the user is not logged in
-   * Returns a 401 not auhtorized response with a custom message
-   *
-   * @param ex The exception that was thrown
-   * @param request The request that caused the exception
-   * @return A response entity with the exception message
-   */
-  @ExceptionHandler(value = { AccessDeniedException.class })
-  public ResponseEntity<ExceptionResponse> handleNotAuthorized(Exception ex, WebRequest request) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
    * Handles exceptions where a null object
-   * was tried to be accessed
-   * Returns a 500 internal server error response with custom message
+   * was tried to be accessed or when an argument passed was not valid
+   * Returns a 400 bad request response with custom message
    *
    * @param ex The exception that was thrown
    * @param request The request that caused the exception
    * @return A response entity with the exception message
    */
-  @ExceptionHandler(value = { NullPointerException.class })
+  @ExceptionHandler(value = { NullPointerException.class, IllegalArgumentException.class })
   public ResponseEntity<ExceptionResponse> handleNullPointerException(
     Exception ex,
     WebRequest request
   ) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -144,12 +179,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    */
   @ExceptionHandler(value = { Exception.class })
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(
+  public ResponseEntity<ExceptionResponse> handleRemainingExceptions(
     Exception ex,
     WebRequest request
   ) {
-    LOGGER.error(ex.getMessage());
-    ExceptionResponse response = new ExceptionResponse(Exception.class.getSimpleName());
-    return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return getResponseEntityWithExceptionResponse(
+      new Exception(new Throwable(ex.getClass().getSimpleName() + ": " + ex.getMessage())),
+      HttpStatus.INTERNAL_SERVER_ERROR
+    );
   }
 }
