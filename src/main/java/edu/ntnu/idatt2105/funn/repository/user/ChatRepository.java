@@ -1,12 +1,10 @@
 package edu.ntnu.idatt2105.funn.repository.user;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Chat;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Interface for the repository class for the chat repository.
@@ -15,7 +13,7 @@ import edu.ntnu.idatt2105.funn.model.user.Chat;
  */
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    List<Chat> findChatsByMessager(String username);
+  List<Chat> findChatsByMessager(String username);
 
-    List<Chat> findChatsByListing(Listing listing);
+  List<Chat> findChatsByListing(Listing listing);
 }

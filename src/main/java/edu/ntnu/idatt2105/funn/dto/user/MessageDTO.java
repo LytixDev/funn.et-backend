@@ -1,9 +1,8 @@
 package edu.ntnu.idatt2105.funn.dto.user;
 
-import java.sql.Timestamp;
-
 import edu.ntnu.idatt2105.funn.model.user.Chat;
 import jakarta.validation.constraints.NotBlank;
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,20 +19,20 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Builder
 public class MessageDTO {
-    
-    private Long id;
 
-    @NonNull
-    @NotBlank
-    private Chat chat;
+  private Long id;
 
-    @NonNull
-    @NotBlank
-    private String message;
-    
-    private Timestamp timestamp;
+  @NonNull
+  @NotBlank
+  private Chat chat;
 
-    @NonNull
-    @NotBlank
-    private UserDTO sender;
+  @NonNull
+  @NotBlank
+  private String message;
+
+  private Timestamp timestamp;
+
+  @NonNull
+  @NotBlank
+  private UserDTO sender;
 }
