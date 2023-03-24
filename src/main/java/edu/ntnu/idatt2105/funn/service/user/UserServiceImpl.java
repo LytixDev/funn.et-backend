@@ -142,10 +142,25 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User partialUpdate(@NonNull User user, String email, String firstName, String lastName) {
+  public User partialUpdate(
+    @NonNull User user,
+    String email,
+    String firstName,
+    String lastName,
+    String oldPassword,
+    String newPassword
+  ) throws BadCredentialsException {
     if (email != null) user.setEmail(email);
     if (firstName != null) user.setFirstName(firstName);
     if (lastName != null) user.setLastName(lastName);
+
+    if (oldPassword != null && newPassword != null) {
+      if (checkPassword(oldPassword, user.getPassword())) user.setPassword(
+        hashPassword(newPassword)
+      ); else throw new BadCredentialsException("Invalid password");
+    } else if (newPassword != null) throw new BadCredentialsException(
+      "Old password is required to update password"
+    );
     return userRepository.save(user);
   }
 

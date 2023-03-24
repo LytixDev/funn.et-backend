@@ -35,8 +35,14 @@ public interface UserService {
 
   public User updateUser(User user) throws UserDoesNotExistsException;
 
-  public User partialUpdate(User user, String email, String firstName, String lastName)
-    throws UserDoesNotExistsException;
+  public User partialUpdate(
+    User user,
+    String email,
+    String firstName,
+    String lastName,
+    String oldPassword,
+    String newPassword
+  ) throws UserDoesNotExistsException, BadCredentialsException;
 
   public List<User> getAllUsers() throws DatabaseException;
 

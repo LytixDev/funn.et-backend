@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,7 @@ public class PrivateUserController {
     @AuthenticationPrincipal String tokenUsername,
     @PathVariable String username,
     @RequestBody UserPatchDTO userUpdateDTO
-  ) throws UserDoesNotExistsException, PermissionDeniedException {
+  ) throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException {
     LOGGER.info("PATCH request for user: {}", username);
     User authenticatedUser = userService.getUserByUsername(tokenUsername);
     if (
@@ -84,7 +85,9 @@ public class PrivateUserController {
       userToUpdate,
       userUpdateDTO.getEmail(),
       userUpdateDTO.getFirstName(),
-      userUpdateDTO.getLastName()
+      userUpdateDTO.getLastName(),
+      userUpdateDTO.getOldPassword(),
+      userUpdateDTO.getNewPassword()
     );
     UserDTO updatedUserDTO = UserMapper.INSTANCE.userToUserDTO(updatedUser);
     LOGGER.info("Mapped to UserDTO: {}", updatedUserDTO);

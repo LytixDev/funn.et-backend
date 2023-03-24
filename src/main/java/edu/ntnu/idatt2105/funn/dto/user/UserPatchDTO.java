@@ -1,6 +1,10 @@
 package edu.ntnu.idatt2105.funn.dto.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Nicolai H. B.
