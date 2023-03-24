@@ -110,7 +110,6 @@ public class PublicUserControllerTest {
       fail();
     }
   }
-
   //@Test
   //public void testCreateUserThatAlreadyExists() throws Exception {
   //  User user = User
