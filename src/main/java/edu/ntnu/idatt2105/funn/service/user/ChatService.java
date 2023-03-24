@@ -17,6 +17,8 @@ public interface ChatService {
 
   Chat getChat(User user, Long id);
 
+  Chat getChat(User user, Listing listing);
+
   Message sendMessage(User user, Chat chat, String message);
 
   void deleteChat(User user, Chat chat);

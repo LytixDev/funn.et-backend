@@ -70,6 +70,26 @@ public class ChatServiceImpl implements ChatService {
   }
 
   /**
+   * Gets a chat by listing.
+   * @param user The user getting the chat.
+   * @param listing The listing the chat is for.
+   * @return The chat.
+   */
+  @Override
+  public Chat getChat(@NonNull User user, @NonNull Listing listing) {
+    Chat chat = chatRepository
+      .findChatByListingAndMessager(listing, user)
+      .orElseThrow(() -> new IllegalArgumentException("Chat does not exist"));
+
+    if (
+      !chat.getMessager().getUsername().equals(user.getUsername()) &&
+      !chat.getListing().getUser().getUsername().equals(user.getUsername())
+    ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
+
+    return chat;
+  }
+
+  /**
    * Sends a message to a chat.
    * @param user The user sending the message.
    * @param chat The chat the message is being sent to.
