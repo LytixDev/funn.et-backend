@@ -32,6 +32,8 @@ public class UserRepositoryTest {
       "lastName",
       "password",
       new HashSet<>(),
+      new HashSet<>(),
+      new HashSet<>(),
       Role.USER
     );
     entityManager.persist(user);
@@ -50,6 +52,8 @@ public class UserRepositoryTest {
       "firstName",
       "lastName",
       "password",
+      new HashSet<>(),
+      new HashSet<>(),
       new HashSet<>(),
       Role.USER
     );
