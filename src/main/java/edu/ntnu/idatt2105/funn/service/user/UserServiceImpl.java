@@ -4,10 +4,13 @@ import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.funn.repository.user.UserRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -188,6 +191,19 @@ public class UserServiceImpl implements UserService {
     }
 
     return true;
+  }
+
+  @Override
+  public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException {
+    User user = getUserByUsername(username);
+    user.getFavoriteListings().add(listing);
+    userRepository.save(user);
+  }
+
+  @Override
+  public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException {
+    User user = getUserByUsername(username);
+    return user.getFavoriteListings();
   }
 
   public static String hashPassword(String password) {

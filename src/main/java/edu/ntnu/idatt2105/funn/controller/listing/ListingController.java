@@ -13,15 +13,19 @@ import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
+import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,6 +37,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -69,6 +74,8 @@ public class ListingController {
 
   private final ImageStorageService imageStorageService;
 
+  private final UserService userService;
+
   /**
    * Returns all listings in the database.
    * Possible to search for keywords in listing
@@ -82,7 +89,7 @@ public class ListingController {
   )
   public ResponseEntity<List<ListingDTO>> getListingsByFilter(@RequestBody SearchRequest search)
     throws NullPointerException {
-    LOGGER.info("Recieved request to get all listings");
+    LOGGER.info("Received request to get all listings");
     Page<Listing> listings = listingService.searchListingsPaginated(search);
     LOGGER.info("Found {} listings", listings.getContent().size());
 
@@ -102,7 +109,7 @@ public class ListingController {
    */
   @GetMapping(value = "/public/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ListingDTO> getListing(@PathVariable long id) {
-    LOGGER.info("Recieved request to get listing with id: {}", id);
+    LOGGER.info("Received request to get listing with id: {}", id);
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
@@ -278,6 +285,39 @@ public class ListingController {
   }
 
   /**
+   * Favorites a listing with the given id.
+   * @param username the username of the user
+   * @param id the id of the listing to favorite
+   * @return nothing
+   * @throws UserDoesNotExistsException if the user does not exist
+   * @throws ListingNotFoundException if the listing does not exist
+   */
+  @PutMapping(value = "/private/listings/{id}/favorite")
+  public ResponseEntity<Void> favoriteListing(
+    @AuthenticationPrincipal String username,
+    @PathVariable long id
+  ) throws UserDoesNotExistsException, ListingNotFoundException {
+    LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
+    Listing listing = listingService.getListing(id);
+    LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
+    userService.favoriteListing(username, listing);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping(value = "/private/listings/favorites")
+  public ResponseEntity<Set<ListingDTO>> getFavoriteListings(
+    @AuthenticationPrincipal String username
+  ) throws UserDoesNotExistsException {
+    LOGGER.info("Received request to get favorite listings by user {}", username);
+    Set<Listing> favorites = userService.getFavoriteListings(username);
+    Set<ListingDTO> listingDTOs = favorites
+      .stream()
+      .map(l -> listingMapper.listingToListingDTO(l))
+      .collect(Collectors.toSet());
+    return ResponseEntity.ok(listingDTOs);
+  }
+
+  /**
    * Deletes a listing with the given id.
    * @param id the id of the listing to delete
    * @return status 204 - no content
@@ -288,7 +328,7 @@ public class ListingController {
   @DeleteMapping(value = "/private/listings/{id}")
   public ResponseEntity<Void> deleteListing(@PathVariable long id)
     throws ListingNotFoundException, NullPointerException, DatabaseException {
-    LOGGER.info("Recieved request to delete listing with id: {}", id);
+    LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
     listing

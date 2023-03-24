@@ -60,6 +60,7 @@ public class ListingSortTest {
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
+      new HashSet<>(),
       Role.USER
     );
 
@@ -69,6 +70,7 @@ public class ListingSortTest {
       "firstName2",
       "lastName2",
       "password2",
+      new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),

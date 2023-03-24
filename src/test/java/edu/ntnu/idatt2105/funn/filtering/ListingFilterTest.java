@@ -87,6 +87,7 @@ public class ListingFilterTest {
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
+      new HashSet<>(),
       Role.USER
     );
 
@@ -96,6 +97,7 @@ public class ListingFilterTest {
       "firstName2",
       "lastName2",
       "password2",
+      new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
