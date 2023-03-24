@@ -1,15 +1,35 @@
 package edu.ntnu.idatt2105.funn.model.listing;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
 /**
  * Enum representing the category of a listing.
- * @author Nicolai H. B.
- * @version 1.0 - 18.3.2023
+ * @author Thomas H. Svendal
+ * @version 2.0 - 24.3.2023
  */
-public enum Category {
-  ELECTRONICS,
-  CLOTHING,
-  BOOKS,
-  SPORTS,
-  FURNITURE,
-  OTHER,
+@Data
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@Entity
+@Table(name = "`category`")
+public class Category {
+  @Id
+  @Column(name = "`category_id`", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(name = "`category_name`", nullable = false)
+  @NonNull
+  private String name;
 }
