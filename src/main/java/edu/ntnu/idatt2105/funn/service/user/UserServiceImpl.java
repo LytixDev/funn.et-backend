@@ -88,7 +88,6 @@ public class UserServiceImpl implements UserService {
     if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException();
 
     user.setPassword(hashPassword(user.getPassword()));
-    user.setRole(Role.USER);
 
     return userRepository.save(user);
   }
