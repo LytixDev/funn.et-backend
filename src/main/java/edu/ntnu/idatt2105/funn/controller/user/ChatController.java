@@ -147,6 +147,46 @@ public class ChatController {
   }
 
   /**
+   * Gets chat by listing and username.
+   * @param listingId The id of the listing.
+   * @param username The username of the user.
+   * @return The chat.
+   */
+  @GetMapping(
+    value = "/listing/{id}/chat/{username}",
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
+  public ResponseEntity<ChatDTO> getChatByListingAndUser(
+    @PathVariable("id") Long listingId,
+    @PathVariable("username") String username
+  ) throws UserDoesNotExistsException, NullPointerException {
+    LOGGER.info("Getting chat by listing {} and user {}", listingId, username);
+
+    User user = userService.getUserByUsername(username);
+
+    Listing listing = listingService.getListing(listingId);
+
+    LOGGER.info("User found: {}", user);
+
+    LOGGER.info("Getting chat");
+    Chat chat = chatService.getChat(user, listing);
+
+    ChatDTO chatDTO = new ChatDTO(
+      chat.getId(),
+      UserMapper.INSTANCE.userToUserDTO(chat.getMessager()),
+      UserMapper.INSTANCE.userToUserDTO(chat.getListing().getUser()),
+      chat.getListing().getId(),
+      chat
+        .getMessages()
+        .stream()
+        .map(MessageMapper.INSTANCE::messageToMessageDTO)
+        .collect(Collectors.toList())
+    );
+
+    return ResponseEntity.status(HttpStatus.OK).body(chatDTO);
+  }
+
+  /**
    * Send a message to a chat.
    * @param chat The chat to send the message to.
    * @param message The message to send.
