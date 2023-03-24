@@ -1,7 +1,5 @@
 package edu.ntnu.idatt2105.funn.security;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,8 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -25,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * Configures spring security
  *
  * @author Carl G, Thomas S.
- * @version 1.1 - 20.3.2023
+ * @version 1.2 - 23.3.2023
  */
 @Configuration
 @EnableWebSecurity
