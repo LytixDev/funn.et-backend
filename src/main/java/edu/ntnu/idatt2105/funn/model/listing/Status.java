@@ -6,8 +6,8 @@ package edu.ntnu.idatt2105.funn.model.listing;
  * @version 1.0 - 24.3.2023
  */
 public enum Status {
-    SOLD,
-    ARCHIVED,
-    DRAFT,
-    ACTIVE
+  SOLD,
+  ARCHIVED,
+  DRAFT,
+  ACTIVE,
 }

@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.ntnu.idatt2105.funn.model.listing.Category;
-import edu.ntnu.idatt2105.funn.model.listing.Status;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.listing.Status;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
@@ -178,7 +178,7 @@ public class ListingFilterTest {
         .fullDescription("Test4")
         .price(2000)
         .category(Category.SPORTS)
-              .status(Status.ARCHIVED)
+        .status(Status.ARCHIVED)
         .expirationDate(LocalDate.of(2023, 6, 30))
         .publicationDate(LocalDate.of(2023, 1, 31))
         .user(user2)
