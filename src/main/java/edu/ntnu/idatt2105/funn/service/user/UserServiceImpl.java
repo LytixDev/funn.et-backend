@@ -88,7 +88,6 @@ public class UserServiceImpl implements UserService {
     if (emailExists(user.getEmail())) throw new EmailAlreadyExistsException();
 
     user.setPassword(hashPassword(user.getPassword()));
-    user.setRole(Role.USER);
 
     return userRepository.save(user);
   }
@@ -139,6 +138,29 @@ public class UserServiceImpl implements UserService {
     user.setPassword(hashPassword(user.getPassword()));
 
     return userRepository.save(getUserByUsername(user.getUsername()));
+  }
+
+  @Override
+  public User partialUpdate(
+    @NonNull User user,
+    String email,
+    String firstName,
+    String lastName,
+    String oldPassword,
+    String newPassword
+  ) throws BadCredentialsException {
+    if (email != null) user.setEmail(email);
+    if (firstName != null) user.setFirstName(firstName);
+    if (lastName != null) user.setLastName(lastName);
+
+    if (oldPassword != null && newPassword != null) {
+      if (checkPassword(oldPassword, user.getPassword())) user.setPassword(
+        hashPassword(newPassword)
+      ); else throw new BadCredentialsException("Invalid password");
+    } else if (newPassword != null) throw new BadCredentialsException(
+      "Old password is required to update password"
+    );
+    return userRepository.save(user);
   }
 
   /**
