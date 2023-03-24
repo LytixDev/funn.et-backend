@@ -59,6 +59,12 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
 
+  @OneToMany(mappedBy = "messager", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Chat> chats;
+
+  @OneToMany(mappedBy = "sender", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Message> messages;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)
   @NonNull

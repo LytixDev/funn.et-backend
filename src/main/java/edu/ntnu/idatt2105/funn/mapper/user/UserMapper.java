@@ -3,12 +3,13 @@ package edu.ntnu.idatt2105.funn.mapper.user;
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
  * Class used to map between User and UserDTO.
  * @author Callum G.
- * @version 1.0 - 13.3.2023
+ * @version 1.1 - 23.3.2023
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
