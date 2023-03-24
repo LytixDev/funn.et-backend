@@ -18,7 +18,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   UserService userService;
 
   @Override
-  public void run(String...args) throws Exception {
+  public void run(String... args) throws Exception {
     if (!userService.usernameExists("admin")) {
       RegisterDTO admin = new RegisterDTO("admin", "admin", "admin", "admin", "admin");
       User user = RegisterMapper.INSTANCE.registerDTOtoUser(admin);
@@ -27,4 +27,3 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     }
   }
 }
-
