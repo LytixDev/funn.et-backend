@@ -141,6 +141,14 @@ public class UserServiceImpl implements UserService {
     return userRepository.save(getUserByUsername(user.getUsername()));
   }
 
+  @Override
+  public User partialUpdate(@NonNull User user, String email, String firstName, String lastName) {
+    if (email != null) user.setEmail(email);
+    if (firstName != null) user.setFirstName(firstName);
+    if (lastName != null) user.setLastName(lastName);
+    return userRepository.save(user);
+  }
+
   /**
    * Gets all users from the database.
    * @return a list of all users.
