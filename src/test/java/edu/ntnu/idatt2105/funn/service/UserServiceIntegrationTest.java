@@ -62,6 +62,8 @@ public class UserServiceIntegrationTest {
         "password",
         new HashSet<>(),
         new HashSet<>(),
+        new HashSet<>(),
+        new HashSet<>(),
         Role.USER
       );
 
@@ -83,6 +85,8 @@ public class UserServiceIntegrationTest {
         "newFirstName",
         "newLastName",
         "newPassword",
+        new HashSet<>(),
+        new HashSet<>(),
         new HashSet<>(),
         new HashSet<>(),
         Role.USER

@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.funn.filtering;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.ntnu.idatt2105.funn.filtering.FieldType;
 import java.time.LocalDate;
 import org.junit.Test;
 

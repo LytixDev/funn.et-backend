@@ -17,6 +17,14 @@ public class DatabaseException extends Exception {
 
   /**
    * Constructor for DatabaseException.
+   * @param cause The cause of the exception.
+   */
+  public DatabaseException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Constructor for DatabaseException.
    * Has a default message.
    */
   public DatabaseException() {

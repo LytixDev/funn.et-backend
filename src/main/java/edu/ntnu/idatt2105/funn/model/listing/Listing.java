@@ -3,10 +3,12 @@ package edu.ntnu.idatt2105.funn.model.listing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.location.Location;
+import edu.ntnu.idatt2105.funn.model.user.Chat;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.*;
@@ -14,7 +16,7 @@ import lombok.*;
 /**
  * Entity class for listing.
  * @author Nicolai H. B., Callum G.
- * @version 1.2 - 21.3.2023
+ * @version 1.3 - 23.3.2023
  */
 @Setter
 @Getter
@@ -68,6 +70,23 @@ public class Listing {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
   private List<Image> images;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "`listing`", referencedColumnName = "`listing_id`")
+  private List<Chat> chats;
+
+  /**
+   * Method for getting the images of a listing.
+   * If the list of images is null, a new list is created.
+   * @return List of images.
+   */
+  public List<Image> getImages() {
+    if (images == null) {
+      images = new ArrayList<>();
+    }
+
+    return images;
+  }
 
   @ManyToMany(
     mappedBy = "favoriteListings",

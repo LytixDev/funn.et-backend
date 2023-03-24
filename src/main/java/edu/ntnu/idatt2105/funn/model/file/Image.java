@@ -34,4 +34,8 @@ public class Image {
   @Column(name = "`image_alt`", nullable = false)
   @NonNull
   private String alt;
+
+  @Column(name = "`listing`")
+  @NonNull
+  private Long listingId;
 }

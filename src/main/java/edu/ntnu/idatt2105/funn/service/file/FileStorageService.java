@@ -8,6 +8,11 @@ import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Interface for the service class for the image repository.
+ * @author Callum G.
+ * @version 1.1 - 22.03.2023
+ */
 public interface FileStorageService {
   void init() throws IOException;
 

@@ -156,7 +156,7 @@ public class LocationControllerTest {
             )
             .accept(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
     } catch (Exception e) {
       fail();
     }
@@ -209,7 +209,7 @@ public class LocationControllerTest {
             )
             .accept(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
     } catch (Exception e) {
       fail();
     }
@@ -242,7 +242,7 @@ public class LocationControllerTest {
             .delete("/api/v1/private/locations/1")
             .accept(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
     } catch (Exception e) {
       fail();
     }

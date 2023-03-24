@@ -1,5 +1,8 @@
 package edu.ntnu.idatt2105.funn.controller.listing;
 
+import edu.ntnu.idatt2105.funn.controller.file.ImageController;
+import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
@@ -8,12 +11,22 @@ import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
+import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.service.file.ImageService;
+import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +40,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 /**
  * Controller for listings
@@ -53,6 +69,10 @@ public class ListingController {
   private ListingMapper listingMapper;
 
   private final ListingService listingService;
+
+  private final ImageService imageService;
+
+  private final ImageStorageService imageStorageService;
 
   private final UserService userService;
 
@@ -98,29 +118,115 @@ public class ListingController {
   }
 
   /**
+   * Uploads images to a listing.
+   * @param listing The listing to upload images to.
+   * @param images The images to upload.
+   * @param imageAlts The alt text for the images.
+   * @return The listing with the uploaded images.
+   */
+  private List<ImageResponseDTO> uploadImages(
+    Long listingId,
+    MultipartFile[] images,
+    String[] imageAlts
+  ) throws RuntimeException, IOException {
+    List<ImageResponseDTO> dtos = new ArrayList<>();
+    Map<MultipartFile, String> imageAltMap = IntStream
+      .range(0, images.length)
+      .boxed()
+      .collect(Collectors.toMap(i -> images[i], i -> imageAlts[i]));
+
+    imageAltMap.forEach((image, alt) -> {
+      LOGGER.info("Image upload request received");
+
+      ImageResponseDTO dto = new ImageResponseDTO();
+
+      Image imageFile = new Image();
+
+      imageFile.setAlt(alt);
+
+      imageFile.setListingId(listingId);
+
+      LOGGER.info("Saving image file");
+
+      try {
+        imageFile = imageService.saveFile(imageFile);
+      } catch (DatabaseException e) {
+        throw new RuntimeException(e);
+      }
+
+      LOGGER.info("Storing image file");
+
+      try {
+        imageStorageService.init();
+        imageStorageService.store(image, imageFile.getId());
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+
+      LOGGER.info("Image upload successful");
+
+      dto.setId(imageFile.getId());
+
+      dto.setAlt(imageFile.getAlt());
+
+      dto.setUrl(
+        MvcUriComponentsBuilder
+          .fromMethodName(ImageController.class, "getImage", dto.getId())
+          .build()
+          .toString()
+      );
+
+      dtos.add(dto);
+    });
+
+    LOGGER.info("Image upload responses {}", dtos);
+
+    return dtos;
+  }
+
+  /**
    * Creates a listing from a listing dto
-   * @param listingDTO The id of the listing to delete.
+   * @param listingDTO The listing dto to create a listing from
    * @return The listing created
    * @throws LocationDoesntExistException If the location does not exist
    * @throws DatabaseException If the database could not handle a sql request
    * @throws UserDoesNotExistsException If the user does not exist
-   * @throws NullPointerException If the user is null
    * @throws ListingAlreadyExistsException If the listing already exists
+   * @throws IOException
+   * @throws RuntimeException
    */
   @PostMapping(
     value = "/private/listings",
-    consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE },
+    consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO listingDTO)
-    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, NullPointerException, ListingAlreadyExistsException {
-    LOGGER.info("Received request to create listing: {}", listingDTO);
-    Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
+  @Operation(summary = "Create listing", description = "Creates a listing from a listing dto")
+  public ResponseEntity<ListingDTO> createListing(@ModelAttribute ListingCreateDTO listingDTO)
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, ListingAlreadyExistsException, RuntimeException, IOException {
+    LOGGER.info("Recieved request to create listing: {}", listingDTO);
+    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
     Listing createdListing = listingService.saveListing(requestedListing);
+
     LOGGER.info("Saved listing to database");
     ListingDTO createdListingDTO = listingMapper.listingToListingDTO(createdListing);
+
+    if (listingDTO.getImages() != null) {
+      if (listingDTO.getImageAlts() == null) {
+        String[] imageAlts = new String[listingDTO.getImages().length];
+        for (int i = 0; i < listingDTO.getImages().length; i++) {
+          imageAlts[i] = "image";
+        }
+        listingDTO.setImageAlts(imageAlts);
+      }
+
+      createdListingDTO.setImageResponse(
+        uploadImages(requestedListing.getId(), listingDTO.getImages(), listingDTO.getImageAlts())
+      );
+    }
     LOGGER.info("Mapped listing to DTO and returning");
+
     return ResponseEntity.ok(createdListingDTO);
   }
 
@@ -132,20 +238,18 @@ public class ListingController {
    * @throws DatabaseException if an sql operation fails
    * @throws UserDoesNotExistsException if the requesting user does not exist
    */
-  @PutMapping(
-    value = "/private/listings/{id}",
-    consumes = { MediaType.APPLICATION_JSON_VALUE },
-    produces = { MediaType.APPLICATION_JSON_VALUE }
-  )
+  @PutMapping(value = "/private/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ListingDTO> updateListing(
-    @RequestBody ListingDTO listingDTO,
+    @ModelAttribute ListingCreateDTO listingDTO,
     @PathVariable long id
-  ) throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException {
-    LOGGER.info("Received request to update listing: {}", listingDTO);
+  )
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
+    LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
-    if (listingDTO.getId() != id) throw new IllegalArgumentException("400 Bad Request");
+    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
 
-    Listing requestedListing = listingMapper.listingDTOToListing(listingDTO);
+    requestedListing.setId(id);
+    requestedListing.setImages(imageService.getAllFilesByListingId(id));
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
@@ -153,6 +257,29 @@ public class ListingController {
 
     LOGGER.info("Saved updated listing to database");
     ListingDTO updatedListingDTO = listingMapper.listingToListingDTO(updatedListing);
+
+    if (listingDTO.getImages() != null) {
+      if (listingDTO.getImageAlts() == null) {
+        String[] imageAlts = new String[listingDTO.getImages().length];
+        for (int i = 0; i < listingDTO.getImages().length; i++) {
+          imageAlts[i] = "image";
+        }
+        listingDTO.setImageAlts(imageAlts);
+      }
+
+      updatedListingDTO.setImageResponse(
+        Stream
+          .concat(
+            updatedListingDTO.getImageResponse().stream(),
+            uploadImages(updatedListing.getId(), listingDTO.getImages(), listingDTO.getImageAlts())
+              .stream()
+          )
+          .collect(Collectors.toList())
+      );
+    }
+
+    LOGGER.info("Saved images to database");
+
     LOGGER.info("Mapped listing to DTO and returning");
     return ResponseEntity.ok(updatedListingDTO);
   }
@@ -204,7 +331,18 @@ public class ListingController {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
-    LOGGER.info("Found listing to delete: {}", listing);
+    listing
+      .getImages()
+      .forEach(image -> {
+        try {
+          imageStorageService.init();
+          imageStorageService.deleteFile(image.getId());
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+
+    LOGGER.info("Found listing to delete: ", listing);
     listingService.deleteListing(listing);
 
     LOGGER.info("Deleted listing from database and returning 204");

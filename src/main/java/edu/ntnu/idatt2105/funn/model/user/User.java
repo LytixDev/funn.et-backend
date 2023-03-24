@@ -3,7 +3,6 @@ package edu.ntnu.idatt2105.funn.model.user;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import jakarta.persistence.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.*;
@@ -50,6 +49,12 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Listing> listings;
+
+  @OneToMany(mappedBy = "messager", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Chat> chats;
+
+  @OneToMany(mappedBy = "sender", orphanRemoval = true, cascade = CascadeType.ALL)
+  private Collection<Message> messages;
 
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(

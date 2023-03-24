@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service for image files.
  * @author Callum G.
- * @version 1.0 - 20.03.2023
+ * @version 1.1 - 23.03.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
    */
   @Override
   public Image saveFile(@NonNull Image file) throws DatabaseException, NullPointerException {
-    if (fileExists(file)) throw new DatabaseException();
+    if (file.getId() != null && fileExists(file)) throw new DatabaseException();
     try {
       return imageRepository.save(file);
     } catch (Exception e) {
@@ -118,6 +118,25 @@ public class ImageServiceImpl implements ImageService {
 
     try {
       imageRepository.deleteById(id);
+    } catch (Exception e) {
+      throw new DatabaseException();
+    }
+  }
+
+  /**
+   * Gets all files by listing id from the database.
+   * @param listingId The id of the listing to get files for.
+   * @return A list of all files for the listing.
+   * @throws DatabaseException If the files could not be retrieved from the database.
+   * @throws NullPointerException If the listing id is null.
+   */
+  @Override
+  public List<Image> getAllFilesByListingId(Long listingId)
+    throws DatabaseException, NullPointerException {
+    try {
+      return imageRepository
+        .findAllByListingId(listingId)
+        .orElseThrow(() -> new DatabaseException());
     } catch (Exception e) {
       throw new DatabaseException();
     }
