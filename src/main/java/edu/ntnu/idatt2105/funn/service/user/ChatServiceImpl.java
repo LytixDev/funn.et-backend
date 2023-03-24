@@ -31,21 +31,22 @@ public class ChatServiceImpl implements ChatService {
    * @throws NullPointerException If the listing is null.
    */
   @Override
-  public Chat createChat(@NonNull User user, @NonNull Listing listing) {
-    if (
-      chatRepository
-        .findChatsByMessager(user.getUsername())
-        .stream()
-        .anyMatch(chat -> chat.getListing().getId() == listing.getId())
-    ) throw new IllegalArgumentException("Chat already exists");
+  public Chat createChat(@NonNull User user, @NonNull Listing listing)
+    throws IllegalArgumentException {
+    // if (
+    //   chatRepository
+    //     .findChatsByMessager(user.getUsername())
+    //     .stream()
+    //     .anyMatch(chat -> chat.getListing().getId() == listing.getId())
+    // ) throw new IllegalArgumentException("Chat already exists");
 
-    if (
-      user.getUsername().equals(listing.getUser().getUsername())
-    ) throw new IllegalArgumentException("Cannot create chat with yourself");
+    // if (
+    //   user.getUsername().equals(listing.getUser().getUsername())
+    // ) throw new IllegalArgumentException("Cannot create chat with yourself");
 
-    return chatRepository.save(
-      Chat.builder().messager(user).listing(listing).messages(new HashSet<>()).build()
-    );
+    Chat chat = Chat.builder().messager(user).listing(listing).messages(new HashSet<>()).build();
+
+    return chatRepository.save(chat);
   }
 
   /**
@@ -61,7 +62,7 @@ public class ChatServiceImpl implements ChatService {
       .orElseThrow(() -> new IllegalArgumentException("Chat does not exist"));
 
     if (
-      !chat.getMessager().getUsername().equals(user.getUsername()) ||
+      !chat.getMessager().getUsername().equals(user.getUsername()) &&
       !chat.getListing().getUser().getUsername().equals(user.getUsername())
     ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
 
@@ -78,24 +79,26 @@ public class ChatServiceImpl implements ChatService {
    * @throws NullPointerException If the message is null.
    */
   @Override
-  public void sendMessage(@NonNull User user, @NonNull Chat chat, @NonNull String message) {
+  public Message sendMessage(@NonNull User user, @NonNull Chat chat, @NonNull String message) {
     if (
-      !chat.getMessager().getUsername().equals(user.getUsername()) ||
+      !chat.getMessager().getUsername().equals(user.getUsername()) &&
       !chat.getListing().getUser().getUsername().equals(user.getUsername())
     ) throw new IllegalArgumentException("Cannot send message to chat you are not a part of");
 
-    chat
-      .getMessages()
-      .add(
-        Message
-          .builder()
-          .chat(chat)
-          .message(message)
-          .sender(user)
-          .timestamp(new Timestamp(System.currentTimeMillis()))
-          .build()
-      );
-    chatRepository.save(chat);
+    Message messageToAdd = Message
+      .builder()
+      .chat(chat)
+      .message(message)
+      .sender(user)
+      .timestamp(new Timestamp(System.currentTimeMillis()))
+      .build();
+
+    chat.getMessages().add(messageToAdd);
+    chat = chatRepository.save(chat);
+
+    Message messageToReturn = (Message) chat.getMessages().toArray()[chat.getMessages().size() - 1];
+
+    return messageToReturn;
   }
 
   /**
@@ -108,7 +111,7 @@ public class ChatServiceImpl implements ChatService {
   @Override
   public void deleteChat(@NonNull User user, @NonNull Chat chat) {
     if (
-      !chat.getMessager().getUsername().equals(user.getUsername()) ||
+      !chat.getMessager().getUsername().equals(user.getUsername()) &&
       !chat.getListing().getUser().getUsername().equals(user.getUsername())
     ) throw new IllegalArgumentException("Cannot delete chat you are not a part of");
 
