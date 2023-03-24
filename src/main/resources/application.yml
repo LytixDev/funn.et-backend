@@ -18,13 +18,6 @@ spring:
       maxFileSize: 51200KB
       maxRequestSize: 51200KB
 
-  security:
-    user:
-      name: admin
-      password: SuperSecretAdmin
-
-
-
 springdoc:
   swagger-ui:
     path: /swagger/index.html
