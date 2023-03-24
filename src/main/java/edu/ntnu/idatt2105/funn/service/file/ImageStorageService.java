@@ -39,11 +39,8 @@ public class ImageStorageService implements FileStorageService {
     Files.copy(
       file.getInputStream(),
       root.resolve(
-        id.toString() +
-        file
-          .getOriginalFilename()
-          .substring(file.getOriginalFilename().lastIndexOf("."))
-          .toLowerCase()
+        id.toString() + "." +
+        file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1)
       )
     );
   }
