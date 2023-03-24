@@ -9,5 +9,5 @@ public enum Status {
     SOLD,
     ARCHIVED,
     DRAFT,
-    LIVE
+    ACTIVE
 }
