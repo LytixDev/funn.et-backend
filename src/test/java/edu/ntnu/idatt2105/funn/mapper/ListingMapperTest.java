@@ -13,6 +13,7 @@ import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapperImpl;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.listing.Status;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
@@ -106,6 +107,7 @@ public class ListingMapperTest {
       .location(location)
       .user(user)
       .category(Category.OTHER)
+      .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
       .images(new ArrayList<>())
@@ -136,6 +138,7 @@ public class ListingMapperTest {
       .briefDescription("description")
       .fullDescription("description")
       .category(Category.OTHER)
+      .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
       .imageResponse(new ArrayList<>())
@@ -172,6 +175,7 @@ public class ListingMapperTest {
       .briefDescription("description")
       .fullDescription("description")
       .category(Category.OTHER)
+      .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
       .build();

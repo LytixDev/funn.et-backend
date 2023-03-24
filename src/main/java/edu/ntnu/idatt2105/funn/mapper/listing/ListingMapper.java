@@ -10,6 +10,7 @@ import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.listing.Status;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
@@ -79,6 +80,17 @@ public abstract class ListingMapper {
   @Named("getUser")
   public User getUser(String username) throws UserDoesNotExistsException {
     return userService.getUserByUsername(username);
+  }
+
+  /**
+   * Gets the status of a listing.
+   * @param Listing The listing to get the status from.
+   * @return The status of the listing.
+   */
+  @Named("getStatus")
+  public Status getStatus(Status status) {
+    if (status == null) return Status.ACTIVE;
+    return status;
   }
 
   /**
@@ -168,6 +180,7 @@ public abstract class ListingMapper {
       @Mapping(source = "username", target = "user", qualifiedByName = "getUser"),
       @Mapping(target = "images", ignore = true),
       @Mapping(target = "id", ignore = true),
+      @Mapping(source = "status", target = "status", qualifiedByName = "getStatus"),
     }
   )
   public abstract Listing listingCreateDTOToListing(ListingCreateDTO listingDTO)

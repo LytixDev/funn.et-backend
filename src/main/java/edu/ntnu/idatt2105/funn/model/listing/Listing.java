@@ -57,6 +57,10 @@ public class Listing {
   @Column(name = "`category`", nullable = false)
   private Category category;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "`status`", nullable = false)
+  private Status status;
+
   @DecimalMin(value = "0.0")
   @Column(name = "`price`", nullable = false)
   private double price;
