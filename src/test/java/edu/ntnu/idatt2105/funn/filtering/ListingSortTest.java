@@ -9,6 +9,7 @@ import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.repository.listing.CategoryRepository;
 import edu.ntnu.idatt2105.funn.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.funn.repository.location.LocationRepository;
 import edu.ntnu.idatt2105.funn.repository.location.PostCodeRepository;
@@ -40,6 +41,9 @@ public class ListingSortTest {
   @Autowired
   private PostCodeRepository postCodeRepository;
 
+  @Autowired
+  private CategoryRepository categoryRepository;
+
   private SearchSpecification<Listing> searchSpecification;
 
   private Listing listing1;
@@ -52,6 +56,11 @@ public class ListingSortTest {
 
   @Before
   public void setUp() {
+
+    Category books = new Category(null, "Books");
+    Category sport = new Category(null, "Sport");
+    Category furniture = new Category(null, "Furniture");
+
     User user1 = new User(
       "username",
       "email",
@@ -77,6 +86,10 @@ public class ListingSortTest {
       new HashSet<>(),
       Role.USER
     );
+
+    categoryRepository.save(sport);
+    categoryRepository.save(books);
+    categoryRepository.save(furniture);
 
     PostCode postCode = new PostCode(0000, "Oslo", new HashSet<>());
 
@@ -107,7 +120,7 @@ public class ListingSortTest {
         .briefDescription("Test")
         .fullDescription("Test")
         .price(1000)
-        .category(Category.BOOKS)
+        .category(books)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
@@ -122,7 +135,7 @@ public class ListingSortTest {
         .briefDescription("Test2")
         .fullDescription("Test2")
         .price(2000)
-        .category(Category.BOOKS)
+        .category(books)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
@@ -137,7 +150,7 @@ public class ListingSortTest {
         .briefDescription("Test3")
         .fullDescription("Test3")
         .price(2000)
-        .category(Category.FURNITURE)
+        .category(furniture)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2022, 12, 31))
         .publicationDate(LocalDate.of(2022, 6, 30))
@@ -152,7 +165,7 @@ public class ListingSortTest {
         .briefDescription("Test4")
         .fullDescription("Test4")
         .price(2000)
-        .category(Category.SPORTS)
+        .category(sport)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2023, 6, 30))
         .publicationDate(LocalDate.of(2023, 1, 31))
@@ -211,5 +224,24 @@ public class ListingSortTest {
     assertEquals(listing3.getTitle(), found.getContent().get(1).getTitle());
     assertEquals(listing2.getTitle(), found.getContent().get(2).getTitle());
     assertEquals(listing1.getTitle(), found.getContent().get(3).getTitle());
+  }
+
+  @Test
+  public void testSortByCategoryAsc() {
+    SortRequest sortRequest = new SortRequest("category", SortDirection.ASC);
+    SearchRequest searchRequest = new SearchRequest();
+    searchRequest.getSortRequests().add(sortRequest);
+
+    searchSpecification = new SearchSpecification<>(searchRequest);
+
+    Pageable pageable = SearchSpecification.getPageable(searchRequest);
+
+    Page<Listing> found = listingRepository.findAll(searchSpecification, pageable);
+
+    assertEquals(4, found.getTotalElements());
+    assertEquals(listing1.getTitle(), found.getContent().get(0).getTitle());
+    assertEquals(listing2.getTitle(), found.getContent().get(1).getTitle());
+    assertEquals(listing3.getTitle(), found.getContent().get(2).getTitle());
+    assertEquals(listing4.getTitle(), found.getContent().get(3).getTitle());
   }
 }

@@ -8,6 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Search request for filtering and sorting.
+ * @author Callum G.
+ * @version 1.0 - 18.3.2023
+ */
 @Data
 @Builder
 @AllArgsConstructor

@@ -63,10 +63,14 @@ public class ListingMapperTest {
 
   PostCode postCode;
 
+  Category category;
+
   @Before
   public void setUp()
     throws UserDoesNotExistsException, LocationDoesntExistException, DatabaseException {
     postCode = new PostCode(0000, "Oslo", new HashSet<>());
+
+    category = new Category(1L, "Other");
 
     location =
       Location
@@ -106,7 +110,7 @@ public class ListingMapperTest {
       .price(1000)
       .location(location)
       .user(user)
-      .category(Category.OTHER)
+      .category(category)
       .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
@@ -137,7 +141,7 @@ public class ListingMapperTest {
       .username("username")
       .briefDescription("description")
       .fullDescription("description")
-      .category(Category.OTHER)
+      .category(category)
       .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))
@@ -174,7 +178,7 @@ public class ListingMapperTest {
       .username("username")
       .briefDescription("description")
       .fullDescription("description")
-      .category(Category.OTHER)
+      .category(category)
       .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))

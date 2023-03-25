@@ -106,13 +106,17 @@ public class UserRepositoryTest {
 
     entityManager.persist(location);
 
+    Category category = new Category(null, "Books");
+
+    entityManager.persist(category);
+
     Listing listing = Listing
       .builder()
       .title("Test")
       .briefDescription("Test")
       .fullDescription("Test")
       .price(1000)
-      .category(Category.BOOKS)
+      .category(category)
       .expirationDate(LocalDate.of(2021, 12, 31))
       .publicationDate(LocalDate.of(2020, 12, 31))
       .user(user)
@@ -165,13 +169,17 @@ public class UserRepositoryTest {
 
     entityManager.persist(location);
 
+    Category category = new Category(null, "Books");
+
+    entityManager.persist(category);
+
     Listing listing = Listing
       .builder()
       .title("Test")
       .briefDescription("Test")
       .fullDescription("Test")
       .price(1000)
-      .category(Category.BOOKS)
+      .category(category)
       .expirationDate(LocalDate.of(2021, 12, 31))
       .publicationDate(LocalDate.of(2020, 12, 31))
       .user(user)
