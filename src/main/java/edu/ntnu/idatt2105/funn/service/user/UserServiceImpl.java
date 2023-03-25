@@ -180,9 +180,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean isFavouriteByUser(String username, Listing listing)
+  public boolean isFavoriteByUser(String username, Listing listing)
     throws UserDoesNotExistsException {
-    return userRepository.findUserWhoFavouritedListing(listing.getId(), username).isPresent();
+    return userRepository.findUserWhoFavoritedListing(listing.getId(), username).isPresent();
   }
 
   @Override

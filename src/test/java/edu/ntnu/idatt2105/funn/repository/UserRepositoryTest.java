@@ -77,7 +77,7 @@ public class UserRepositoryTest {
   }
 
   @Test
-  public void testUserHasFavouritedListing() throws Exception {
+  public void testUserHasFavoritedListing() throws Exception {
     User user = new User(
       "username",
       "email",
@@ -131,12 +131,12 @@ public class UserRepositoryTest {
     entityManager.merge(listing);
 
     assertTrue(
-      userRepository.findUserWhoFavouritedListing(listing.getId(), user.getUsername()).isPresent()
+      userRepository.findUserWhoFavoritedListing(listing.getId(), user.getUsername()).isPresent()
     );
   }
 
   @Test
-  public void testUserDoesNotHaveFavouriteListing() {
+  public void testUserDoesNotHaveFavoriteListing() {
     User user = new User(
       "username",
       "email",
@@ -184,7 +184,7 @@ public class UserRepositoryTest {
     entityManager.persist(listing);
 
     assertFalse(
-      userRepository.findUserWhoFavouritedListing(listing.getId(), user.getUsername()).isPresent()
+      userRepository.findUserWhoFavoritedListing(listing.getId(), user.getUsername()).isPresent()
     );
   }
 }
