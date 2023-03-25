@@ -23,6 +23,7 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -116,9 +117,12 @@ public class ListingController {
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
     LOGGER.info("Mapped listing to DTO and checking if possible user has favourited it");
-    if (username != null) {
+    listingDTO.setIsFavourite(Optional.empty());
+    if (!username.equals("anonymousUser")) {
+      LOGGER.info("User is not anonymous, checking if user has favourited listing");
       boolean listingIsFavorite = userService.isFavouriteByUser(username, foundListing);
-      listingDTO.setFavourite(listingIsFavorite);
+      LOGGER.info("Listing is favourite: {}", listingIsFavorite);
+      listingDTO.setIsFavourite(Optional.of(listingIsFavorite));
     }
     return ResponseEntity.ok(listingDTO);
   }
@@ -306,7 +310,7 @@ public class ListingController {
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
-    userService.favoriteListing(username, listing);
+    userService.isFavouriteByUser(username, listing);
     return ResponseEntity.ok().build();
   }
 

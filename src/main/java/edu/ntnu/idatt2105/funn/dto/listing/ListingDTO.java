@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.model.listing.Status;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -66,5 +67,5 @@ public class ListingDTO {
 
   private List<ImageResponseDTO> imageResponse;
 
-  private boolean isFavourite;
+  private Optional<Boolean> isFavourite;
 }
