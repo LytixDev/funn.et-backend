@@ -118,7 +118,7 @@ public class ListingController {
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
     LOGGER.info("Mapped listing to DTO and checking if possible user has favorited it");
     listingDTO.setIsFavorite(Optional.empty());
-    if (!username.equals("anonymousUser")) {
+    if (username != null && !username.equals("anonymousUser")) {
       LOGGER.info("User is not anonymous, checking if user has favorited listing");
       boolean listingIsFavorite = userService.isFavoriteByUser(username, foundListing);
       LOGGER.info("Listing is favorite: {}", listingIsFavorite);
@@ -310,11 +310,21 @@ public class ListingController {
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
-    userService.isFavoriteByUser(username, listing);
+    userService.favoriteListing(username, listing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(listing);
+
+    boolean listingIsFavorite = userService.isFavoriteByUser(username, listing);
+    LOGGER.info("Listing is favorite: {}", listingIsFavorite);
+    listingDTO.setIsFavorite(Optional.of(listingIsFavorite));
     return ResponseEntity.ok(listingDTO);
   }
 
+  /**
+   * Gets all favorite listings for a user.
+   * @param username the username of the user. Ano
+   * @return a set of favorite listings by a user
+   * @throws UserDoesNotExistsException
+   */
   @GetMapping(value = "/private/listings/favorites")
   public ResponseEntity<Set<ListingDTO>> getFavoriteListings(
     @AuthenticationPrincipal String username
