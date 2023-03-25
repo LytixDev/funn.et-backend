@@ -296,6 +296,7 @@ public class ListingController {
 
   /**
    * Favorites a listing with the given id.
+   * If a listing is already favorited, it is unfavorited.
    * @param username the username of the user
    * @param id the id of the listing to favorite
    * @return nothing
@@ -303,14 +304,14 @@ public class ListingController {
    * @throws ListingNotFoundException if the listing does not exist
    */
   @PutMapping(value = "/private/listings/{id}/favorite")
-  public ResponseEntity<ListingDTO> favoriteListing(
+  public ResponseEntity<ListingDTO> favoriteOrUnfavoriteListing(
     @AuthenticationPrincipal String username,
     @PathVariable long id
   ) throws UserDoesNotExistsException, ListingNotFoundException {
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
-    userService.favoriteListing(username, listing);
+    userService.favoriteOrUnfavoriteListing(username, listing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(listing);
 
     boolean listingIsFavorite = userService.isFavoriteByUser(username, listing);
