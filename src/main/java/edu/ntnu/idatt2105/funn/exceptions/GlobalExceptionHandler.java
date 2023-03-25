@@ -9,6 +9,7 @@ import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import java.util.Arrays;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * unhandled exceptions to a response object
  * Logs the exception message to the console
  *
- * @author Carl. G
- * @version 1.2 - 24.03.2023
+ * @author Carl. G, Nicolai H. B.
+ * @version 1.3 - 24.03.2023
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -167,6 +168,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     WebRequest request
   ) {
     return getResponseEntityWithExceptionResponse(ex, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Handles exceptions where a user is not authorized to perform an action
+   * Returns a 403 forbidden response with custom message
+   * @param ex The exception that was thrown
+   * @param request The request that caused the exception
+   * @return A response entity with the exception message
+   */
+  @ExceptionHandler(value = { PermissionDeniedException.class })
+  public ResponseEntity<ExceptionResponse> handlePermissionDeniedException(
+    Exception ex,
+    WebRequest request
+  ) {
+    return getResponseEntityWithExceptionResponse(ex, HttpStatus.FORBIDDEN);
   }
 
   /**

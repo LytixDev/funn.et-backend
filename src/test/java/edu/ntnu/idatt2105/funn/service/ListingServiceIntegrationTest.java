@@ -62,6 +62,7 @@ public class ListingServiceIntegrationTest {
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
+      new HashSet<>(),
       Role.USER
     );
 

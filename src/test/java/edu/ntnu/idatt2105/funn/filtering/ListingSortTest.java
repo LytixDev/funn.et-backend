@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.listing.Status;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
@@ -60,6 +61,7 @@ public class ListingSortTest {
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
+      new HashSet<>(),
       Role.USER
     );
 
@@ -69,6 +71,7 @@ public class ListingSortTest {
       "firstName2",
       "lastName2",
       "password2",
+      new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
       new HashSet<>(),
@@ -105,6 +108,7 @@ public class ListingSortTest {
         .fullDescription("Test")
         .price(1000)
         .category(Category.BOOKS)
+        .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
         .user(user1)
@@ -119,6 +123,7 @@ public class ListingSortTest {
         .fullDescription("Test2")
         .price(2000)
         .category(Category.BOOKS)
+        .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
         .user(user1)
@@ -133,6 +138,7 @@ public class ListingSortTest {
         .fullDescription("Test3")
         .price(2000)
         .category(Category.FURNITURE)
+        .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2022, 12, 31))
         .publicationDate(LocalDate.of(2022, 6, 30))
         .user(user2)
@@ -147,6 +153,7 @@ public class ListingSortTest {
         .fullDescription("Test4")
         .price(2000)
         .category(Category.SPORTS)
+        .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2023, 6, 30))
         .publicationDate(LocalDate.of(2023, 1, 31))
         .user(user2)

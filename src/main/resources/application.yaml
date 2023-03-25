@@ -23,3 +23,4 @@ springdoc:
     path: /swagger/index.html
   api-docs:
     path: /swagger/api-docs
+

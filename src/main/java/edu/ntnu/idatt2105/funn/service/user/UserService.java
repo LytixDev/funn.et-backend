@@ -4,8 +4,10 @@ import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import java.util.List;
+import java.util.Set;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +37,24 @@ public interface UserService {
 
   public User updateUser(User user) throws UserDoesNotExistsException;
 
+  public User partialUpdate(
+    User user,
+    String email,
+    String firstName,
+    String lastName,
+    String oldPassword,
+    String newPassword
+  ) throws UserDoesNotExistsException, BadCredentialsException;
+
   public List<User> getAllUsers() throws DatabaseException;
 
   public boolean authenticateUser(String username, String password)
     throws UserDoesNotExistsException, BadCredentialsException;
+
+  public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException;
+
+  public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException;
+
+  public boolean isFavoriteByUser(String username, Listing listing)
+    throws UserDoesNotExistsException;
 }

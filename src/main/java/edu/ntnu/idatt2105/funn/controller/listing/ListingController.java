@@ -16,12 +16,15 @@ import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
+import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,6 +36,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,7 +54,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.2 - 23.3.2023
+ * @version 1.3 - 25.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -69,6 +73,8 @@ public class ListingController {
 
   private final ImageStorageService imageStorageService;
 
+  private final UserService userService;
+
   /**
    * Returns all listings in the database.
    * Possible to search for keywords in listing
@@ -82,7 +88,7 @@ public class ListingController {
   )
   public ResponseEntity<List<ListingDTO>> getListingsByFilter(@RequestBody SearchRequest search)
     throws NullPointerException {
-    LOGGER.info("Recieved request to get all listings");
+    LOGGER.info("Received request to get all listings");
     Page<Listing> listings = listingService.searchListingsPaginated(search);
     LOGGER.info("Found {} listings", listings.getContent().size());
 
@@ -101,12 +107,23 @@ public class ListingController {
    * @return The listing with the given id.
    */
   @GetMapping(value = "/public/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public ResponseEntity<ListingDTO> getListing(@PathVariable long id) {
-    LOGGER.info("Recieved request to get listing with id: {}", id);
+  public ResponseEntity<ListingDTO> getListing(
+    @PathVariable long id,
+    @AuthenticationPrincipal String username
+  ) throws UserDoesNotExistsException {
+    LOGGER.info("Received user: {}", username);
+    LOGGER.info("Received request to get listing with id: {}", id);
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
-    LOGGER.info("Mapped listing to DTO and returning");
+    LOGGER.info("Mapped listing to DTO and checking if possible user has favorited it");
+    listingDTO.setIsFavorite(Optional.empty());
+    if (!username.equals("anonymousUser")) {
+      LOGGER.info("User is not anonymous, checking if user has favorited listing");
+      boolean listingIsFavorite = userService.isFavoriteByUser(username, foundListing);
+      LOGGER.info("Listing is favorite: {}", listingIsFavorite);
+      listingDTO.setIsFavorite(Optional.of(listingIsFavorite));
+    }
     return ResponseEntity.ok(listingDTO);
   }
 
@@ -278,6 +295,40 @@ public class ListingController {
   }
 
   /**
+   * Favorites a listing with the given id.
+   * @param username the username of the user
+   * @param id the id of the listing to favorite
+   * @return nothing
+   * @throws UserDoesNotExistsException if the user does not exist
+   * @throws ListingNotFoundException if the listing does not exist
+   */
+  @PutMapping(value = "/private/listings/{id}/favorite")
+  public ResponseEntity<ListingDTO> favoriteListing(
+    @AuthenticationPrincipal String username,
+    @PathVariable long id
+  ) throws UserDoesNotExistsException, ListingNotFoundException {
+    LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
+    Listing listing = listingService.getListing(id);
+    LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
+    userService.isFavoriteByUser(username, listing);
+    ListingDTO listingDTO = listingMapper.listingToListingDTO(listing);
+    return ResponseEntity.ok(listingDTO);
+  }
+
+  @GetMapping(value = "/private/listings/favorites")
+  public ResponseEntity<Set<ListingDTO>> getFavoriteListings(
+    @AuthenticationPrincipal String username
+  ) throws UserDoesNotExistsException {
+    LOGGER.info("Received request to get favorite listings by user {}", username);
+    Set<Listing> favorites = userService.getFavoriteListings(username);
+    Set<ListingDTO> listingDTOs = favorites
+      .stream()
+      .map(l -> listingMapper.listingToListingDTO(l))
+      .collect(Collectors.toSet());
+    return ResponseEntity.ok(listingDTOs);
+  }
+
+  /**
    * Deletes a listing with the given id.
    * @param id the id of the listing to delete
    * @return status 204 - no content
@@ -288,7 +339,7 @@ public class ListingController {
   @DeleteMapping(value = "/private/listings/{id}")
   public ResponseEntity<Void> deleteListing(@PathVariable long id)
     throws ListingNotFoundException, NullPointerException, DatabaseException {
-    LOGGER.info("Recieved request to delete listing with id: {}", id);
+    LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
     listing

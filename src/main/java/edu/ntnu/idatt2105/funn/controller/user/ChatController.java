@@ -13,6 +13,7 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -144,6 +145,83 @@ public class ChatController {
     );
 
     return ResponseEntity.status(HttpStatus.OK).body(chatDTO);
+  }
+
+  /**
+   * Gets chat by listing and username.
+   * @param listingId The id of the listing.
+   * @param username The username of the user.
+   * @return The chat.
+   */
+  @GetMapping(
+    value = "/listing/{id}/chat/{username}",
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
+  public ResponseEntity<ChatDTO> getChatByListingAndUser(
+    @PathVariable("id") Long listingId,
+    @PathVariable("username") String username
+  ) throws UserDoesNotExistsException, NullPointerException {
+    LOGGER.info("Getting chat by listing {} and user {}", listingId, username);
+
+    User user = userService.getUserByUsername(username);
+
+    Listing listing = listingService.getListing(listingId);
+
+    LOGGER.info("User found: {}", user);
+
+    LOGGER.info("Getting chat");
+    Chat chat = chatService.getChat(user, listing);
+
+    ChatDTO chatDTO = new ChatDTO(
+      chat.getId(),
+      UserMapper.INSTANCE.userToUserDTO(chat.getMessager()),
+      UserMapper.INSTANCE.userToUserDTO(chat.getListing().getUser()),
+      chat.getListing().getId(),
+      chat
+        .getMessages()
+        .stream()
+        .map(MessageMapper.INSTANCE::messageToMessageDTO)
+        .collect(Collectors.toList())
+    );
+
+    return ResponseEntity.status(HttpStatus.OK).body(chatDTO);
+  }
+
+  /**
+   * Get all chats for a user.
+   * @param username The username of the user.
+   * @return The chats.
+   */
+  @GetMapping(value = "/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public ResponseEntity<List<ChatDTO>> getChats(@AuthenticationPrincipal String username)
+    throws UserDoesNotExistsException, NullPointerException {
+    LOGGER.info("Getting chats for user {}", username);
+
+    User user = userService.getUserByUsername(username);
+
+    LOGGER.info("User found: {}", user);
+
+    LOGGER.info("Getting chats");
+    List<Chat> chats = chatService.getChats(user);
+
+    List<ChatDTO> chatDTOs = chats
+      .stream()
+      .map(chat ->
+        new ChatDTO(
+          chat.getId(),
+          UserMapper.INSTANCE.userToUserDTO(chat.getMessager()),
+          UserMapper.INSTANCE.userToUserDTO(chat.getListing().getUser()),
+          chat.getListing().getId(),
+          chat
+            .getMessages()
+            .stream()
+            .map(MessageMapper.INSTANCE::messageToMessageDTO)
+            .collect(Collectors.toList())
+        )
+      )
+      .collect(Collectors.toList());
+
+    return ResponseEntity.status(HttpStatus.OK).body(chatDTOs);
   }
 
   /**

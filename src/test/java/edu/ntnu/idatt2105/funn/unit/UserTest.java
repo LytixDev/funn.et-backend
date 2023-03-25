@@ -28,6 +28,7 @@ public class UserTest {
           new HashSet<>(),
           new HashSet<>(),
           new HashSet<>(),
+          new HashSet<>(),
           Role.USER
         );
 
@@ -49,6 +50,7 @@ public class UserTest {
             null,
             null,
             null,
+            new HashSet<>(),
             new HashSet<>(),
             null,
             null,

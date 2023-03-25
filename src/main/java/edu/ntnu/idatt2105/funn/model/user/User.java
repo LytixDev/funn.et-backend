@@ -1,21 +1,11 @@
 package edu.ntnu.idatt2105.funn.model.user;
 
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import java.util.Set;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @version 1.0
  * @date 13.3.2023
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -64,6 +55,14 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "sender", orphanRemoval = true, cascade = CascadeType.ALL)
   private Collection<Message> messages;
+
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(
+    name = "listing_favorite",
+    joinColumns = @JoinColumn(name = "username"),
+    inverseJoinColumns = @JoinColumn(name = "listing_id")
+  )
+  private Set<Listing> favoriteListings;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "`role`", nullable = false)

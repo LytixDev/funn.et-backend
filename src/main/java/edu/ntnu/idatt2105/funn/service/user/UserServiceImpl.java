@@ -4,10 +4,13 @@ import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.funn.repository.user.UserRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -140,6 +143,29 @@ public class UserServiceImpl implements UserService {
     return userRepository.save(getUserByUsername(user.getUsername()));
   }
 
+  @Override
+  public User partialUpdate(
+    @NonNull User user,
+    String email,
+    String firstName,
+    String lastName,
+    String oldPassword,
+    String newPassword
+  ) throws BadCredentialsException {
+    if (email != null) user.setEmail(email);
+    if (firstName != null) user.setFirstName(firstName);
+    if (lastName != null) user.setLastName(lastName);
+
+    if (oldPassword != null && newPassword != null) {
+      if (checkPassword(oldPassword, user.getPassword())) user.setPassword(
+        hashPassword(newPassword)
+      ); else throw new BadCredentialsException("Invalid password");
+    } else if (newPassword != null) throw new BadCredentialsException(
+      "Old password is required to update password"
+    );
+    return userRepository.save(user);
+  }
+
   /**
    * Gets all users from the database.
    * @return a list of all users.
@@ -154,6 +180,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public boolean isFavoriteByUser(String username, Listing listing)
+    throws UserDoesNotExistsException {
+    return userRepository.findUserWhoFavoritedListing(listing.getId(), username).isPresent();
+  }
+
+  @Override
   public boolean authenticateUser(String username, String password)
     throws UserDoesNotExistsException, BadCredentialsException {
     User user = getUserByUsername(username);
@@ -165,6 +197,19 @@ public class UserServiceImpl implements UserService {
     }
 
     return true;
+  }
+
+  @Override
+  public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException {
+    User user = getUserByUsername(username);
+    user.getFavoriteListings().add(listing);
+    userRepository.save(user);
+  }
+
+  @Override
+  public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException {
+    User user = getUserByUsername(username);
+    return user.getFavoriteListings();
   }
 
   public static String hashPassword(String password) {

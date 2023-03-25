@@ -40,10 +40,8 @@ public class ImageStorageService implements FileStorageService {
       file.getInputStream(),
       root.resolve(
         id.toString() +
-        file
-          .getOriginalFilename()
-          .substring(file.getOriginalFilename().lastIndexOf("."))
-          .toLowerCase()
+        "." +
+        file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1)
       )
     );
   }

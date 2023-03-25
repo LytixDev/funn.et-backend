@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.repository.user.ChatRepository;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,39 @@ public class ChatServiceImpl implements ChatService {
     ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
 
     return chat;
+  }
+
+  /**
+   * Gets a chat by listing.
+   * @param user The user getting the chat.
+   * @param listing The listing the chat is for.
+   * @return The chat.
+   */
+  @Override
+  public Chat getChat(@NonNull User user, @NonNull Listing listing) {
+    Chat chat = chatRepository
+      .findChatByListingAndMessager(listing, user)
+      .orElseThrow(() -> new IllegalArgumentException("Chat does not exist"));
+
+    if (
+      !chat.getMessager().getUsername().equals(user.getUsername()) &&
+      !chat.getListing().getUser().getUsername().equals(user.getUsername())
+    ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
+
+    return chat;
+  }
+
+  /**
+   * Gets all chats for a user.
+   * @param user The user getting the chats.
+   * @return The chats.
+   * @throws NullPointerException If the user is null.
+   */
+  @Override
+  public List<Chat> getChats(@NonNull User user) throws NullPointerException {
+    List<Chat> chats = chatRepository.findChatsByUser(user);
+
+    return chats;
   }
 
   /**
