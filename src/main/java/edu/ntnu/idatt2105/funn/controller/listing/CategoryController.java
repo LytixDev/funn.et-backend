@@ -108,8 +108,11 @@ public class CategoryController {
   ) throws CategoryNotFoundException {
     LOGGER.info("Updating category with id: {}", id);
 
+    if (!id.equals(category.getId()))
+      throw new CategoryNotFoundException();
+
     CategoryDTO updatedCategory = CategoryMapper.INSTANCE.categoryToCategoryDTO(
-      categoryService.updateCategory(id, CategoryMapper.INSTANCE.categoryDTOToCategory(category))
+      categoryService.updateCategory(CategoryMapper.INSTANCE.categoryDTOToCategory(category))
     );
 
     LOGGER.info("Returning updated category with id: {}", id);
