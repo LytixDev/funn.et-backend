@@ -200,7 +200,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void favoriteOrUnfavoriteListing(String username, Listing listing) throws UserDoesNotExistsException {
+  public void favoriteOrUnfavoriteListing(String username, Listing listing)
+    throws UserDoesNotExistsException {
     User user = getUserByUsername(username);
     if (userRepository.findUserWhoFavoritedListing(listing.getId(), username).isPresent()) {
       user.getFavoriteListings().remove(listing);

@@ -51,7 +51,8 @@ public interface UserService {
   public boolean authenticateUser(String username, String password)
     throws UserDoesNotExistsException, BadCredentialsException;
 
-  public void favoriteOrUnfavoriteListing(String username, Listing listing) throws UserDoesNotExistsException;
+  public void favoriteOrUnfavoriteListing(String username, Listing listing)
+    throws UserDoesNotExistsException;
 
   public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException;
 
