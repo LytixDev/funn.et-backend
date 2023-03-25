@@ -56,7 +56,6 @@ public class ListingSortTest {
 
   @Before
   public void setUp() {
-
     Category books = new Category(null, "Books");
     Category sport = new Category(null, "Sport");
     Category furniture = new Category(null, "Furniture");
