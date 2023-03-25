@@ -8,7 +8,6 @@ import edu.ntnu.idatt2105.funn.repository.user.ChatRepository;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
-
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,7 +99,7 @@ public class ChatServiceImpl implements ChatService {
   @Override
   public List<Chat> getChats(@NonNull User user) throws NullPointerException {
     List<Chat> chats = chatRepository.findChatsByUser(user);
-    
+
     return chats;
   }
 

@@ -4,9 +4,7 @@ import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Chat;
 import edu.ntnu.idatt2105.funn.model.user.Message;
 import edu.ntnu.idatt2105.funn.model.user.User;
-
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 /**

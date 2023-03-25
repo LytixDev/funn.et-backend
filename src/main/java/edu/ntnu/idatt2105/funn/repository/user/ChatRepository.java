@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
   List<Chat> findChatsByMessager(String username);
 
-  @Query("SELECT c FROM Chat c WHERE c.messager = ?1 OR c.listing.user = ?1")
+  @Query("SELECT c FROM Chat c JOIN c.messages m WHERE c.messager = ?1 OR c.listing.user = ?1 ORDER BY m.timestamp DESC")
   List<Chat> findChatsByUser(User user);
 
   List<Chat> findChatsByListing(Listing listing);

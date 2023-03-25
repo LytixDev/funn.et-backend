@@ -13,7 +13,6 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -207,19 +206,18 @@ public class ChatController {
 
     List<ChatDTO> chatDTOs = chats
       .stream()
-      .map(
-        chat ->
-          new ChatDTO(
-            chat.getId(),
-            UserMapper.INSTANCE.userToUserDTO(chat.getMessager()),
-            UserMapper.INSTANCE.userToUserDTO(chat.getListing().getUser()),
-            chat.getListing().getId(),
-            chat
-              .getMessages()
-              .stream()
-              .map(MessageMapper.INSTANCE::messageToMessageDTO)
-              .collect(Collectors.toList())
-          )
+      .map(chat ->
+        new ChatDTO(
+          chat.getId(),
+          UserMapper.INSTANCE.userToUserDTO(chat.getMessager()),
+          UserMapper.INSTANCE.userToUserDTO(chat.getListing().getUser()),
+          chat.getListing().getId(),
+          chat
+            .getMessages()
+            .stream()
+            .map(MessageMapper.INSTANCE::messageToMessageDTO)
+            .collect(Collectors.toList())
+        )
       )
       .collect(Collectors.toList());
 
