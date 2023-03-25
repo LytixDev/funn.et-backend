@@ -1,14 +1,13 @@
 package edu.ntnu.idatt2105.funn.service.listing;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.repository.listing.CategoryRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Service layer for Category
@@ -18,41 +17,74 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    
-    @Autowired
-    private CategoryRepository categoryRepository;
 
-    /**
-     * Get all categories
-     * @return List of all categories
-     */
-    @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+  @Autowired
+  private CategoryRepository categoryRepository;
+
+  /**
+   * Get all categories
+   * @return List of all categories
+   */
+  @Override
+  public List<Category> getAllCategories() {
+    return categoryRepository.findAll();
+  }
+
+  /**
+   * Get category by id
+   * @param id
+   * @return Category
+   */
+  @Override
+  public Category getCategoryById(Long id) throws CategoryNotFoundException {
+    return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+  }
+
+  /**
+   * Create category if it does not already exist
+   * @param category Category to create
+   * @return created category
+   * @throws CategoryAlreadyExistsException if category already exists
+   */
+  @Override
+  public Category createCategory(Category category) throws CategoryAlreadyExistsException {
+    if (category.getId() != null) {
+      throw new CategoryAlreadyExistsException();
     }
 
-    /**
-     * Get category by id
-     * @param id
-     * @return Category
-     */
-    @Override
-    public Category getCategoryById(Long id) throws CategoryNotFoundException {
-        return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+    if (categoryRepository.existsByName(category.getName())) {
+      throw new CategoryAlreadyExistsException();
     }
 
-    /**
-     * Create category if it does not already exist
-     * @param category Category to create
-     * @return created category
-     * @throws CategoryAlreadyExistsException if category already exists
-     */
-    @Override
-    public Category createCategory(Category category) throws CategoryAlreadyExistsException {
-        if (categoryRepository.existsById(category.getId())) {
-            throw new CategoryAlreadyExistsException();
-        }
-        return categoryRepository.save(category);
+    return categoryRepository.save(category);
+  }
+
+  /**
+   * Update category
+   * @param category Category to update
+   * @return updated category
+   * @throws CategoryNotFoundException if category does not exist
+   */
+  @Override
+  public Category updateCategory(Category category) throws CategoryNotFoundException {
+    if (!categoryRepository.existsById(category.getId())) {
+      throw new CategoryNotFoundException();
     }
 
+    return categoryRepository.save(category);
+  }
+
+  /**
+   * Delete category
+   * @param id Id of category to delete
+   * @throws CategoryNotFoundException if category does not exist
+   */
+  @Override
+  public void deleteCategory(Long id) throws CategoryNotFoundException {
+    if (!categoryRepository.existsById(id)) {
+      throw new CategoryNotFoundException();
+    }
+
+    categoryRepository.deleteById(id);
+  }
 }

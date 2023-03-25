@@ -6,11 +6,11 @@ package edu.ntnu.idatt2105.funn.exceptions.listing;
  * @version 1.0 - 25.03.2023
  */
 public class CategoryNotFoundException extends Exception {
-    
-    /**
-     * Constructor for CategoryNotFoundException
-     */
-    public CategoryNotFoundException() {
-        super("Category not found");
-    }
+
+  /**
+   * Constructor for CategoryNotFoundException
+   */
+  public CategoryNotFoundException() {
+    super("Category not found");
+  }
 }

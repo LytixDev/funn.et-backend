@@ -1,10 +1,9 @@
 package edu.ntnu.idatt2105.funn.service.listing;
 
-import java.util.List;
-
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
+import java.util.List;
 
 /**
  * Interface for service layer for Category
@@ -12,14 +11,13 @@ import edu.ntnu.idatt2105.funn.model.listing.Category;
  * @version 1.0 - 25.03.2023
  */
 public interface CategoryService {
-    
-    List<Category> getAllCategories();
+  List<Category> getAllCategories();
 
-    Category getCategoryById(Long id) throws CategoryNotFoundException;
+  Category getCategoryById(Long id) throws CategoryNotFoundException;
 
-    Category createCategory(Category category) throws CategoryAlreadyExistsException;
+  Category createCategory(Category category) throws CategoryAlreadyExistsException;
 
-    Category updateCategory(Category category) throws CategoryNotFoundException;
+  Category updateCategory(Category category) throws CategoryNotFoundException;
 
-    void deleteCategory(Long id) throws CategoryNotFoundException;
+  void deleteCategory(Long id) throws CategoryNotFoundException;
 }

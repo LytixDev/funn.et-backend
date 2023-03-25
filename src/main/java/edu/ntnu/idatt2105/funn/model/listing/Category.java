@@ -24,6 +24,7 @@ import lombok.NonNull;
 @Entity
 @Table(name = "`category`")
 public class Category {
+
   @Id
   @Column(name = "`category_id`", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
