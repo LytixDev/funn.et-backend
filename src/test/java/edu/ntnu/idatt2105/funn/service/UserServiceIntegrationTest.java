@@ -10,11 +10,16 @@ import static org.mockito.Mockito.when;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.model.listing.Category;
+import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.location.Location;
+import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.repository.user.UserRepository;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import edu.ntnu.idatt2105.funn.service.user.UserServiceImpl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -304,6 +309,45 @@ public class UserServiceIntegrationTest {
       fail();
     } catch (Exception e) {
       assertEquals(e.getClass(), DatabaseException.class);
+    }
+  }
+
+  @Test
+  public void testUserHasFavouritedListing() {
+    PostCode postCode = new PostCode(1234, "Oslo", new HashSet<>());
+
+    Location location = Location
+      .builder()
+      .id(1L)
+      .address("Testveien 1")
+      .postCode(postCode)
+      .latitude(59.9127D)
+      .longitude(10.7461D)
+      .listings(new HashSet<>())
+      .build();
+
+    Listing listing = Listing
+      .builder()
+      .id(1L)
+      .title("Test")
+      .briefDescription("Test")
+      .fullDescription("Test")
+      .price(1000)
+      .category(Category.BOOKS)
+      .expirationDate(LocalDate.of(2021, 12, 31))
+      .publicationDate(LocalDate.of(2020, 12, 31))
+      .user(existingUser)
+      .location(location)
+      .build();
+
+    when(userRepository.findUserWhoFavouritedListing(listing.getId(), existingUser.getUsername()))
+      .thenReturn(Optional.of(existingUser));
+
+    try {
+      boolean isFavourite = userService.isFavouriteByUser(existingUser.getUsername(), listing);
+      assertTrue(isFavourite);
+    } catch (UserDoesNotExistsException e) {
+      fail("User does not exist");
     }
   }
 }

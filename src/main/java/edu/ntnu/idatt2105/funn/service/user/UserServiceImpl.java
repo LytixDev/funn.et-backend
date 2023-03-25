@@ -180,6 +180,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public boolean isFavouriteByUser(String username, Listing listing)
+    throws UserDoesNotExistsException {
+    return userRepository.findUserWhoFavouritedListing(listing.getId(), username).isPresent();
+  }
+
+  @Override
   public boolean authenticateUser(String username, String password)
     throws UserDoesNotExistsException, BadCredentialsException {
     User user = getUserByUsername(username);

@@ -13,7 +13,6 @@ import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
-import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
@@ -24,8 +23,8 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -108,12 +107,23 @@ public class ListingController {
    * @return The listing with the given id.
    */
   @GetMapping(value = "/public/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public ResponseEntity<ListingDTO> getListing(@PathVariable long id) {
+  public ResponseEntity<ListingDTO> getListing(
+    @PathVariable long id,
+    @AuthenticationPrincipal String username
+  ) throws UserDoesNotExistsException {
+    LOGGER.info("Received user: {}", username);
     LOGGER.info("Received request to get listing with id: {}", id);
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
-    LOGGER.info("Mapped listing to DTO and returning");
+    LOGGER.info("Mapped listing to DTO and checking if possible user has favourited it");
+    listingDTO.setIsFavourite(Optional.empty());
+    if (!username.equals("anonymousUser")) {
+      LOGGER.info("User is not anonymous, checking if user has favourited listing");
+      boolean listingIsFavorite = userService.isFavouriteByUser(username, foundListing);
+      LOGGER.info("Listing is favourite: {}", listingIsFavorite);
+      listingDTO.setIsFavourite(Optional.of(listingIsFavorite));
+    }
     return ResponseEntity.ok(listingDTO);
   }
 
@@ -300,7 +310,7 @@ public class ListingController {
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
-    userService.favoriteListing(username, listing);
+    userService.isFavouriteByUser(username, listing);
     return ResponseEntity.ok().build();
   }
 
