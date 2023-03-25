@@ -16,8 +16,8 @@ import lombok.NonNull;
 /**
  * Data transfer object for listing.
  * Used to transfer listing data between the backend and the application.
- * @author Nicolai H. B., Callum G.
- * @version 1.2 - 24.3.2023
+ * @author Nicolai H. B., Callum G., Carl G.
+ * @version 1.3 - 25.3.2023
  */
 @Data
 @AllArgsConstructor
@@ -65,4 +65,6 @@ public class ListingDTO {
   private LocalDate expirationDate;
 
   private List<ImageResponseDTO> imageResponse;
+
+  private boolean isFavourite;
 }

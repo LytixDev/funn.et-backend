@@ -54,4 +54,7 @@ public interface UserService {
   public void favoriteListing(String username, Listing listing) throws UserDoesNotExistsException;
 
   public Set<Listing> getFavoriteListings(String username) throws UserDoesNotExistsException;
+
+  public boolean isFavouriteByUser(String username, Listing listing)
+    throws UserDoesNotExistsException;
 }
