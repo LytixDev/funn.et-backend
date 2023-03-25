@@ -6,6 +6,7 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
   List<Chat> findChatsByMessager(String username);
+
+  @Query("SELECT c FROM Chat c WHERE c.messager = ?1 OR c.listing.user = ?1")
+  List<Chat> findChatsByUser(User user);
 
   List<Chat> findChatsByListing(Listing listing);
 

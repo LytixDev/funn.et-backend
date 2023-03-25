@@ -7,6 +7,8 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.repository.user.ChatRepository;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
+
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,6 +89,19 @@ public class ChatServiceImpl implements ChatService {
     ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
 
     return chat;
+  }
+
+  /**
+   * Gets all chats for a user.
+   * @param user The user getting the chats.
+   * @return The chats.
+   * @throws NullPointerException If the user is null.
+   */
+  @Override
+  public List<Chat> getChats(@NonNull User user) throws NullPointerException {
+    List<Chat> chats = chatRepository.findChatsByUser(user);
+    
+    return chats;
   }
 
   /**
