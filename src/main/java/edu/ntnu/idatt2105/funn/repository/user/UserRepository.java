@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, String> {
   Optional<User> findByEmail(@NonNull String email);
 
   @Query("SELECT u FROM User u JOIN u.favoriteListings l WHERE l.id = ?1 AND u.username = ?2")
-  Optional<User> findUserWhoFavouritedListing(
+  Optional<User> findUserWhoFavoritedListing(
     @Param("listing_id") Long listing_id,
     @Param("username") String username
   );

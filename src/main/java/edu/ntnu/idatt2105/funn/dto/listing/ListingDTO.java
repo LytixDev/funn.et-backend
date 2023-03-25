@@ -67,5 +67,5 @@ public class ListingDTO {
 
   private List<ImageResponseDTO> imageResponse;
 
-  private Optional<Boolean> isFavourite;
+  private Optional<Boolean> isFavorite;
 }

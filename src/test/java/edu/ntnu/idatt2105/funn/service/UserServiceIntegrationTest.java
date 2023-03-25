@@ -313,7 +313,7 @@ public class UserServiceIntegrationTest {
   }
 
   @Test
-  public void testUserHasFavouritedListing() {
+  public void testUserHasFavoritedListing() {
     PostCode postCode = new PostCode(1234, "Oslo", new HashSet<>());
 
     Location location = Location
@@ -340,12 +340,12 @@ public class UserServiceIntegrationTest {
       .location(location)
       .build();
 
-    when(userRepository.findUserWhoFavouritedListing(listing.getId(), existingUser.getUsername()))
+    when(userRepository.findUserWhoFavoritedListing(listing.getId(), existingUser.getUsername()))
       .thenReturn(Optional.of(existingUser));
 
     try {
-      boolean isFavourite = userService.isFavouriteByUser(existingUser.getUsername(), listing);
-      assertTrue(isFavourite);
+      boolean isFavorite = userService.isFavoriteByUser(existingUser.getUsername(), listing);
+      assertTrue(isFavorite);
     } catch (UserDoesNotExistsException e) {
       fail("User does not exist");
     }

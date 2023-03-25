@@ -54,7 +54,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.2 - 23.3.2023
+ * @version 1.3 - 25.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -116,13 +116,13 @@ public class ListingController {
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
-    LOGGER.info("Mapped listing to DTO and checking if possible user has favourited it");
-    listingDTO.setIsFavourite(Optional.empty());
+    LOGGER.info("Mapped listing to DTO and checking if possible user has favorited it");
+    listingDTO.setIsFavorite(Optional.empty());
     if (!username.equals("anonymousUser")) {
-      LOGGER.info("User is not anonymous, checking if user has favourited listing");
-      boolean listingIsFavorite = userService.isFavouriteByUser(username, foundListing);
-      LOGGER.info("Listing is favourite: {}", listingIsFavorite);
-      listingDTO.setIsFavourite(Optional.of(listingIsFavorite));
+      LOGGER.info("User is not anonymous, checking if user has favorited listing");
+      boolean listingIsFavorite = userService.isFavoriteByUser(username, foundListing);
+      LOGGER.info("Listing is favorite: {}", listingIsFavorite);
+      listingDTO.setIsFavorite(Optional.of(listingIsFavorite));
     }
     return ResponseEntity.ok(listingDTO);
   }
@@ -303,15 +303,16 @@ public class ListingController {
    * @throws ListingNotFoundException if the listing does not exist
    */
   @PutMapping(value = "/private/listings/{id}/favorite")
-  public ResponseEntity<Void> favoriteListing(
+  public ResponseEntity<ListingDTO> favoriteListing(
     @AuthenticationPrincipal String username,
     @PathVariable long id
   ) throws UserDoesNotExistsException, ListingNotFoundException {
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
-    userService.isFavouriteByUser(username, listing);
-    return ResponseEntity.ok().build();
+    userService.isFavoriteByUser(username, listing);
+    ListingDTO listingDTO = listingMapper.listingToListingDTO(listing);
+    return ResponseEntity.ok(listingDTO);
   }
 
   @GetMapping(value = "/private/listings/favorites")
