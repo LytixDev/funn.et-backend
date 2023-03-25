@@ -89,11 +89,11 @@ public class ListingFilterTest {
 
     postCodeRepository.deleteAll();
 
-    books = new Category(null, "Book");
+    books = new Category(null, "Book", new HashSet<>());
 
-    furniture = new Category(null, "Furniture");
+    furniture = new Category(null, "Furniture", new HashSet<>());
 
-    sport = new Category(null, "Sport");
+    sport = new Category(null, "Sport", new HashSet<>());
 
     User user1 = new User(
       "username",

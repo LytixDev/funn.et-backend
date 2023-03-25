@@ -1,10 +1,13 @@
 package edu.ntnu.idatt2105.funn.model.listing;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +36,7 @@ public class Category {
   @Column(name = "`category_name`", nullable = false)
   @NonNull
   private String name;
+
+  @OneToMany(mappedBy = "category")
+  private Set<Listing> listings;
 }

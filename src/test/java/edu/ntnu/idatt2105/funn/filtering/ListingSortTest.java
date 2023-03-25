@@ -56,9 +56,9 @@ public class ListingSortTest {
 
   @Before
   public void setUp() {
-    Category books = new Category(null, "Books");
-    Category sport = new Category(null, "Sport");
-    Category furniture = new Category(null, "Furniture");
+    Category books = new Category(null, "Books", new HashSet<>());
+    Category sport = new Category(null, "Sport", new HashSet<>());
+    Category furniture = new Category(null, "Furniture", new HashSet<>());
 
     User user1 = new User(
       "username",

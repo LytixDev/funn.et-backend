@@ -12,11 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +44,7 @@ public class CategoryController {
    * Get all categories
    * @return List of all categories
    */
-  @GetMapping("/public/categories")
+  @GetMapping(value = "/public/categories", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<CategoryDTO>> getAllCategories() {
     LOGGER.info("Getting all categories");
 
@@ -61,7 +64,7 @@ public class CategoryController {
    * @param id
    * @return Category
    */
-  @GetMapping("/public/categories/{id}")
+  @GetMapping(value = "/public/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id)
     throws CategoryNotFoundException {
     LOGGER.info("Getting category with id: {}", id);
@@ -81,16 +84,18 @@ public class CategoryController {
    * @return created category
    * @throws CategoryAlreadyExistsException if category already exists
    */
-  @PostMapping("/private/categories")
+  @PostMapping(value = "/private/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category)
     throws CategoryAlreadyExistsException {
-    LOGGER.info("Creating category with name: {}", category.getName());
+    // System.out.println(username);
+
+    LOGGER.info("Creating category with name: {}", category);
 
     CategoryDTO createdCategory = CategoryMapper.INSTANCE.categoryToCategoryDTO(
       categoryService.createCategory(CategoryMapper.INSTANCE.categoryDTOToCategory(category))
     );
 
-    LOGGER.info("Returning created category with name: {}", category.getName());
+    LOGGER.info("Returning created category with name: {}", category);
 
     return ResponseEntity.ok(createdCategory);
   }
@@ -101,11 +106,15 @@ public class CategoryController {
    * @return updated category
    * @throws CategoryNotFoundException if category does not exist
    */
-  @PostMapping("/private/categories/{id}")
+  @PutMapping(value = "/private/categories/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CategoryDTO> updateCategory(
     @PathVariable Long id,
-    @RequestBody CategoryDTO category
+    @RequestBody CategoryDTO category,
+    @AuthenticationPrincipal String username
   ) throws CategoryNotFoundException {
+
+    System.out.println(username);
+
     LOGGER.info("Updating category with id: {}", id);
 
     if (!id.equals(category.getId())) throw new CategoryNotFoundException();
@@ -124,9 +133,12 @@ public class CategoryController {
    * @param id Id of category to delete
    * @throws CategoryNotFoundException if category does not exist
    */
-  @DeleteMapping("/private/categories/{id}")
-  public ResponseEntity<Void> deleteCategory(@PathVariable Long id)
+  @DeleteMapping(value = "/private/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> deleteCategory(@PathVariable Long id, @AuthenticationPrincipal String username)
     throws CategoryNotFoundException {
+    
+    System.out.println(username);
+
     LOGGER.info("Deleting category with id: {}", id);
 
     categoryService.deleteCategory(id);

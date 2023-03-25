@@ -68,7 +68,7 @@ public class ListingServiceIntegrationTest {
 
     PostCode postCode = new PostCode(1234, "Oslo", new HashSet<>());
 
-    Category category = new Category(1L, "Books");
+    Category category = new Category(1L, "Books", new HashSet<>());
 
     Location location = Location
       .builder()

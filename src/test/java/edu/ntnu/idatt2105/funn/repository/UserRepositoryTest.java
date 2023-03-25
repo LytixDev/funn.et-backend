@@ -106,7 +106,7 @@ public class UserRepositoryTest {
 
     entityManager.persist(location);
 
-    Category category = new Category(null, "Books");
+    Category category = new Category(null, "Books", new HashSet<>());
 
     entityManager.persist(category);
 
@@ -169,7 +169,7 @@ public class UserRepositoryTest {
 
     entityManager.persist(location);
 
-    Category category = new Category(null, "Books");
+    Category category = new Category(null, "Books", new HashSet<>());
 
     entityManager.persist(category);
 

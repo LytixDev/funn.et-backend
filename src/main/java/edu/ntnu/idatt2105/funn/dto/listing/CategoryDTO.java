@@ -15,8 +15,8 @@ import lombok.NonNull;
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 public class CategoryDTO {
 
   private Long id;

@@ -54,7 +54,7 @@ public class Listing {
   private String fullDescription;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`category`", referencedColumnName = "`category_name`")
+  @JoinColumn(name = "`category`", referencedColumnName = "`category_id`")
   @NonNull
   private Category category;
 

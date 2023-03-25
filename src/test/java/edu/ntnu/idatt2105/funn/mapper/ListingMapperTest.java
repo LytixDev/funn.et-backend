@@ -70,7 +70,7 @@ public class ListingMapperTest {
     throws UserDoesNotExistsException, LocationDoesntExistException, DatabaseException {
     postCode = new PostCode(0000, "Oslo", new HashSet<>());
 
-    category = new Category(1L, "Other");
+    category = new Category(1L, "Other", new HashSet<>());
 
     location =
       Location
