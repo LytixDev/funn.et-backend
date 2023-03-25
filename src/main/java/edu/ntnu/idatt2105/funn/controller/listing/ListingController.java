@@ -248,7 +248,11 @@ public class ListingController {
    * @throws DatabaseException if an sql operation fails
    * @throws UserDoesNotExistsException if the requesting user does not exist
    */
-  @PutMapping(value = "/private/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PutMapping(
+    value = "/private/listings/{id}",
+    consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
   public ResponseEntity<ListingDTO> updateListing(
     @ModelAttribute ListingCreateDTO listingDTO,
     @PathVariable long id
