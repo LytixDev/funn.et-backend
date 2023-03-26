@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.funn.service.file;
 
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -7,8 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
-
-import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 
 /**
  * Interface for the service class for the image repository.

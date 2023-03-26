@@ -1,5 +1,6 @@
 package edu.ntnu.idatt2105.funn.service.file;
 
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -13,8 +14,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 
 /**
  * Implementation of the service class for the image repository.
@@ -35,17 +34,17 @@ public class ImageStorageService implements FileStorageService {
   public void store(MultipartFile file, Long id) throws IOException {
     String contentType = file.getContentType();
     if (
-      !(contentType.equals("image/jpeg") || contentType.equals("image/png"))
+      !(
+        contentType.equals("image/jpeg") ||
+        contentType.equals("image/jpg") ||
+        contentType.equals("image/png")
+      )
     ) {
       throw new IOException("Only JPG and PNG files are allowed. Got " + file.getContentType());
     }
     Files.copy(
       file.getInputStream(),
-      root.resolve(
-        id.toString() +
-        "." +
-        contentType.substring(contentType.lastIndexOf("/") + 1)
-      )
+      root.resolve(id.toString() + "." + contentType.substring(contentType.lastIndexOf("/") + 1))
     );
   }
 
@@ -58,11 +57,13 @@ public class ImageStorageService implements FileStorageService {
    * @throws MalformedURLException If the file path could not be correctly parsed
    */
   @Override
-  public Resource loadFile(Long id) throws IOException, MalformedURLException, FileNotFoundException {
-    File[] foundFiles = new File(root.toString()).listFiles(
-      (dir, name) -> name.substring(0, name.lastIndexOf(".")).equals(id.toString())
+  public Resource loadFile(Long id)
+    throws IOException, MalformedURLException, FileNotFoundException {
+    File[] foundFiles = new File(root.toString())
+      .listFiles((dir, name) -> name.substring(0, name.lastIndexOf(".")).equals(id.toString()));
+    if (foundFiles.length == 0) throw new FileNotFoundException(
+      "Could not find any files with the name " + id.toString()
     );
-    if (foundFiles.length == 0) throw new FileNotFoundException("Could not find any files with the name " + id.toString());
     Path file = root.resolve(foundFiles[0].getName());
 
     if (file == null) throw new IOException("Found file is not valid");

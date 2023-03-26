@@ -9,10 +9,8 @@ import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
-
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
