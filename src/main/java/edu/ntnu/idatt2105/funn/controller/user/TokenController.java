@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.idatt2105.funn.dto.user.AuthenticateDTO;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.time.Duration;
@@ -61,7 +62,8 @@ public class TokenController {
 
     if (userService.authenticateUser(authenticate.getUsername(), authenticate.getPassword())) {
       LOGGER.info("User authenticated: {}", authenticate.getUsername());
-      return generateToken(authenticate.getUsername());
+      User user = userService.getUserByUsername(authenticate.getUsername());
+      return generateToken(user);
     }
 
     LOGGER.info("Wrong credentials: {}", authenticate.getUsername());
@@ -73,14 +75,15 @@ public class TokenController {
    * @param userId The user to generate a token for.
    * @return The generated token.
    */
-  public String generateToken(final String userId) {
+  public String generateToken(final User user) {
     final Instant now = Instant.now();
     final Algorithm hmac512 = Algorithm.HMAC512(JWT_TOKEN_SECRET);
 
     return JWT
       .create()
-      .withSubject(userId)
+      .withSubject(user.getUsername())
       .withIssuer("idatt2105_project_funn")
+      .withClaim("role", user.getRole().toString())
       .withIssuedAt(now)
       .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
       .sign(hmac512);

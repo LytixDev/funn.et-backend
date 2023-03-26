@@ -333,7 +333,7 @@ public class UserServiceIntegrationTest {
       .briefDescription("Test")
       .fullDescription("Test")
       .price(1000)
-      .category(Category.BOOKS)
+      .category(new Category(1L, "Books", new HashSet<>()))
       .expirationDate(LocalDate.of(2021, 12, 31))
       .publicationDate(LocalDate.of(2020, 12, 31))
       .user(existingUser)

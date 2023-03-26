@@ -68,6 +68,8 @@ public class ListingServiceIntegrationTest {
 
     PostCode postCode = new PostCode(1234, "Oslo", new HashSet<>());
 
+    Category category = new Category(1L, "Books", new HashSet<>());
+
     Location location = Location
       .builder()
       .id(1L)
@@ -86,7 +88,7 @@ public class ListingServiceIntegrationTest {
         .briefDescription("Test")
         .fullDescription("Test")
         .price(1000)
-        .category(Category.BOOKS)
+        .category(category)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
         .user(user)
@@ -101,7 +103,7 @@ public class ListingServiceIntegrationTest {
         .briefDescription("Test2")
         .fullDescription("Test2")
         .price(2000)
-        .category(Category.BOOKS)
+        .category(category)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
         .user(user)

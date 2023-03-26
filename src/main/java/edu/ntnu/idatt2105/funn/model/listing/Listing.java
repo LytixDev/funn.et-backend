@@ -53,8 +53,9 @@ public class Listing {
   @Column(name = "`full_description`", length = 512)
   private String fullDescription;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "`category`", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "`category`", referencedColumnName = "`category_id`")
+  @NonNull
   private Category category;
 
   @Enumerated(EnumType.STRING)

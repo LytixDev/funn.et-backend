@@ -10,6 +10,7 @@ import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.repository.listing.CategoryRepository;
 import edu.ntnu.idatt2105.funn.repository.listing.ListingRepository;
 import edu.ntnu.idatt2105.funn.repository.location.LocationRepository;
 import edu.ntnu.idatt2105.funn.repository.location.PostCodeRepository;
@@ -57,6 +58,9 @@ public class ListingFilterTest {
   private PostCodeRepository postCodeRepository;
 
   @Autowired
+  private CategoryRepository categoryRepository;
+
+  @Autowired
   private LocationService locationService;
 
   private SearchSpecification<Listing> searchSpecification;
@@ -69,6 +73,12 @@ public class ListingFilterTest {
 
   private Listing listing4;
 
+  private Category books;
+
+  private Category furniture;
+
+  private Category sport;
+
   @Before
   public void setUp() {
     listingRepository.deleteAll();
@@ -78,6 +88,12 @@ public class ListingFilterTest {
     locationRepository.deleteAll();
 
     postCodeRepository.deleteAll();
+
+    books = new Category(null, "Book", new HashSet<>());
+
+    furniture = new Category(null, "Furniture", new HashSet<>());
+
+    sport = new Category(null, "Sport", new HashSet<>());
 
     User user1 = new User(
       "username",
@@ -127,6 +143,10 @@ public class ListingFilterTest {
       .listings(new HashSet<>())
       .build();
 
+    books = categoryRepository.save(books);
+    furniture = categoryRepository.save(furniture);
+    sport = categoryRepository.save(sport);
+
     listing1 =
       Listing
         .builder()
@@ -134,7 +154,7 @@ public class ListingFilterTest {
         .briefDescription("Test")
         .fullDescription("Test")
         .price(1000)
-        .category(Category.BOOKS)
+        .category(books)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
@@ -149,7 +169,7 @@ public class ListingFilterTest {
         .briefDescription("Test2")
         .fullDescription("Test2")
         .price(2000)
-        .category(Category.BOOKS)
+        .category(books)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2021, 12, 31))
         .publicationDate(LocalDate.of(2020, 12, 31))
@@ -164,7 +184,7 @@ public class ListingFilterTest {
         .briefDescription("Test3")
         .fullDescription("Test3")
         .price(2000)
-        .category(Category.FURNITURE)
+        .category(furniture)
         .status(Status.ACTIVE)
         .expirationDate(LocalDate.of(2022, 12, 31))
         .publicationDate(LocalDate.of(2022, 6, 30))
@@ -179,7 +199,7 @@ public class ListingFilterTest {
         .briefDescription("Test4")
         .fullDescription("Test4")
         .price(2000)
-        .category(Category.SPORTS)
+        .category(furniture)
         .status(Status.ARCHIVED)
         .expirationDate(LocalDate.of(2023, 6, 30))
         .publicationDate(LocalDate.of(2023, 1, 31))

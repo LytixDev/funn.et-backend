@@ -3,7 +3,6 @@ package edu.ntnu.idatt2105.funn.mapper.user;
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
