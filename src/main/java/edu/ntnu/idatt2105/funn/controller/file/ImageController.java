@@ -104,7 +104,7 @@ public class ImageController {
 
     imageAltMap.forEach((image, alt) -> {
       ImageUploadDTO imageUploadDTO = new ImageUploadDTO();
-      imageUploadDTO.setAlt(alt);
+      imageUploadDTO.setAlt(alt != null ? alt : "");
       imageUploadDTO.setImage(image);
 
       LOGGER.info("Image upload request received");
