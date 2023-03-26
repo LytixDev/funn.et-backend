@@ -33,17 +33,18 @@ public class ImageStorageService implements FileStorageService {
 
   @Override
   public void store(MultipartFile file, Long id) throws IOException {
+    String contentType = file.getContentType();
     if (
-      !(file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png"))
+      !(contentType.equals("image/jpeg") || contentType.equals("image/png"))
     ) {
-      throw new IOException("Only JPG and PNG files are allowed");
+      throw new IOException("Only JPG and PNG files are allowed. Got " + file.getContentType());
     }
     Files.copy(
       file.getInputStream(),
       root.resolve(
         id.toString() +
         "." +
-        file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1)
+        contentType.substring(contentType.lastIndexOf("/") + 1)
       )
     );
   }
