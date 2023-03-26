@@ -5,7 +5,10 @@ import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
 import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
+import edu.ntnu.idatt2105.funn.model.user.Role;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,8 +94,13 @@ public class CategoryController {
     consumes = { MediaType.APPLICATION_JSON_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryCreateDTO category)
+  public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryCreateDTO category, @AuthenticationPrincipal Auth auth)
     throws CategoryAlreadyExistsException {
+    LOGGER.info("Auth: {}", auth);
+
+    if (!auth.getRole().equals(Role.ADMIN)) {
+      throw new AccessDeniedException("You do not have permission to delete a category");
+    }
     LOGGER.info("Creating category with name: {}", category);
 
     CategoryDTO createdCategory = CategoryMapper.INSTANCE.categoryToCategoryDTO(
@@ -117,9 +126,13 @@ public class CategoryController {
   public ResponseEntity<CategoryDTO> updateCategory(
     @PathVariable Long id,
     @RequestBody CategoryDTO category,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws CategoryNotFoundException {
-    System.out.println(username);
+    LOGGER.info("Auth: {}", auth);
+
+    if (!auth.getRole().equals(Role.ADMIN)) {
+      throw new AccessDeniedException("You do not have permission to delete a category");
+    }
 
     LOGGER.info("Updating category with id: {}", id);
 
@@ -142,9 +155,13 @@ public class CategoryController {
   @DeleteMapping(value = "/private/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> deleteCategory(
     @PathVariable Long id,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws CategoryNotFoundException {
-    System.out.println(username);
+    LOGGER.info("Auth: {}", auth);
+
+    if (!auth.getRole().equals(Role.ADMIN)) {
+      throw new AccessDeniedException("You do not have permission to delete a category");
+    }
 
     LOGGER.info("Deleting category with id: {}", id);
 

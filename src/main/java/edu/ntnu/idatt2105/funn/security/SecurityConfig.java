@@ -20,8 +20,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 /**
  * Configures spring security
  *
- * @author Carl G, Thomas S.
- * @version 1.2 - 23.3.2023
+ * @author Carl G, Thomas S., Callum G.
+ * @version 1.3 - 26.3.2023
  */
 @Configuration
 @EnableWebSecurity

@@ -9,7 +9,6 @@ import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
-import edu.ntnu.idatt2105.funn.filtering.FilterRequest;
 import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
@@ -240,10 +239,12 @@ public class ListingController {
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   @Operation(summary = "Create listing", description = "Creates a listing from a listing dto")
-  public ResponseEntity<ListingDTO> createListing(@ModelAttribute ListingCreateDTO listingDTO)
+  public ResponseEntity<ListingDTO> createListing(@ModelAttribute ListingCreateDTO listingDTO, @AuthenticationPrincipal String username)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, ListingAlreadyExistsException, RuntimeException, IOException {
     LOGGER.info("Recieved request to create listing: {}", listingDTO);
     Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+
+    requestedListing.setUser(userService.getUserByUsername(username));
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
     Listing createdListing = listingService.saveListing(requestedListing);
