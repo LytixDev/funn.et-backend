@@ -1,11 +1,11 @@
 package edu.ntnu.idatt2105.funn.controller.listing;
 
+import edu.ntnu.idatt2105.funn.dto.listing.CategoryCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
 import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -89,12 +90,12 @@ public class CategoryController {
     consumes = { MediaType.APPLICATION_JSON_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category)
+  public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryCreateDTO category)
     throws CategoryAlreadyExistsException {
     LOGGER.info("Creating category with name: {}", category);
 
     CategoryDTO createdCategory = CategoryMapper.INSTANCE.categoryToCategoryDTO(
-      categoryService.createCategory(CategoryMapper.INSTANCE.categoryDTOToCategory(category))
+      categoryService.createCategory(CategoryMapper.INSTANCE.categoryCreateDTOToCategory(category))
     );
 
     LOGGER.info("Returning created category with name: {}", category);

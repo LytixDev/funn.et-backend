@@ -1,8 +1,11 @@
 package edu.ntnu.idatt2105.funn.mapper.listing;
 
+import edu.ntnu.idatt2105.funn.dto.listing.CategoryCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
 import edu.ntnu.idatt2105.funn.model.listing.Category;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -19,7 +22,18 @@ public interface CategoryMapper {
    * @param categoryDTO CategoryDTO to map
    * @return the mapped Category
    */
+  @Mapping(target = "listings", ignore = true)
   Category categoryDTOToCategory(CategoryDTO categoryDTO);
+
+  /**
+   * Maps a CategoryCreateDTO to a Category
+   * @param categoryCreateDTO CategoryCreateDTO to map
+   * @return the mapped Category
+   */
+  @Mappings(
+    { @Mapping(target = "id", ignore = true), @Mapping(target = "listings", ignore = true) }
+  )
+  Category categoryCreateDTOToCategory(CategoryCreateDTO categoryCreateDTO);
 
   /**
    * Maps a Category to a CategoryDTO
