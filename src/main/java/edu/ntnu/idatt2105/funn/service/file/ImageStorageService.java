@@ -14,10 +14,12 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
+
 /**
  * Implementation of the service class for the image repository.
- * @author Callum G.
- * @version 1.1 - 22.03.2023
+ * @author Callum G., Carl G.
+ * @version 1.2 - 26.03.2023
  */
 @Service
 public class ImageStorageService implements FileStorageService {
@@ -46,28 +48,30 @@ public class ImageStorageService implements FileStorageService {
     );
   }
 
+  /**
+   * Loads a file from the root directory
+   * @param id The id and name of the file to be loaded
+   * @return The file as a resource
+   * @throws FileNotFoundException If the file could not be found
+   * @throws IOException If the file is not readable
+   * @throws MalformedURLException If the file path could not be correctly parsed
+   */
   @Override
-  public Resource loadFile(Long id) throws IOException, MalformedURLException {
-    Path file = root.resolve(
-      new File(root.toString())
-        .listFiles(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
-            }
-          }
-        )[0].getName()
+  public Resource loadFile(Long id) throws IOException, MalformedURLException, FileNotFoundException {
+    File[] foundFiles = new File(root.toString()).listFiles(
+      (dir, name) -> name.substring(0, name.lastIndexOf(".")).equals(id.toString())
     );
+    if (foundFiles.length == 0) throw new FileNotFoundException("Could not find any files with the name " + id.toString());
+    Path file = root.resolve(foundFiles[0].getName());
 
-    if (file == null) throw new IOException("Could not read file");
+    if (file == null) throw new IOException("Found file is not valid");
 
     Resource resource = new UrlResource(file.toUri());
 
     if (resource.exists() || resource.isReadable()) {
       return resource;
     } else {
-      throw new IOException("Could not read file");
+      throw new IOException("The file is not readable");
     }
   }
 
