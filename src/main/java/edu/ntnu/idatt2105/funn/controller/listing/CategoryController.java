@@ -84,11 +84,13 @@ public class CategoryController {
    * @return created category
    * @throws CategoryAlreadyExistsException if category already exists
    */
-  @PostMapping(value = "/private/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+    value = "/private/categories",
+    consumes = { MediaType.APPLICATION_JSON_VALUE },
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
   public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category)
     throws CategoryAlreadyExistsException {
-    // System.out.println(username);
-
     LOGGER.info("Creating category with name: {}", category);
 
     CategoryDTO createdCategory = CategoryMapper.INSTANCE.categoryToCategoryDTO(
@@ -106,13 +108,16 @@ public class CategoryController {
    * @return updated category
    * @throws CategoryNotFoundException if category does not exist
    */
-  @PutMapping(value = "/private/categories/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(
+    value = "/private/categories/{id}",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
   public ResponseEntity<CategoryDTO> updateCategory(
     @PathVariable Long id,
     @RequestBody CategoryDTO category,
     @AuthenticationPrincipal String username
   ) throws CategoryNotFoundException {
-
     System.out.println(username);
 
     LOGGER.info("Updating category with id: {}", id);
@@ -134,9 +139,10 @@ public class CategoryController {
    * @throws CategoryNotFoundException if category does not exist
    */
   @DeleteMapping(value = "/private/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> deleteCategory(@PathVariable Long id, @AuthenticationPrincipal String username)
-    throws CategoryNotFoundException {
-    
+  public ResponseEntity<Void> deleteCategory(
+    @PathVariable Long id,
+    @AuthenticationPrincipal String username
+  ) throws CategoryNotFoundException {
     System.out.println(username);
 
     LOGGER.info("Deleting category with id: {}", id);

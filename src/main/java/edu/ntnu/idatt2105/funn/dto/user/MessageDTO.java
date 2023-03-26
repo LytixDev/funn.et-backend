@@ -1,6 +1,5 @@
 package edu.ntnu.idatt2105.funn.dto.user;
 
-import edu.ntnu.idatt2105.funn.model.user.Chat;
 import jakarta.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;

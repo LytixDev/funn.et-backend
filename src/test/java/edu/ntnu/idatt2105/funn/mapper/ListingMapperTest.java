@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
+import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
@@ -65,12 +66,16 @@ public class ListingMapperTest {
 
   Category category;
 
+  CategoryDTO categoryDTO;
+
   @Before
   public void setUp()
     throws UserDoesNotExistsException, LocationDoesntExistException, DatabaseException {
     postCode = new PostCode(0000, "Oslo", new HashSet<>());
 
     category = new Category(1L, "Other", new HashSet<>());
+
+    categoryDTO = new CategoryDTO(1L, "Other");
 
     location =
       Location
@@ -141,7 +146,7 @@ public class ListingMapperTest {
       .username("username")
       .briefDescription("description")
       .fullDescription("description")
-      .category(category)
+      .category(categoryDTO)
       .status(Status.ACTIVE)
       .publicationDate(LocalDate.of(2012, 12, 12))
       .expirationDate(LocalDate.of(2013, 6, 12))

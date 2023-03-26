@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.funn.dto.listing;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
-import edu.ntnu.idatt2105.funn.model.listing.Category;
 import edu.ntnu.idatt2105.funn.model.listing.Status;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -49,7 +48,7 @@ public class ListingDTO {
 
   @NonNull
   @NotBlank
-  private Category category;
+  private CategoryDTO category;
 
   @NonNull
   @NotBlank

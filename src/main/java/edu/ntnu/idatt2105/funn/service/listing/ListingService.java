@@ -8,7 +8,6 @@ import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import java.util.List;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Service interface for listing operations.
@@ -24,7 +23,6 @@ public interface ListingService {
   Listing updateListing(@NonNull Listing listing)
     throws ListingNotFoundException, DatabaseException, NullPointerException;
 
-  @PreAuthorize("hasRole('ADMIN') or authentication.principal.username.equals(#listing.user.username)")
   Listing deleteListing(@NonNull Listing listing)
     throws ListingNotFoundException, DatabaseException, NullPointerException;
 
