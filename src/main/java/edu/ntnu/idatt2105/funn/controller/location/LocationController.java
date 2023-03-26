@@ -9,6 +9,8 @@ import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeAlreadyExistsExceptio
 import edu.ntnu.idatt2105.funn.mapper.location.LocationMapper;
 import edu.ntnu.idatt2105.funn.model.location.Location;
 import edu.ntnu.idatt2105.funn.model.location.PostCode;
+import edu.ntnu.idatt2105.funn.model.user.Role;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.location.PostCodeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,8 +111,13 @@ public class LocationController {
   @Operation(summary = "Update location by id", description = "Updates a location by id.")
   public ResponseEntity<LocationResponseDTO> updateLocationById(
     @RequestBody LocationResponseDTO locationResponseDTO,
-    @PathVariable Long id
+    @PathVariable Long id,
+    @AuthenticationPrincipal Auth auth
   ) throws LocationDoesntExistException, DatabaseException {
+    if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
+      "You do not have access to update ations."
+    );
+
     if (locationResponseDTO.getId() != id) {
       throw new LocationDoesntExistException(
         "The id in the request body does not match the id in the path variable."
@@ -202,8 +210,14 @@ public class LocationController {
    */
   @DeleteMapping(value = "/private/locations/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "Delete location by id", description = "Deletes a location by id.")
-  public ResponseEntity<Void> deleteLocation(@PathVariable Long id)
-    throws LocationDoesntExistException, NullPointerException, DatabaseException {
+  public ResponseEntity<Void> deleteLocation(
+    @PathVariable Long id,
+    @AuthenticationPrincipal Auth auth
+  ) throws LocationDoesntExistException, NullPointerException, DatabaseException {
+    if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
+      "You do not have access to delete locations."
+    );
+
     LOGGER.info("Received request to delete location with id {}", id);
 
     locationService.deleteLocation(id);

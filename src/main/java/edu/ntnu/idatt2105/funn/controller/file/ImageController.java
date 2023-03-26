@@ -5,8 +5,11 @@ import edu.ntnu.idatt2105.funn.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import edu.ntnu.idatt2105.funn.model.file.Image;
+import edu.ntnu.idatt2105.funn.model.user.Role;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
+import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -24,6 +27,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +50,8 @@ public class ImageController {
   private final ImageService imageService;
 
   private final ImageStorageService imageStorageService;
+
+  private final ListingService listingService;
 
   /**
    * Gets a specific image from the server.
@@ -155,9 +162,22 @@ public class ImageController {
    */
   @DeleteMapping("/private/images/{id}")
   @Operation(summary = "Deletes an image from the server")
-  public ResponseEntity<String> deleteImage(@PathVariable Long id)
-    throws FileNotFoundException, IOException, DatabaseException {
+  public ResponseEntity<String> deleteImage(
+    @PathVariable Long id,
+    @AuthenticationPrincipal Auth auth
+  ) throws FileNotFoundException, IOException, DatabaseException {
     LOGGER.info("Image delete request received for id {}", id);
+
+    Image tmp = imageService.getFile(id);
+
+    if (
+      !listingService
+        .getListing(tmp.getListingId())
+        .getUser()
+        .getUsername()
+        .equals(auth.getUsername()) &&
+      auth.getRole() != Role.ADMIN
+    ) throw new AccessDeniedException("You do not have access to this resource");
 
     imageService.deleteFile(id);
 
