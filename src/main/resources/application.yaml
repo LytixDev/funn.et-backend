@@ -13,10 +13,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
   servlet:
     multipart:
       maxFileSize: 51200KB
       maxRequestSize: 51200KB
+  sql:
+    init:
+      mode: always
+
 
 springdoc:
   swagger-ui:
