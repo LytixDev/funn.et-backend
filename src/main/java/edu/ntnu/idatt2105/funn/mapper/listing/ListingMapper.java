@@ -177,7 +177,6 @@ public abstract class ListingMapper {
   @Mappings(
     {
       @Mapping(source = "location", target = "location", qualifiedByName = "getLocation"),
-      @Mapping(source = "username", target = "user", qualifiedByName = "getUser"),
       @Mapping(target = "images", ignore = true),
       @Mapping(target = "id", ignore = true),
       @Mapping(source = "status", target = "status", qualifiedByName = "getStatus"),

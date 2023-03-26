@@ -25,10 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ListingCreateDTO {
 
   @NonNull
-  @NotBlank
-  private String username;
-
-  @NonNull
   private Long location;
 
   @NonNull

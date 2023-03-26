@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +48,6 @@ public class LocationController {
 
   private final PostCodeService postCodeService;
 
-  //TODO: make this paginated with search...
   /**
    * Returns all locations in the database.
    * @return List of all locations

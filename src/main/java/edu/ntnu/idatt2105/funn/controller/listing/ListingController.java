@@ -9,6 +9,7 @@ import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.funn.filtering.FilterRequest;
 import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
@@ -91,6 +92,32 @@ public class ListingController {
     LOGGER.info("Received request to get all listings");
     Page<Listing> listings = listingService.searchListingsPaginated(search);
     LOGGER.info("Found {} listings", listings.getContent().size());
+
+    List<ListingDTO> listingDTOs = listings
+      .stream()
+      .map(l -> listingMapper.listingToListingDTO(l))
+      .toList();
+
+    LOGGER.info("Mapped listings to DTOs and returning");
+    return ResponseEntity.ok(listingDTOs);
+  }
+
+  /**
+   * Returns all listings by user in the database.
+   * @param username The username of the user
+   * @return A list of all listings in the database.
+   */
+  @GetMapping(value = "/public/listings/{username}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @Operation(
+    summary = "Get listings by user",
+    description = "Returns all listings in the database. Possible to search for keywords in listing"
+  )
+  public ResponseEntity<List<ListingDTO>> getListingsByUser(@PathVariable String username)
+    throws NullPointerException {
+
+    LOGGER.info("Received request to get all listings by user");
+    List<Listing> listings = listingService.getListingsByUser(username);
+    LOGGER.info("Found {} listings", listings.size());
 
     List<ListingDTO> listingDTOs = listings
       .stream()

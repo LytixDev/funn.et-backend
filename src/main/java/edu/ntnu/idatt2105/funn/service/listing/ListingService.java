@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 /**
  * Service interface for listing operations.
  * @author Nicolai H. B, Callum G.
- * @version 1.1 - 18.3.2023
+ * @version 1.2 - 26.3.2023
  */
 public interface ListingService {
   boolean listingExists(@NonNull Listing listing) throws NullPointerException;
@@ -29,6 +29,8 @@ public interface ListingService {
   Listing getListing(@NonNull Long id) throws ListingNotFoundException, NullPointerException;
 
   List<Listing> getAllListings();
+
+  List<Listing> getListingsByUser(@NonNull String username) throws NullPointerException;
 
   Page<Listing> searchListingsPaginated(SearchRequest searchRequest) throws NullPointerException;
 }

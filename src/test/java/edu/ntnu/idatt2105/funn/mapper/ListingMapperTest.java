@@ -180,7 +180,6 @@ public class ListingMapperTest {
       .title("title")
       .price(1000)
       .location(1L)
-      .username("username")
       .briefDescription("description")
       .fullDescription("description")
       .category(category)
@@ -202,7 +201,6 @@ public class ListingMapperTest {
     assertEquals(dto.getFullDescription(), listing.getFullDescription());
     assertEquals(dto.getPrice(), listing.getPrice());
     assertEquals(dto.getLocation(), listing.getLocation().getId());
-    assertEquals(dto.getUsername(), listing.getUser().getUsername());
     assertEquals(dto.getCategory().getName(), listing.getCategory().getName());
     assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
     assertEquals(dto.getExpirationDate(), listing.getExpirationDate());

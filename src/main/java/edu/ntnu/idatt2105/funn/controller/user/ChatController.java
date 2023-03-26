@@ -159,13 +159,18 @@ public class ChatController {
   )
   public ResponseEntity<ChatDTO> getChatByListingAndUser(
     @PathVariable("id") Long listingId,
-    @PathVariable("username") String username
+    @PathVariable("username") String pathUsername,
+    @AuthenticationPrincipal String username
   ) throws UserDoesNotExistsException, NullPointerException {
-    LOGGER.info("Getting chat by listing {} and user {}", listingId, username);
+    LOGGER.info("Getting chat by listing {} and user {}", listingId, pathUsername);
 
-    User user = userService.getUserByUsername(username);
 
     Listing listing = listingService.getListing(listingId);
+
+    if (!username.equals(pathUsername) && !listing.getUser().getUsername().equals(pathUsername))
+      throw new IllegalAccessError("Forbidden");
+
+    User user = userService.getUserByUsername(pathUsername);
 
     LOGGER.info("User found: {}", user);
 

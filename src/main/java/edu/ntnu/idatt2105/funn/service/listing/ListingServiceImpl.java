@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service for listing operations.
  * @author Nicolai H. B., Callum G.
- * @version 1.2 - 21.3.2023
+ * @version 1.3 - 26.3.2023
  */
 @Service
 @RequiredArgsConstructor
@@ -111,6 +111,16 @@ public class ListingServiceImpl implements ListingService {
   public Listing getListing(@NonNull Long id)
     throws ListingNotFoundException, NullPointerException {
     return listingRepository.findById(id).orElseThrow(ListingNotFoundException::new);
+  }
+
+  /**
+   * Finds all listings by username.
+   * @param username The username of the user.
+   * @return A list of listings.
+   */
+  @Override
+  public List<Listing> getListingsByUser(@NonNull String username) {
+    return listingRepository.findAllByUserUsername(username);
   }
 
   /**
