@@ -19,6 +19,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class CategoryDTO {
 
+  @NotBlank
   private Long id;
 
   @NonNull
