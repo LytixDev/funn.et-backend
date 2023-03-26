@@ -13,6 +13,7 @@ import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
@@ -37,6 +38,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -140,11 +142,10 @@ public class ListingController {
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
   ) throws UserDoesNotExistsException {
-
     final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Received user: {}", username);
     LOGGER.info("Received request to get listing with id: {}", id);
-    
+
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
 
@@ -246,8 +247,13 @@ public class ListingController {
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   @Operation(summary = "Create listing", description = "Creates a listing from a listing dto")
-  public ResponseEntity<ListingDTO> createListing(@ModelAttribute ListingCreateDTO listingDTO, @AuthenticationPrincipal String username)
+  public ResponseEntity<ListingDTO> createListing(
+    @ModelAttribute ListingCreateDTO listingDTO,
+    @AuthenticationPrincipal Auth auth
+  )
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, ListingAlreadyExistsException, RuntimeException, IOException {
+    final String username = auth != null ? auth.getUsername() : null;
+
     LOGGER.info("Recieved request to create listing: {}", listingDTO);
     Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
 
@@ -292,9 +298,14 @@ public class ListingController {
   )
   public ResponseEntity<ListingDTO> updateListing(
     @ModelAttribute ListingCreateDTO listingDTO,
-    @PathVariable long id
+    @PathVariable long id,
+    @AuthenticationPrincipal Auth auth
   )
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
+    LOGGER.info("Auth: {}", auth);
+
+    //TODO: Use listing updateDTO?
+
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
     Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
@@ -346,9 +357,10 @@ public class ListingController {
    */
   @PutMapping(value = "/private/listings/{id}/favorite")
   public ResponseEntity<ListingDTO> favoriteOrUnfavoriteListing(
-    @AuthenticationPrincipal String username,
+    @AuthenticationPrincipal Auth auth,
     @PathVariable long id
   ) throws UserDoesNotExistsException, ListingNotFoundException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Received request to favorite listing with id {} by user {}", username, id);
     Listing listing = listingService.getListing(id);
     LOGGER.info("Found listing to favorite: {}, by user {}", listing, username);
@@ -368,9 +380,9 @@ public class ListingController {
    * @throws UserDoesNotExistsException
    */
   @GetMapping(value = "/private/listings/favorites")
-  public ResponseEntity<Set<ListingDTO>> getFavoriteListings(
-    @AuthenticationPrincipal String username
-  ) throws UserDoesNotExistsException {
+  public ResponseEntity<Set<ListingDTO>> getFavoriteListings(@AuthenticationPrincipal Auth auth)
+    throws UserDoesNotExistsException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Received request to get favorite listings by user {}", username);
     Set<Listing> favorites = userService.getFavoriteListings(username);
     Set<ListingDTO> listingDTOs = favorites
@@ -389,10 +401,20 @@ public class ListingController {
    * @throws DatabaseException if the database could not run an sql operation
    */
   @DeleteMapping(value = "/private/listings/{id}")
-  public ResponseEntity<Void> deleteListing(@PathVariable long id)
-    throws ListingNotFoundException, NullPointerException, DatabaseException {
+  public ResponseEntity<Void> deleteListing(
+    @PathVariable long id,
+    @AuthenticationPrincipal Auth auth
+  ) throws ListingNotFoundException, NullPointerException, DatabaseException {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
+
+    if (
+      auth == null ||
+      (
+        !auth.getUsername().equals(listing.getUser().getUsername()) &&
+        auth.getRole() != Role.ADMIN
+      )
+    ) throw new AccessDeniedException("You do not have permission to delete this listing");
 
     listing
       .getImages()

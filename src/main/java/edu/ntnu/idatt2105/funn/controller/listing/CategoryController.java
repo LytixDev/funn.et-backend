@@ -8,7 +8,6 @@ import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -94,11 +93,13 @@ public class CategoryController {
     consumes = { MediaType.APPLICATION_JSON_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryCreateDTO category, @AuthenticationPrincipal Auth auth)
-    throws CategoryAlreadyExistsException {
+  public ResponseEntity<CategoryDTO> createCategory(
+    @RequestBody CategoryCreateDTO category,
+    @AuthenticationPrincipal Auth auth
+  ) throws CategoryAlreadyExistsException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!auth.getRole().equals(Role.ADMIN)) {
+    if (auth.getRole() != Role.ADMIN) {
       throw new AccessDeniedException("You do not have permission to delete a category");
     }
     LOGGER.info("Creating category with name: {}", category);
@@ -130,7 +131,7 @@ public class CategoryController {
   ) throws CategoryNotFoundException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!auth.getRole().equals(Role.ADMIN)) {
+    if (auth.getRole() != Role.ADMIN) {
       throw new AccessDeniedException("You do not have permission to delete a category");
     }
 
@@ -159,7 +160,7 @@ public class CategoryController {
   ) throws CategoryNotFoundException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!auth.getRole().equals(Role.ADMIN)) {
+    if (auth.getRole() != Role.ADMIN) {
       throw new AccessDeniedException("You do not have permission to delete a category");
     }
 

@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Auth {
-    
-    private String username;
 
-    private Role role;
+  private String username;
+
+  private Role role;
 }
