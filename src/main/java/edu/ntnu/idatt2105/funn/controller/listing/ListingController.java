@@ -410,10 +410,7 @@ public class ListingController {
 
     if (
       auth == null ||
-      (
-        !auth.getUsername().equals(listing.getUser().getUsername()) &&
-        auth.getRole() != Role.ADMIN
-      )
+      (!auth.getUsername().equals(listing.getUser().getUsername()) && auth.getRole() != Role.ADMIN)
     ) throw new AccessDeniedException("You do not have permission to delete this listing");
 
     listing

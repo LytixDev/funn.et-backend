@@ -115,7 +115,7 @@ public class LocationController {
     @AuthenticationPrincipal Auth auth
   ) throws LocationDoesntExistException, DatabaseException {
     if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
-      "You do not have access to update locations."
+      "You do not have access to update ations."
     );
 
     if (locationResponseDTO.getId() != id) {

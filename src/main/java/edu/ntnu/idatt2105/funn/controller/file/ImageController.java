@@ -162,14 +162,22 @@ public class ImageController {
    */
   @DeleteMapping("/private/images/{id}")
   @Operation(summary = "Deletes an image from the server")
-  public ResponseEntity<String> deleteImage(@PathVariable Long id, @AuthenticationPrincipal Auth auth)
-    throws FileNotFoundException, IOException, DatabaseException {
+  public ResponseEntity<String> deleteImage(
+    @PathVariable Long id,
+    @AuthenticationPrincipal Auth auth
+  ) throws FileNotFoundException, IOException, DatabaseException {
     LOGGER.info("Image delete request received for id {}", id);
 
     Image tmp = imageService.getFile(id);
 
-    if (!listingService.getListing(tmp.getListingId()).getUser().getUsername().equals(auth.getUsername()) && auth.getRole() != Role.ADMIN )
-      throw new AccessDeniedException("You do not have access to this resource");
+    if (
+      !listingService
+        .getListing(tmp.getListingId())
+        .getUser()
+        .getUsername()
+        .equals(auth.getUsername()) &&
+      auth.getRole() != Role.ADMIN
+    ) throw new AccessDeniedException("You do not have access to this resource");
 
     imageService.deleteFile(id);
 
