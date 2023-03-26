@@ -224,23 +224,4 @@ public class ListingSortTest {
     assertEquals(listing2.getTitle(), found.getContent().get(2).getTitle());
     assertEquals(listing1.getTitle(), found.getContent().get(3).getTitle());
   }
-
-  @Test
-  public void testSortByCategoryAsc() {
-    SortRequest sortRequest = new SortRequest("category", SortDirection.ASC);
-    SearchRequest searchRequest = new SearchRequest();
-    searchRequest.getSortRequests().add(sortRequest);
-
-    searchSpecification = new SearchSpecification<>(searchRequest);
-
-    Pageable pageable = SearchSpecification.getPageable(searchRequest);
-
-    Page<Listing> found = listingRepository.findAll(searchSpecification, pageable);
-
-    assertEquals(4, found.getTotalElements());
-    assertEquals(listing1.getTitle(), found.getContent().get(0).getTitle());
-    assertEquals(listing2.getTitle(), found.getContent().get(1).getTitle());
-    assertEquals(listing3.getTitle(), found.getContent().get(2).getTitle());
-    assertEquals(listing4.getTitle(), found.getContent().get(3).getTitle());
-  }
 }

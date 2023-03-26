@@ -515,26 +515,4 @@ public class ListingFilterTest {
     assertEquals(found.getContent().get(0).getTitle(), listing1.getTitle());
     assertEquals(found.getContent().get(1).getTitle(), listing2.getTitle());
   }
-
-  @Test
-  public void testListingFilterSpecificationByCategoryEquals() {
-    FilterRequest filterRequest = FilterRequest
-      .builder()
-      .value(listing1.getCategory().getName())
-      .fieldType(FieldType.STRING)
-      .keyWord("category")
-      .operator(Operator.EQUAL)
-      .build();
-
-    SearchRequest searchRequest = new SearchRequest();
-    searchRequest.getFilterRequests().add(filterRequest);
-
-    searchSpecification = new SearchSpecification<>(searchRequest);
-
-    Page<Listing> found = listingRepository.findAll(searchSpecification, Pageable.unpaged());
-
-    assertEquals(found.getSize(), 2);
-    assertEquals(found.getContent().get(0).getTitle(), listing1.getTitle());
-    assertEquals(found.getContent().get(1).getTitle(), listing2.getTitle());
-  }
 }

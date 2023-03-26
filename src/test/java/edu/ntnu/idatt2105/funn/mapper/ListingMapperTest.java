@@ -129,7 +129,7 @@ public class ListingMapperTest {
     assertEquals(listing.getPrice(), dto.getPrice());
     assertEquals(listing.getLocation().getId(), dto.getLocation());
     assertEquals(listing.getUser().getUsername(), dto.getUsername());
-    assertEquals(listing.getCategory(), dto.getCategory());
+    assertEquals(listing.getCategory().getName(), dto.getCategory().getName());
     assertEquals(listing.getPublicationDate(), dto.getPublicationDate());
     assertEquals(listing.getExpirationDate(), dto.getExpirationDate());
     assertEquals(listing.getBriefDescription(), dto.getBriefDescription());
@@ -167,7 +167,7 @@ public class ListingMapperTest {
     assertEquals(dto.getPrice(), listing.getPrice());
     assertEquals(dto.getLocation(), listing.getLocation().getId());
     assertEquals(dto.getUsername(), listing.getUser().getUsername());
-    assertEquals(dto.getCategory(), listing.getCategory());
+    assertEquals(dto.getCategory().getName(), listing.getCategory().getName());
     assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
     assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
     assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
@@ -203,7 +203,7 @@ public class ListingMapperTest {
     assertEquals(dto.getPrice(), listing.getPrice());
     assertEquals(dto.getLocation(), listing.getLocation().getId());
     assertEquals(dto.getUsername(), listing.getUser().getUsername());
-    assertEquals(dto.getCategory(), listing.getCategory());
+    assertEquals(dto.getCategory().getName(), listing.getCategory().getName());
     assertEquals(dto.getPublicationDate(), listing.getPublicationDate());
     assertEquals(dto.getExpirationDate(), listing.getExpirationDate());
     assertEquals(dto.getBriefDescription(), listing.getBriefDescription());
