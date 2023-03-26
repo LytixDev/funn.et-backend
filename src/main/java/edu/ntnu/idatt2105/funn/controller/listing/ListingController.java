@@ -13,6 +13,7 @@ import edu.ntnu.idatt2105.funn.filtering.SearchRequest;
 import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
@@ -107,7 +108,7 @@ public class ListingController {
    * @return A list of all listings in the database.
    */
   @GetMapping(
-    value = "/public/listings/{username}",
+    value = "/public/listings/user/{username}",
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   @Operation(
@@ -137,21 +138,27 @@ public class ListingController {
   @GetMapping(value = "/public/listings/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ListingDTO> getListing(
     @PathVariable long id,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws UserDoesNotExistsException {
+
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Received user: {}", username);
     LOGGER.info("Received request to get listing with id: {}", id);
+    
     Listing foundListing = listingService.getListing(id);
     LOGGER.info("Found listing {}", foundListing);
+
     ListingDTO listingDTO = listingMapper.listingToListingDTO(foundListing);
     LOGGER.info("Mapped listing to DTO and checking if possible user has favorited it");
     listingDTO.setIsFavorite(Optional.empty());
+
     if (username != null && !username.equals("anonymousUser")) {
       LOGGER.info("User is not anonymous, checking if user has favorited listing");
       boolean listingIsFavorite = userService.isFavoriteByUser(username, foundListing);
       LOGGER.info("Listing is favorite: {}", listingIsFavorite);
       listingDTO.setIsFavorite(Optional.of(listingIsFavorite));
     }
+
     return ResponseEntity.ok(listingDTO);
   }
 
