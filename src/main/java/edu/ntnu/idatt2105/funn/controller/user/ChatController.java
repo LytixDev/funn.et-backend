@@ -164,11 +164,11 @@ public class ChatController {
   ) throws UserDoesNotExistsException, NullPointerException {
     LOGGER.info("Getting chat by listing {} and user {}", listingId, pathUsername);
 
-
     Listing listing = listingService.getListing(listingId);
 
-    if (!username.equals(pathUsername) && !listing.getUser().getUsername().equals(pathUsername))
-      throw new IllegalAccessError("Forbidden");
+    if (
+      !username.equals(pathUsername) && !listing.getUser().getUsername().equals(pathUsername)
+    ) throw new IllegalAccessError("Forbidden");
 
     User user = userService.getUserByUsername(pathUsername);
 

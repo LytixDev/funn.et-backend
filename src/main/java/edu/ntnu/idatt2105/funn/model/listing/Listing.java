@@ -34,7 +34,6 @@ public class Listing {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "`user`", referencedColumnName = "`username`")
-  @NonNull
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)

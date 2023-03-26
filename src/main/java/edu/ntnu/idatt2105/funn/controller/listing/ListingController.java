@@ -107,14 +107,16 @@ public class ListingController {
    * @param username The username of the user
    * @return A list of all listings in the database.
    */
-  @GetMapping(value = "/public/listings/{username}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(
+    value = "/public/listings/{username}",
+    produces = { MediaType.APPLICATION_JSON_VALUE }
+  )
   @Operation(
     summary = "Get listings by user",
     description = "Returns all listings in the database. Possible to search for keywords in listing"
   )
   public ResponseEntity<List<ListingDTO>> getListingsByUser(@PathVariable String username)
     throws NullPointerException {
-
     LOGGER.info("Received request to get all listings by user");
     List<Listing> listings = listingService.getListingsByUser(username);
     LOGGER.info("Found {} listings", listings.size());
