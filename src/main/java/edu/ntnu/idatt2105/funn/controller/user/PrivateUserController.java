@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +47,9 @@ public class PrivateUserController {
     description = "Get the authenticated user",
     tags = { "user" }
   )
-  public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal String username)
+  public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal Auth auth)
     throws UserDoesNotExistsException {
+    final String username = auth.getUsername();
     LOGGER.info("GET request for user: {}", username);
     User authenticatedUser = userService.getUserByUsername(username);
 
@@ -69,10 +71,11 @@ public class PrivateUserController {
     tags = { "user" }
   )
   public ResponseEntity<UserDTO> updateUser(
-    @AuthenticationPrincipal String tokenUsername,
+    @AuthenticationPrincipal Auth auth,
     @PathVariable String username,
     @RequestBody UserPatchDTO userUpdateDTO
   ) throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException {
+    final String tokenUsername = auth.getUsername();
     LOGGER.info("PATCH request for user: {}", username);
     User authenticatedUser = userService.getUserByUsername(tokenUsername);
     if (
