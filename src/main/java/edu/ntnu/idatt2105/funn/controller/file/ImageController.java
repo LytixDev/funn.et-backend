@@ -58,12 +58,13 @@ public class ImageController {
    * @param id The id of the image to get.
    * @return The image.
    * @throws IOException If the image could not be read.
-   * @throws MalformedURLException If the image could not be found.
+   * @throws MalformedURLException If the file path could not be correctly parsed
+   * @throws FileNotFoundException If the image could not be found.
    */
   @GetMapping("/public/images/{id}")
   @Operation(summary = "Gets a specific image from the server")
   public ResponseEntity<Resource> getImage(@PathVariable Long id)
-    throws IOException, MalformedURLException {
+    throws IOException, MalformedURLException, FileNotFoundException {
     Resource resource;
 
     LOGGER.info("Image download request received for id {}", id);
@@ -103,7 +104,7 @@ public class ImageController {
 
     imageAltMap.forEach((image, alt) -> {
       ImageUploadDTO imageUploadDTO = new ImageUploadDTO();
-      imageUploadDTO.setAlt(alt);
+      imageUploadDTO.setAlt(alt != null ? alt : "");
       imageUploadDTO.setImage(image);
 
       LOGGER.info("Image upload request received");
