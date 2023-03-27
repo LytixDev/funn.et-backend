@@ -55,7 +55,9 @@ public class PublicUserController {
     tags = { "user" }
   )
   public ResponseEntity<UserDTO> getUser(@PathVariable String username)
-    throws UserDoesNotExistsException {
+    throws BadInputException, UserDoesNotExistsException {
+    if (!UserValidation.validateUsername(username)) throw new BadInputException("Invalid username");
+
     LOGGER.info("GET request for user: {}", username);
     User user = userService.getUserByUsername(username);
 
@@ -81,7 +83,7 @@ public class PublicUserController {
   )
   @Operation(summary = "Create a new user", description = "Create a new user", tags = { "user" })
   public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser)
-    throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, BadInputException {
+    throws BadInputException, UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
     if (
       !UserValidation.validateRegistrationForm(
         registerUser.getUsername(),

@@ -97,6 +97,7 @@ public class CategoryController {
 
   /**
    * Create category if it does not already existing in the database.
+   * @param auth the authentication object of the user that is creating the category.
    * @param category Category to create as a CategoryCreateDTO.
    * @return The created category.
    * @throws CategoryAlreadyExistsException if category already exists in the database.
@@ -140,6 +141,7 @@ public class CategoryController {
   /**
    * Update category if it exists
    * @param category Category to update
+   * @param auth the authentication object of the user that is updating the category.
    * @return updated category
    * @throws CategoryNotFoundException if category does not exist
    * @throws BadInputException if category name is invalid
@@ -185,6 +187,7 @@ public class CategoryController {
   /**
    * Delete category if it exists
    * @param id Id of category to delete
+   * @param auth the authentication object of the user that is deleting the cateogory.
    * @return 204 No Content with no body.
    * @throws CategoryNotFoundException if category does not exist
    * @throws PermissionDeniedException if user is not an admin

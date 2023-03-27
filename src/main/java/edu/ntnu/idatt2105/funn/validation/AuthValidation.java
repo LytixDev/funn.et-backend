@@ -49,4 +49,17 @@ public class AuthValidation extends BaseValidation {
 
     return valid;
   }
+
+  /**
+   * Validates the Auth object and checks that the Auth object is not a specified user.
+   * @param auth The Auth object to validate.
+   * @param username The username to check for.
+   * @return True if the Auth object is valid and is not the specified user, false otherwise.
+   */
+  public static boolean isNotUser(Auth auth, String username) {
+    boolean valid = validateAuth(auth);
+    valid &= !auth.getUsername().equals(username);
+
+    return valid;
+  }
 }

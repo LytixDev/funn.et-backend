@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.funn.controller.user;
+package edu.ntnu.idatt2105.funn.controller.chat;
 
 import edu.ntnu.idatt2105.funn.dto.user.ChatDTO;
 import edu.ntnu.idatt2105.funn.dto.user.MessageDTO;
@@ -16,7 +16,9 @@ import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import edu.ntnu.idatt2105.funn.validation.ChatValidation;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -56,51 +58,45 @@ public class ChatController {
   /**
    * Create a chat between a user and a listing.
    * @param id The id of the listing.
-   * @param username The username of the user.
-   * @return The created chat.
+   * @param auth The auth of the user that wants to create the chat.
+   * @return The created chat as a ChatDTO.
+   * @throws ListingNotFoundException If the listing is not found.
+   * @throws PermissionDeniedException If the user is the listing owner or the auth is null.
+   * @throws UserDoesNotExistsException If the user is not found.
+   * @throws NullPointerException If the auth is null.
    */
   @PostMapping(value = "/listings/{id}/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @Operation(
+    summary = "Create a chat between a user and a listing.",
+    description = "Create a chat between a user and a listing. The chat will be between the user and the listing owner. The user cannot be the listing owner."
+  )
   public ResponseEntity<ChatDTO> createChat(
     @PathVariable("id") Long id,
     @AuthenticationPrincipal Auth auth
-  ) throws ListingNotFoundException, UserDoesNotExistsException, NullPointerException {
+  )
+    throws ListingNotFoundException, PermissionDeniedException, UserDoesNotExistsException, NullPointerException {
+    Listing listing = listingService.getListing(id);
+
+    if (
+      !AuthValidation.isNotUser(auth, listing.getUser().getUsername())
+    ) throw new PermissionDeniedException("Auth is null.");
+
     final String username = auth.getUsername();
-    LOGGER.info("Creating chat between user {} and listing {}", username, id);
 
-    Listing listing = null;
+    LOGGER.info(
+      "Creating chat between messager: {} and owner: {} on listing id: {}",
+      username,
+      listing.getUser().getUsername(),
+      listing.getId()
+    );
 
-    try {
-      listing = listingService.getListing(id);
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-      throw e;
-    }
-
-    LOGGER.info("Listing found: {}", listing);
-
-    LOGGER.info("Getting user {}", username);
-
-    User user = null;
-
-    try {
-      user = userService.getUserByUsername(username);
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-      throw e;
-    }
+    User user = userService.getUserByUsername(username);
 
     LOGGER.info("User found: {}", user);
 
     LOGGER.info("Creating chat");
 
-    Chat chat = null;
-
-    try {
-      chat = chatService.createChat(user, listing);
-    } catch (Exception e) {
-      LOGGER.error(e.getClass() + e.getMessage());
-      throw e;
-    }
+    Chat chat = chatService.createChat(user, listing);
 
     ChatDTO chatDTO = new ChatDTO(
       chat.getId(),
@@ -114,30 +110,36 @@ public class ChatController {
         .collect(Collectors.toList())
     );
 
+    LOGGER.info("Chat made: {}", chatDTO);
+
     return ResponseEntity.status(HttpStatus.CREATED).body(chatDTO);
   }
 
   /**
    * Get messages from a chat.
    * @param chatId The id of the chat.
-   * @param username The username of the user.
-   * @return The chat.
+   * @param auth the authentication object of the user that is getting the chat.
+   * @return The chat as a ChatDTO.
+   * @throws PermissionDeniedException If the user is not in the chat or the auth is null.
+   * @throws NullPointerException If the auth is null.
    */
   @GetMapping(value = "/chat/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @Operation(summary = "Get messages from a chat.", description = "Get messages from a chat.")
   public ResponseEntity<ChatDTO> getChat(
     @PathVariable("id") Long chatId,
     @AuthenticationPrincipal Auth auth
-  ) throws UserDoesNotExistsException, NullPointerException {
-    LOGGER.info("Getting chat {}", chatId);
+  ) throws PermissionDeniedException, NullPointerException {
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException(
+      "Not authorized for this chat."
+    );
 
-    final String username = auth.getUsername();
+    LOGGER.info("Getting chat with id: {}", chatId);
 
-    User user = userService.getUserByUsername(username);
+    Chat chat = chatService.getChat(chatId);
 
-    LOGGER.info("User found: {}", user);
-
-    LOGGER.info("Getting chat");
-    Chat chat = chatService.getChat(user, chatId);
+    if (!ChatValidation.isUserInChat(auth.getUsername(), chat)) throw new PermissionDeniedException(
+      "Not authorized for this chat."
+    );
 
     ChatDTO chatDTO = new ChatDTO(
       chat.getId(),
@@ -157,34 +159,41 @@ public class ChatController {
   /**
    * Gets chat by listing and username.
    * @param listingId The id of the listing.
-   * @param username The username of the user.
+   * @param auth the authentication object of the user that is getting the chat.
    * @return The chat.
+   * @throws PermissionDeniedException If the user is not in the chat or the auth is null.
+   * @throws UserDoesNotExistsException If the user is not found.
+   * @throws NullPointerException If the auth is null.
+   * @throws PermissionDeniedException If the user is not in the chat.
    */
   @GetMapping(
     value = "/listings/{id}/chat/{username}",
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
+  @Operation(
+    summary = "Gets chat by listing and username.",
+    description = "Gets chat by listing and username. The user must be in the chat, either as the messager or the listing owner."
+  )
   public ResponseEntity<ChatDTO> getChatByListingAndUser(
     @PathVariable("id") Long listingId,
     @PathVariable("username") String pathUsername,
     @AuthenticationPrincipal Auth auth
-  ) throws UserDoesNotExistsException, NullPointerException, PermissionDeniedException {
-    LOGGER.info("Getting chat by listing {} and user {}", listingId, pathUsername);
+  )
+    throws PermissionDeniedException, UserDoesNotExistsException, NullPointerException, PermissionDeniedException {
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException(
+      "Not authorized for this chat."
+    );
 
-    final String username = auth.getUsername();
+    LOGGER.info("Getting chat between listing {} and user {}", listingId, pathUsername);
 
     Listing listing = listingService.getListing(listingId);
 
     if (
-      !username.equals(pathUsername) && !listing.getUser().getUsername().equals(username)
-    ) throw new PermissionDeniedException("Cannot access a chat you are not a part of.");
-
-    User user = userService.getUserByUsername(pathUsername);
-
-    LOGGER.info("User found: {}", user);
+      !ChatValidation.isUserInChat(pathUsername, pathUsername, listing.getUser().getUsername())
+    ) throw new PermissionDeniedException("Not authorized for this chat.");
 
     LOGGER.info("Getting chat");
-    Chat chat = chatService.getChat(user, listing);
+    Chat chat = chatService.getChat(userService.getUserByUsername(pathUsername), listing);
 
     ChatDTO chatDTO = new ChatDTO(
       chat.getId(),
@@ -198,17 +207,24 @@ public class ChatController {
         .collect(Collectors.toList())
     );
 
+    LOGGER.info("Chat found: {}", chatDTO);
+
     return ResponseEntity.status(HttpStatus.OK).body(chatDTO);
   }
 
   /**
    * Get all chats for a user.
-   * @param username The username of the user.
-   * @return The chats.
+   * @param auth the authentication object of the user that is getting the chats.
+   * @return The chats as a list of ChatDTOs.
+   * @throws PermissionDeniedException If the auth is null.
+   * @throws UserDoesNotExistsException If the user is not found.
    */
   @GetMapping(value = "/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @Operation(summary = "Get all chats for a user.", description = "Get all chats for a user.")
   public ResponseEntity<List<ChatDTO>> getChats(@AuthenticationPrincipal Auth auth)
-    throws UserDoesNotExistsException, NullPointerException {
+    throws PermissionDeniedException, UserDoesNotExistsException {
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException("Not authorized.");
+
     final String username = auth.getUsername();
 
     LOGGER.info("Getting chats for user {}", username);
@@ -237,6 +253,8 @@ public class ChatController {
       )
       .collect(Collectors.toList());
 
+    LOGGER.info("Chats found: {}", chatDTOs);
+
     return ResponseEntity.status(HttpStatus.OK).body(chatDTOs);
   }
 
@@ -244,6 +262,11 @@ public class ChatController {
    * Send a message to a chat.
    * @param chat The chat to send the message to.
    * @param message The message to send.
+   * @return The message that was sent as a MessageDTO.
+   * @throws PermissionDeniedException If the user is not in the chat or the auth is null.
+   * @throws UserDoesNotExistsException If the user is not found.
+   * @throws BadInputException If the message is not valid.
+   * @throws NullPointerException If the auth is null.
    */
   @PostMapping(
     value = "/chat/{id}",
@@ -254,15 +277,25 @@ public class ChatController {
     @PathVariable("id") Long chatId,
     @AuthenticationPrincipal Auth auth,
     @RequestBody MessageDTO messageDTO
-  ) throws UserDoesNotExistsException, BadInputException, NullPointerException {
-    if (!ChatValidation.validateMessage(messageDTO.getMessage())) throw new BadInputException();
+  )
+    throws PermissionDeniedException, UserDoesNotExistsException, BadInputException, NullPointerException {
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException(
+      "Not authorized for this chat."
+    );
 
-    final String username = auth.getUsername();
-    User sender = userService.getUserByUsername(username);
+    if (!ChatValidation.validateMessage(messageDTO.getMessage())) throw new BadInputException(
+      "Message has bad input."
+    );
 
     LOGGER.info("Message to send: {}", messageDTO.getMessage());
 
-    Chat chat = chatService.getChat(sender, chatId);
+    Chat chat = chatService.getChat(chatId);
+
+    if (!ChatValidation.isUserInChat(auth.getUsername(), chat)) throw new PermissionDeniedException(
+      "Not authorized for this chat."
+    );
+
+    User sender = userService.getUserByUsername(auth.getUsername());
 
     LOGGER.info("Sending message to chat {}", chatId);
 

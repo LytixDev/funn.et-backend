@@ -3,6 +3,7 @@ package edu.ntnu.idatt2105.funn.controller.location;
 import edu.ntnu.idatt2105.funn.dto.location.LocationCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.location.LocationResponseDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
+import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
 import edu.ntnu.idatt2105.funn.exceptions.location.PostCodeAlreadyExistsException;
@@ -14,6 +15,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.location.PostCodeService;
+import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import edu.ntnu.idatt2105.funn.validation.LocationValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -84,7 +86,10 @@ public class LocationController {
    * @throws DatabaseException If the database is not available
    */
   @GetMapping(value = "/public/locations/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Get location by id", description = "Returns a location by id.")
+  @Operation(
+    summary = "Get location by id",
+    description = "Returns a location by id if it exists in the database."
+  )
   public ResponseEntity<LocationResponseDTO> getLocationById(@PathVariable Long id)
     throws LocationDoesntExistException, DatabaseException {
     LOGGER.info("Received request to get location with id {}", id);
@@ -102,22 +107,85 @@ public class LocationController {
   }
 
   /**
+   * Creates a location.
+   * @param locationCreateDTO The location to create.
+   * @return The created location with an id.
+   * @throws LocationAlreadyExistsException If the location already exists.
+   * @throws DatabaseException If the database is not available.
+   */
+  @PostMapping(value = "/private/locations", produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(summary = "Create location", description = "Creates a location.")
+  public ResponseEntity<LocationResponseDTO> createLocation(
+    @RequestBody LocationCreateDTO locationCreateDTO
+  ) throws LocationAlreadyExistsException, DatabaseException, BadInputException {
+    if (
+      !LocationValidation.validateLocation(
+        locationCreateDTO.getAddress(),
+        locationCreateDTO.getLatitude(),
+        locationCreateDTO.getLongitude(),
+        locationCreateDTO.getPostCode(),
+        locationCreateDTO.getCity()
+      )
+    ) {
+      throw new BadInputException("The creation input is not valid.");
+    }
+
+    LOGGER.info("Received request to create location {}", locationCreateDTO);
+
+    Location location = LocationMapper.INSTANCE.locationCreateDTOToLocation(locationCreateDTO);
+
+    PostCode postCode = LocationMapper.INSTANCE.locationCreateDTOToPostCode(locationCreateDTO);
+
+    LOGGER.info("Found post code with code {}", postCode.getPostCode());
+
+    try {
+      postCodeService.savePostCode(postCode);
+      LOGGER.info("Saved post code with code {}", postCode.getPostCode());
+    } catch (PostCodeAlreadyExistsException e) {
+      LOGGER.info("Post code already exists");
+    }
+
+    location.setPostCode(postCode);
+
+    LOGGER.info("Creating location {}", location);
+
+    location = locationService.saveLocation(location);
+
+    LOGGER.info("Created location {}", location);
+
+    LocationResponseDTO locationResponseDTO = LocationMapper.INSTANCE.locationToLocationResponseDTO(
+      location
+    );
+
+    LOGGER.info("Returning created location {}", locationResponseDTO);
+
+    return ResponseEntity.ok(locationResponseDTO);
+  }
+
+  /**
    * Updates a location by id.
    * @param locationResponseDTO The location to update.
    * @param id The id of the location to update.
+   * @param auth The authentication object trying to update the location.
    * @return The updated location with the given id.
+   * @throws PermissionDeniedException If the user is not an admin.
+   * @throws BadInputException If the input is not valid.
    * @throws LocationDoesntExistException If the location does not exist.
    * @throws DatabaseException If the database is not available.
    */
   @PutMapping(value = "/private/locations/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Update location by id", description = "Updates a location by id.")
+  @Operation(
+    summary = "Update location by id",
+    description = "Updates a location by id if it exists in the database, and returns the updated location. Only admins can update locations."
+  )
   public ResponseEntity<LocationResponseDTO> updateLocationById(
     @RequestBody LocationResponseDTO locationResponseDTO,
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
-  ) throws LocationDoesntExistException, DatabaseException, BadInputException {
-    if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
-      "You do not have access to update ations."
+  )
+    throws PermissionDeniedException, LocationDoesntExistException, DatabaseException, BadInputException {
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
+      "You do not have permission to update locations."
     );
 
     if (
@@ -128,7 +196,7 @@ public class LocationController {
         locationResponseDTO.getPostCode(),
         locationResponseDTO.getCity()
       )
-    ) throw new BadInputException();
+    ) throw new BadInputException("The update input is not valid for this location.");
 
     if (locationResponseDTO.getId() != id) {
       throw new LocationDoesntExistException(
@@ -169,65 +237,11 @@ public class LocationController {
   }
 
   /**
-   * Creates a location.
-   * @param locationCreateDTO The location to create.
-   * @return The created location with an id.
-   * @throws LocationAlreadyExistsException If the location already exists.
-   * @throws DatabaseException If the database is not available.
-   */
-  @PostMapping(value = "/private/locations", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Create location", description = "Creates a location.")
-  public ResponseEntity<LocationResponseDTO> createLocation(
-    @RequestBody LocationCreateDTO locationCreateDTO
-  ) throws LocationAlreadyExistsException, DatabaseException, BadInputException {
-    if (
-      !LocationValidation.validateLocation(
-        locationCreateDTO.getAddress(),
-        locationCreateDTO.getLatitude(),
-        locationCreateDTO.getLongitude(),
-        locationCreateDTO.getPostCode(),
-        locationCreateDTO.getCity()
-      )
-    ) {
-      throw new BadInputException();
-    }
-
-    LOGGER.info("Received request to create location {}", locationCreateDTO);
-
-    Location location = LocationMapper.INSTANCE.locationCreateDTOToLocation(locationCreateDTO);
-
-    PostCode postCode = LocationMapper.INSTANCE.locationCreateDTOToPostCode(locationCreateDTO);
-
-    LOGGER.info("Found post code with code {}", postCode.getPostCode());
-
-    try {
-      postCodeService.savePostCode(postCode);
-      LOGGER.info("Saved post code with code {}", postCode.getPostCode());
-    } catch (PostCodeAlreadyExistsException e) {
-      LOGGER.info("Post code already exists");
-    }
-
-    location.setPostCode(postCode);
-
-    LOGGER.info("Creating location {}", location);
-
-    location = locationService.saveLocation(location);
-
-    LOGGER.info("Created location {}", location);
-
-    LocationResponseDTO locationResponseDTO = LocationMapper.INSTANCE.locationToLocationResponseDTO(
-      location
-    );
-
-    LOGGER.info("Returning created location {}", locationResponseDTO);
-
-    return ResponseEntity.ok(locationResponseDTO);
-  }
-
-  /**
    * Deletes a location by id.
    * @param id The id of the location to delete.
-   * @return No content.
+   * @param auth The authentication object trying to delete the location.
+   * @return 204 No Content with no body.
+   * @throws PermissionDeniedException If the user is not an admin.
    * @throws LocationDoesntExistException If the location does not exist.
    * @throws NullPointerException If the location is null.
    * @throws DatabaseException If the database is not available.
@@ -237,9 +251,10 @@ public class LocationController {
   public ResponseEntity<Void> deleteLocation(
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
-  ) throws LocationDoesntExistException, NullPointerException, DatabaseException {
-    if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
-      "You do not have access to delete locations."
+  )
+    throws PermissionDeniedException, LocationDoesntExistException, NullPointerException, DatabaseException {
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
+      "You do not have permission to delete locations."
     );
 
     LOGGER.info("Received request to delete location with id {}", id);

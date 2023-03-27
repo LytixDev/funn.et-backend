@@ -9,6 +9,7 @@ import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.swagger.v3.oas.annotations.Operation;
 import java.time.Duration;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,10 @@ public class TokenController {
    * @throws BadCredentialsException if the user credentials are wrong.
    */
   @PostMapping(value = "")
+  @Operation(
+    summary = "Generate a JWT token for the given user.",
+    description = "Generate a JWT token for the given user. The token is valid for 30 minutes or the amount of time specified in the JWT_TOKEN_VALIDITY environment variable."
+  )
   @ResponseStatus(value = HttpStatus.CREATED)
   public String generateToken(@RequestBody AuthenticateDTO authenticate)
     throws UserDoesNotExistsException, BadCredentialsException, ResponseStatusException, BadInputException {

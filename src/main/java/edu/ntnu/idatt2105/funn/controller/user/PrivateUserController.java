@@ -10,6 +10,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class PrivateUserController {
    * Get the authenticated user.
    * @param username The username of the authenticated user.
    * @return The authenticated user.
+   * @throws PermissionDeniedException If the auth is null.
    * @throws UserDoesNotExistsException If the user does not exist.
    */
   @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,18 +52,31 @@ public class PrivateUserController {
     tags = { "user" }
   )
   public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal Auth auth)
-    throws UserDoesNotExistsException {
-    final String username = auth.getUsername();
-    LOGGER.info("GET request for user: {}", username);
-    User authenticatedUser = userService.getUserByUsername(username);
+    throws PermissionDeniedException, UserDoesNotExistsException {
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException("Invalid token.");
 
-    UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(authenticatedUser);
+    LOGGER.info("GET request for user: {}", auth.getUsername());
+
+    UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(
+      userService.getUserByUsername(auth.getUsername())
+    );
 
     LOGGER.info("Mapped to UserDTO: {}", userDTO);
 
     return ResponseEntity.ok(userDTO);
   }
 
+  /**
+   * Update the user with the given username.
+   * @param auth The authentication object of the user trying to update the user.
+   * @param username The username of the user to update.
+   * @param userUpdateDTO The user update data transfer object.
+   * @return The updated user.
+   * @throws PermissionDeniedException If the user is not authorized to update the user.
+   * @throws UserDoesNotExistsException If the user does not exist.
+   * @throws BadCredentialsException If the old password is incorrect.
+   * @throws BadInputException If the input is invalid.
+   */
   @PatchMapping(
     value = "/{username}",
     consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -77,7 +92,7 @@ public class PrivateUserController {
     @PathVariable String username,
     @RequestBody UserPatchDTO userUpdateDTO
   )
-    throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException, BadInputException {
+    throws PermissionDeniedException, UserDoesNotExistsException, BadCredentialsException, BadInputException {
     if (
       !UserValidation.validatePartialUserUpdate(
         userUpdateDTO.getEmail(),
@@ -86,14 +101,13 @@ public class PrivateUserController {
         userUpdateDTO.getOldPassword(),
         userUpdateDTO.getNewPassword()
       )
-    ) throw new BadInputException();
+    ) throw new BadInputException("Invalid input for user update.");
 
-    final String tokenUsername = auth.getUsername();
-    LOGGER.info("PATCH request for user: {}", username);
-    User authenticatedUser = userService.getUserByUsername(tokenUsername);
     if (
-      !tokenUsername.equals(username) && authenticatedUser.getRole() != Role.ADMIN
-    ) throw new PermissionDeniedException();
+      !AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, username)
+    ) throw new PermissionDeniedException("Not authorized to update this user.");
+
+    LOGGER.info("PATCH request for user: {}", username);
 
     User userToUpdate = userService.getUserByUsername(username);
 

@@ -24,7 +24,6 @@ import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import edu.ntnu.idatt2105.funn.validation.ListingValidation;
-import edu.ntnu.idatt2105.funn.validation.LocationValidation;
 import edu.ntnu.idatt2105.funn.validation.SearchRequestValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
@@ -153,6 +152,7 @@ public class ListingController {
   /**
    * Returns a listing with the given id.
    * @param id The id of the listing to return.
+   * @param auth the authentication object of the user that is getting the listing.
    * @return The listing with the given id.
    * @throws UserDoesNotExistsException If user does not exist
    */
@@ -269,6 +269,7 @@ public class ListingController {
    * Uploads images to the listing if they are present
    * using the uploadImages method.
    * @param listingDTO The listing dto to create a listing from.
+   * @param auth the authentication object of the user that is creating the listing.
    * @return The created listing as a listing dto with images.
    * @throws PermissionDeniedException If the auth is null.
    * @throws BadRequestException If the user input is invalid.
@@ -297,7 +298,18 @@ public class ListingController {
       throw new PermissionDeniedException("User is not logged in");
     }
 
-    if (!ListingValidation.validateListing(listingDTO.getTitle(), listingDTO.getBriefDescription(), listingDTO.getFullDescription(), listingDTO.getPrice(), listingDTO.getPublicationDate(), listingDTO.getExpirationDate(), listingDTO.getImages(), listingDTO.getImageAlts())) {
+    if (
+      !ListingValidation.validateListing(
+        listingDTO.getTitle(),
+        listingDTO.getBriefDescription(),
+        listingDTO.getFullDescription(),
+        listingDTO.getPrice(),
+        listingDTO.getPublicationDate(),
+        listingDTO.getExpirationDate(),
+        listingDTO.getImages(),
+        listingDTO.getImageAlts()
+      )
+    ) {
       throw new BadInputException("Listing data is not valid");
     }
 
@@ -408,7 +420,7 @@ public class ListingController {
   /**
    * Favorites a listing with the given id.
    * If a listing is already favorited, it is unfavorited.
-   * @param username the username of the user
+   * @param auth the authentication object of the user that is favoriting the listing.
    * @param id the id of the listing to favorite
    * @return nothing
    * @throws UserDoesNotExistsException if the user does not exist
@@ -424,21 +436,26 @@ public class ListingController {
     @AuthenticationPrincipal Auth auth,
     @PathVariable long id
   ) throws UserDoesNotExistsException, ListingNotFoundException, PermissionDeniedException {
-    if (!AuthValidation.validateAuth(auth))
-      throw new PermissionDeniedException("User is not logged in");
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException(
+      "User is not logged in"
+    );
 
     final String username = auth.getUsername();
 
-    LOGGER.info("Received request to change favorite value on listing with id {} by user {}", username, id);
+    LOGGER.info(
+      "Received request to change favorite value on listing with id {} by user {}",
+      username,
+      id
+    );
     Listing listing = listingService.getListing(id);
 
     LOGGER.info("Found listing to change value for: {}, by user {}", listing, username);
     userService.favoriteOrUnfavoriteListing(username, listing);
-    
+
     ListingDTO listingDTO = listingMapper.listingToListingDTO(listing);
 
     boolean listingIsFavorite = userService.isFavoriteByUser(username, listing);
-    
+
     LOGGER.info("Listing is favorite: {}", listingIsFavorite);
     listingDTO.setIsFavorite(Optional.of(listingIsFavorite));
 
@@ -447,7 +464,7 @@ public class ListingController {
 
   /**
    * Gets all favorite listings for a user.
-   * @param auth authentication object of the user.
+   * @param auth authentication object of the user who is requesting their favorite listings.
    * @return a set of favorite listings by a user.
    * @throws PermissionDeniedException if the user is not logged in.
    * @throws UserDoesNotExistsException if the user does not exist.
@@ -459,9 +476,10 @@ public class ListingController {
   )
   public ResponseEntity<Set<ListingDTO>> getFavoriteListings(@AuthenticationPrincipal Auth auth)
     throws UserDoesNotExistsException, PermissionDeniedException {
-    if (!AuthValidation.validateAuth(auth))
-      throw new PermissionDeniedException("User is not logged in");
-      
+    if (!AuthValidation.validateAuth(auth)) throw new PermissionDeniedException(
+      "User is not logged in"
+    );
+
     final String username = auth.getUsername();
     LOGGER.info("Received request to get favorite listings by user {}", username);
 
@@ -477,6 +495,7 @@ public class ListingController {
   /**
    * Deletes a listing with the given id.
    * @param id the id of the listing to delete
+   * @param auth the authentication object of the user that is deleting the listing.
    * @return 204 No Content with no body.
    * @throws ListingNotFoundException if a listing with the given id is not found
    * @throws PermissionDeniedException if the user is not an admin or the owner of the listing.
@@ -491,12 +510,14 @@ public class ListingController {
   public ResponseEntity<Void> deleteListing(
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
-  ) throws ListingNotFoundException, PermissionDeniedException, NullPointerException, DatabaseException {
+  )
+    throws ListingNotFoundException, PermissionDeniedException, NullPointerException, DatabaseException {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
-    if (!AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, listing.getUser().getUsername()))
-      throw new PermissionDeniedException("You do not have permission to delete this listing");
+    if (
+      !AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, listing.getUser().getUsername())
+    ) throw new PermissionDeniedException("You do not have permission to delete this listing");
 
     listing
       .getImages()

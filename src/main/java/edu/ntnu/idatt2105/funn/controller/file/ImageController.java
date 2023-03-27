@@ -29,7 +29,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -94,6 +93,7 @@ public class ImageController {
    * Uploads images to the server.
    * @param images The images to upload.
    * @param alts The alt text for the images.
+   * @param auth the authentication object of the user that is uploading the images.
    * @return A list of image response DTOs.
    * @throws IOException If the images could not be read.
    * @throws DatabaseException If the images could not be saved.
@@ -107,8 +107,10 @@ public class ImageController {
     @RequestParam("images") MultipartFile[] images,
     @RequestParam("alts") String[] alts,
     @AuthenticationPrincipal Auth auth
-  ) throws IOException, DatabaseException {
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException("Access denied");
+  ) throws IOException, DatabaseException, PermissionDeniedException {
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
+      "Access denied"
+    );
 
     List<ImageResponseDTO> dtos = new ArrayList<>();
     Map<MultipartFile, String> imageAltMap = IntStream
@@ -166,6 +168,7 @@ public class ImageController {
   /**
    * Deletes an image from the server.
    * @param id The id of the image to delete.
+   * @param auth the authentication object of the user that is deleting the image.
    * @return 204 No Content with no body.
    * @throws FileNotFoundException If the image could not be found.
    * @throws IOException If the image could not be read.
