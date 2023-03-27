@@ -226,7 +226,7 @@ public class ListingController {
     );
 
     imageStorageService.init();
-    
+
     LOGGER.info("Uploading {} images", imageAltMap.size());
 
     imageAltMap.forEach((image, alt) -> {

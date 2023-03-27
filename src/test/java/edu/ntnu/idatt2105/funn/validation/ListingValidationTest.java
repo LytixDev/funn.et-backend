@@ -55,7 +55,7 @@ public class ListingValidationTest {
   public void testCategoryNameValidateReturnsTrue() {
     assertTrue(ListingValidation.validateCategoryName(goodCategoryName));
   }
-  
+
   @Test
   public void testCategoryNameValidateReturnsFalseOnEmptyString() {
     assertFalse(ListingValidation.validateCategoryName(emptyString));

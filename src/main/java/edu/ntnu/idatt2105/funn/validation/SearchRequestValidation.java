@@ -19,8 +19,7 @@ public class SearchRequestValidation extends BaseValidation {
    * @return True if the key word is valid, false otherwise.
    */
   public static boolean validateJavaVariableName(String keyWord) {
-    if (isNotNullOrEmpty(keyWord)) 
-      return keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern());
+    if (isNotNullOrEmpty(keyWord)) return keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern());
 
     return true;
   }
@@ -49,10 +48,7 @@ public class SearchRequestValidation extends BaseValidation {
    */
   public static boolean validatePageNumber(int pageNumber) {
     return (
-      isLargerThanOrEqual(
-        pageNumber,
-        SearchRequestValidationRules.PAGE_MIN_NUMBER.getValue()
-      )
+      isLargerThanOrEqual(pageNumber, SearchRequestValidationRules.PAGE_MIN_NUMBER.getValue())
     );
   }
 
@@ -70,12 +66,10 @@ public class SearchRequestValidation extends BaseValidation {
     for (SortRequest sort : request.getSortRequests()) valid &=
       validateJavaVariableName(sort.getKeyWord());
 
-    if (request.getPage() != null)
-      valid &= validatePageNumber(request.getPage());
+    if (request.getPage() != null) valid &= validatePageNumber(request.getPage());
 
-    if (request.getSize() != null)
-      valid &= validatePageSize(request.getSize());
-    
+    if (request.getSize() != null) valid &= validatePageSize(request.getSize());
+
     return valid;
   }
 }
