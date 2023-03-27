@@ -78,18 +78,13 @@ public class ImageStorageService implements FileStorageService {
   }
 
   @Override
-  public void deleteFile(Long id) throws IOException {
-    Path file = root.resolve(
-      new File(root.toString())
-        .listFiles(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return name.substring(0, name.lastIndexOf(".")).equals(id.toString());
-            }
-          }
-        )[0].getName()
+  public void deleteFile(Long id) throws IOException, FileNotFoundException {
+    File[] foundFiles = new File(root.toString())
+    .listFiles((dir, name) -> name.substring(0, name.lastIndexOf(".")).equals(id.toString()));
+    if (foundFiles.length == 0) throw new FileNotFoundException(
+      "Could not find any files with the name " + id.toString()
     );
+    Path file = root.resolve(foundFiles[0].getName());
 
     if (file == null) throw new IOException("Could not read file");
 

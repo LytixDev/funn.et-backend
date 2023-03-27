@@ -332,8 +332,9 @@ public class ListingController {
         LOGGER.info("Image: {}", i);
         if (!keepImageIds.contains(i.getId())) {
           try {
-            imageService.deleteFile(i.getId());
-          } catch (FileNotFoundException | DatabaseException e) {
+            imageStorageService.init();
+            imageStorageService.deleteFile(i.getId());
+          } catch (FileNotFoundException | IOException e) {
             LOGGER.error("Could not delete image: {}.\nError: {}", i.getId(), e.getMessage());
           }
         } else {
@@ -343,7 +344,6 @@ public class ListingController {
       images = imagesToKeep;
     }
     LOGGER.info("Images that are kept: {}", images);
-    LOGGER.info("Images left in database", imageService.getAllFilesByListingId(id));
 
     requestedListing.setImages(images);
 
@@ -354,10 +354,7 @@ public class ListingController {
     LOGGER.info("Saved updated listing to database");
     ListingDTO updatedListingDTO = listingMapper.listingToListingDTO(updatedListing);
 
-    LOGGER.info("ListingDTO: {}", updatedListingDTO);
-
     if (listingDTO.getImages() != null) {
-      LOGGER.info("Uploading images: ");
       if (listingDTO.getImageAlts() == null) {
         String[] imageAlts = new String[listingDTO.getImages().length];
         for (int i = 0; i < listingDTO.getImages().length; i++) {
@@ -441,7 +438,7 @@ public class ListingController {
   public ResponseEntity<Void> deleteListing(
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
-  ) throws ListingNotFoundException, NullPointerException, DatabaseException {
+  ) throws ListingNotFoundException, NullPointerException, DatabaseException, FileNotFoundException {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
@@ -458,6 +455,8 @@ public class ListingController {
           imageStorageService.deleteFile(image.getId());
         } catch (IOException e) {
           throw new UncheckedIOException(e);
+        } catch (FileNotFoundException e) {
+          LOGGER.error("File not found: {}", image.getId());
         }
       });
 
