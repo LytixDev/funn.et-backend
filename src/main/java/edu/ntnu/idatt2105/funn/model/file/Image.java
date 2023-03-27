@@ -28,7 +28,6 @@ public class Image {
   @Id
   @Column(name = "`image_id`", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NonNull
   private Long id;
 
   @Column(name = "`image_alt`", nullable = false)
