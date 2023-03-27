@@ -2,6 +2,7 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
 import edu.ntnu.idatt2105.funn.dto.user.UserPatchDTO;
+import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
@@ -9,6 +10,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.Validation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -74,7 +76,18 @@ public class PrivateUserController {
     @AuthenticationPrincipal Auth auth,
     @PathVariable String username,
     @RequestBody UserPatchDTO userUpdateDTO
-  ) throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException {
+  )
+    throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException, BadInputException {
+    if (
+      !Validation.validatePartialUserUpdate(
+        userUpdateDTO.getEmail(),
+        userUpdateDTO.getFirstName(),
+        userUpdateDTO.getLastName(),
+        userUpdateDTO.getOldPassword(),
+        userUpdateDTO.getNewPassword()
+      )
+    ) throw new BadInputException();
+
     final String tokenUsername = auth.getUsername();
     LOGGER.info("PATCH request for user: {}", username);
     User authenticatedUser = userService.getUserByUsername(tokenUsername);

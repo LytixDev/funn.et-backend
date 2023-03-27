@@ -2,6 +2,7 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.ChatDTO;
 import edu.ntnu.idatt2105.funn.dto.user.MessageDTO;
+import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.mapper.user.MessageMapper;
@@ -14,6 +15,8 @@ import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.ChatValidation;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -248,7 +251,9 @@ public class ChatController {
     @PathVariable("id") Long chatId,
     @AuthenticationPrincipal Auth auth,
     @RequestBody MessageDTO messageDTO
-  ) throws UserDoesNotExistsException, NullPointerException {
+  ) throws UserDoesNotExistsException, BadInputException, NullPointerException {
+    if (!ChatValidation.validateMessage(messageDTO.getMessage())) throw new BadInputException();
+
     final String username = auth != null ? auth.getUsername() : null;
     User sender = userService.getUserByUsername(username);
 

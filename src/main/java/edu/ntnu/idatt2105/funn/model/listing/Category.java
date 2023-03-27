@@ -32,7 +32,7 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "`category_name`", nullable = false)
+  @Column(name = "`category_name`", length = 32, nullable = false)
   @NonNull
   private String name;
 

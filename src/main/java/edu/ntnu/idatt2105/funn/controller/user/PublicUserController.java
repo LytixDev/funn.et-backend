@@ -2,6 +2,7 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
+import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
@@ -10,6 +11,7 @@ import edu.ntnu.idatt2105.funn.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.Validation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -79,8 +81,17 @@ public class PublicUserController {
   )
   @Operation(summary = "Create a new user", description = "Create a new user", tags = { "user" })
   public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser)
-    throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
-    
+    throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, BadInputException {
+    if (
+      !Validation.validateRegistrationForm(
+        registerUser.getUsername(),
+        registerUser.getEmail(),
+        registerUser.getFirstName(),
+        registerUser.getLastName(),
+        registerUser.getPassword()
+      )
+    ) throw new BadInputException();
+
     LOGGER.info("POST request for user: {}", registerUser);
 
     User user = RegisterMapper.INSTANCE.registerDTOtoUser(registerUser);

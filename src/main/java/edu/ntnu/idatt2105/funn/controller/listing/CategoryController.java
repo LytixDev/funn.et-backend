@@ -2,12 +2,14 @@ package edu.ntnu.idatt2105.funn.controller.listing;
 
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
+import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
 import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
+import edu.ntnu.idatt2105.funn.validation.Validation;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -96,7 +98,9 @@ public class CategoryController {
   public ResponseEntity<CategoryDTO> createCategory(
     @RequestBody CategoryCreateDTO category,
     @AuthenticationPrincipal Auth auth
-  ) throws CategoryAlreadyExistsException {
+  ) throws CategoryAlreadyExistsException, BadInputException {
+    if (!Validation.validateCategory(category.getName())) throw new BadInputException();
+
     LOGGER.info("Auth: {}", auth);
 
     if (auth.getRole() != Role.ADMIN) {
@@ -128,12 +132,14 @@ public class CategoryController {
     @PathVariable Long id,
     @RequestBody CategoryDTO category,
     @AuthenticationPrincipal Auth auth
-  ) throws CategoryNotFoundException {
+  ) throws CategoryNotFoundException, BadInputException {
     LOGGER.info("Auth: {}", auth);
 
-    if (auth.getRole() != Role.ADMIN) {
-      throw new AccessDeniedException("You do not have permission to delete a category");
-    }
+    if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
+      "You do not have permission to delete a category"
+    );
+
+    if (!Validation.validateCategory(category.getName())) throw new BadInputException();
 
     LOGGER.info("Updating category with id: {}", id);
 

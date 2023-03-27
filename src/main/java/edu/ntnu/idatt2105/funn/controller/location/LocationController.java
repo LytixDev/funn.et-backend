@@ -2,6 +2,7 @@ package edu.ntnu.idatt2105.funn.controller.location;
 
 import edu.ntnu.idatt2105.funn.dto.location.LocationCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.location.LocationResponseDTO;
+import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -13,6 +14,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.location.PostCodeService;
+import edu.ntnu.idatt2105.funn.validation.Validation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -113,10 +115,20 @@ public class LocationController {
     @RequestBody LocationResponseDTO locationResponseDTO,
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
-  ) throws LocationDoesntExistException, DatabaseException {
+  ) throws LocationDoesntExistException, DatabaseException, BadInputException {
     if (auth.getRole() != Role.ADMIN) throw new AccessDeniedException(
       "You do not have access to update ations."
     );
+
+    if (
+      !Validation.validateLocation(
+        locationResponseDTO.getAddress(),
+        locationResponseDTO.getLatitude(),
+        locationResponseDTO.getLongitude(),
+        locationResponseDTO.getPostCode(),
+        locationResponseDTO.getCity()
+      )
+    ) throw new BadInputException();
 
     if (locationResponseDTO.getId() != id) {
       throw new LocationDoesntExistException(
@@ -167,7 +179,19 @@ public class LocationController {
   @Operation(summary = "Create location", description = "Creates a location.")
   public ResponseEntity<LocationResponseDTO> createLocation(
     @RequestBody LocationCreateDTO locationCreateDTO
-  ) throws LocationAlreadyExistsException, DatabaseException {
+  ) throws LocationAlreadyExistsException, DatabaseException, BadInputException {
+    if (
+      !Validation.validateLocation(
+        locationCreateDTO.getAddress(),
+        locationCreateDTO.getLatitude(),
+        locationCreateDTO.getLongitude(),
+        locationCreateDTO.getPostCode(),
+        locationCreateDTO.getCity()
+      )
+    ) {
+      throw new BadInputException();
+    }
+
     LOGGER.info("Received request to create location {}", locationCreateDTO);
 
     Location location = LocationMapper.INSTANCE.locationCreateDTOToLocation(locationCreateDTO);
