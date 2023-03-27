@@ -133,6 +133,17 @@ public abstract class BaseValidation {
   }
 
   /**
+   * Check if the given date is before the given date.
+   * @param <T>      The subclass of ChronoLocalDate.
+   * @param beforeDate The date to check.
+   * @param afterDate The date to check against.
+   * @return True if the date is before the given date, false otherwise.
+   */
+  public static <T extends ChronoLocalDate> boolean isBefore(T beforeDate, T afterDate) {
+    return beforeDate.isBefore(afterDate);
+  }
+
+  /**
    * Check if a generic array is not null and not empty.
    * @param <T> The type of the array.
    * @param array The array to check.
@@ -143,9 +154,10 @@ public abstract class BaseValidation {
   }
 
   public static <T extends Number> boolean validatePositive(T[] array) {
-    boolean valid = true;
-    for (T t : array) valid &= isLargerThan(t, 0);
+    for (T t : array)
+      if (!isLargerThan(t, 0))
+        return false;
 
-    return valid;
+    return true;
   }
 }

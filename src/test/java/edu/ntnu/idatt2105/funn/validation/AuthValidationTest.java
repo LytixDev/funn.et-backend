@@ -28,7 +28,7 @@ public class AuthValidationTest {
         adminAuth = new Auth(adminUsername, Role.ADMIN);
     }
 
-    @Test 
+    @Test
     public void validateAuthReturnsTrueOnGoodAuth() {
         assertTrue(AuthValidation.validateAuth(goodAuth));
     }
