@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
-
 import org.junit.Test;
 
 public class ListingValidationTest {
@@ -53,7 +52,6 @@ public class ListingValidationTest {
   LocalDate dateBefore = LocalDate.now().minusMonths(1);
   LocalDate dateNow = LocalDate.now();
   LocalDate dateAfter = LocalDate.now().plusMonths(1);
-
 
   @Test
   public void testCategoryNameValidateReturnsTrue() {
@@ -106,52 +104,52 @@ public class ListingValidationTest {
   }
 
   @Test
-    public void testPriceValidateReturnsTrue() {
-        assertTrue(ListingValidation.validatePrice(goodPrice));
-    }
+  public void testPriceValidateReturnsTrue() {
+    assertTrue(ListingValidation.validatePrice(goodPrice));
+  }
 
-    @Test
-    public void testPriceValidateReturnsFalse() {
-        assertFalse(ListingValidation.validatePrice(badPrice));
-    }
+  @Test
+  public void testPriceValidateReturnsFalse() {
+    assertFalse(ListingValidation.validatePrice(badPrice));
+  }
 
-    @Test
-    public void testDateValidateNewReturnsTrue() {
-        assertTrue(ListingValidation.validateDatesNew(dateNow, dateAfter));
-    }
+  @Test
+  public void testDateValidateNewReturnsTrue() {
+    assertTrue(ListingValidation.validateDatesNew(dateNow, dateAfter));
+  }
 
-    @Test
-    public void testDateValidateNewReturnsFalse() {
-        assertFalse(ListingValidation.validateDatesNew(dateAfter, dateNow));
-    }
+  @Test
+  public void testDateValidateNewReturnsFalse() {
+    assertFalse(ListingValidation.validateDatesNew(dateAfter, dateNow));
+  }
 
-    @Test
-    public void testDateValidateNewReturnsFalseOnSameDates() {
-        assertFalse(ListingValidation.validateDatesNew(dateNow, dateNow));
-    }
+  @Test
+  public void testDateValidateNewReturnsFalseOnSameDates() {
+    assertFalse(ListingValidation.validateDatesNew(dateNow, dateNow));
+  }
 
-    @Test
-    public void testDateValidateNewReturnsFalseOnOldPublicationDate() {
-        assertFalse(ListingValidation.validateDatesNew(dateAfter, dateAfter));
-    }
+  @Test
+  public void testDateValidateNewReturnsFalseOnOldPublicationDate() {
+    assertFalse(ListingValidation.validateDatesNew(dateAfter, dateAfter));
+  }
 
-    @Test
-    public void testDateValidateNewReturnsFalseOnNullDates() {
-        assertFalse(ListingValidation.validateDatesNew(null, null));
-    }
+  @Test
+  public void testDateValidateNewReturnsFalseOnNullDates() {
+    assertFalse(ListingValidation.validateDatesNew(null, null));
+  }
 
-    @Test 
-    public void testDateValidateUpdateReturnsTrue() {
-        assertTrue(ListingValidation.validateDatesUpdate(dateNow, dateAfter));
-    }
+  @Test
+  public void testDateValidateUpdateReturnsTrue() {
+    assertTrue(ListingValidation.validateDatesUpdate(dateNow, dateAfter));
+  }
 
-    @Test
-    public void testDateValidateUpdateReturnsFalse() {
-        assertFalse(ListingValidation.validateDatesUpdate(dateAfter, dateNow));
-    }
+  @Test
+  public void testDateValidateUpdateReturnsFalse() {
+    assertFalse(ListingValidation.validateDatesUpdate(dateAfter, dateNow));
+  }
 
-    @Test
-    public void testDateValidateUpdateReturnsFalseOnSameDates() {
-        assertFalse(ListingValidation.validateDatesUpdate(dateNow, dateNow));
-    }    
+  @Test
+  public void testDateValidateUpdateReturnsFalseOnSameDates() {
+    assertFalse(ListingValidation.validateDatesUpdate(dateNow, dateNow));
+  }
 }

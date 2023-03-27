@@ -19,13 +19,37 @@ public class SearchRequestValidation extends BaseValidation {
    * @return True if the key word is valid, false otherwise.
    */
   public static boolean validateJavaVariableName(String keyWord) {
+    return (isNotNullOrEmpty(keyWord) && keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern()));
+  }
+
+  /**
+   * Validate page size.
+   * Checks if the page size is between the minimum and maximum values.
+   * @param pageSize The page to validate.
+   * @return True if the page is valid, false otherwise.
+   */
+  public static boolean validatePageSize(int pageSize) {
     return (
-      isNotNullOrEmpty(keyWord) &&
-      keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern()) &&
       isBetween(
-        keyWord,
-        SearchRequestValidationRules.JAVA_VARIABLE_MIN_LENGTH.getValue(),
-        SearchRequestValidationRules.JAVA_VARIABLE_MAX_LENGTH.getValue()
+        pageSize,
+        SearchRequestValidationRules.PAGE_MIN_SIZE.getValue(),
+        SearchRequestValidationRules.PAGE_MAX_SIZE.getValue()
+      )
+    );
+  }
+
+  /**
+   * Validate page number.
+   * Checks if the page number is larger than or equal to the minimum value.
+   * @param pageNumber The page to validate.
+   * @return True if the page is valid, false otherwise.
+   */
+  public static boolean validatePageNumber(int pageNumber) {
+    return (
+      isBetween(
+        pageNumber,
+        SearchRequestValidationRules.PAGE_MIN_SIZE.getValue(),
+        SearchRequestValidationRules.PAGE_MAX_SIZE.getValue()
       )
     );
   }
@@ -44,17 +68,8 @@ public class SearchRequestValidation extends BaseValidation {
     for (SortRequest sort : request.getSortRequests()) valid &=
       validateJavaVariableName(sort.getKeyWord());
 
-    valid &=
-      isBetween(
-        request.getSize(),
-        SearchRequestValidationRules.PAGE_MIN_SIZE.getValue(),
-        SearchRequestValidationRules.PAGE_MAX_SIZE.getValue()
-      );
-    valid &=
-      isLargerThanOrEqual(
-        request.getPage(),
-        SearchRequestValidationRules.PAGE_MIN_NUMBER.getValue()
-      );
+    valid &= validatePageSize(request.getSize());
+    valid &= validatePageNumber(request.getPage());
 
     return valid;
   }

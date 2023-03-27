@@ -9,14 +9,6 @@ package edu.ntnu.idatt2105.funn.validation.rules;
  */
 public enum SearchRequestValidationRules {
   /**
-   * Minimum length of a search request keyword.
-   */
-  JAVA_VARIABLE_MIN_LENGTH(1),
-  /**
-   * Maximum length of a search request keyword.
-   */
-  JAVA_VARIABLE_MAX_LENGTH(255),
-  /**
    * Minimum size for a page.
    */
   PAGE_MIN_SIZE(1),
