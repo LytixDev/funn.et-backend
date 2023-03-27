@@ -2,7 +2,7 @@ package edu.ntnu.idatt2105.funn.validation;
 
 import edu.ntnu.idatt2105.funn.model.file.ImageFileTypes;
 import edu.ntnu.idatt2105.funn.validation.rules.ImageValidationRules;
-import org.apache.commons.lang3.EnumUtils;
+import java.util.Arrays;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -22,8 +22,10 @@ public class ImageValidation extends BaseValidation {
   public static boolean validateImage(MultipartFile image) {
     return (
       image != null &&
-      EnumUtils.isValidEnum(ImageFileTypes.class, image.getContentType()) &&
-      isSmallerThan(image.getSize(), ImageValidationRules.IMAGE_SIZE_MAX.getValue())
+      Arrays
+        .stream(ImageFileTypes.values())
+        .anyMatch(type -> type.getFileType().equals(image.getContentType())) &&
+      isBetween(image.getSize(), 1, ImageValidationRules.IMAGE_SIZE_MAX.getValue())
     );
   }
 
@@ -33,10 +35,9 @@ public class ImageValidation extends BaseValidation {
    * @return True if the images are valid, false otherwise.
    */
   public static boolean validateImages(MultipartFile[] images) {
-    boolean valid = true;
-    for (MultipartFile image : images) valid &= validateImage(image);
+    for (MultipartFile image : images) if (!validateImage(image)) return false;
 
-    return valid;
+    return true;
   }
 
   /**
@@ -45,11 +46,12 @@ public class ImageValidation extends BaseValidation {
    * @return True if the image alt is valid, false otherwise.
    */
   public static boolean validateImageAlt(String imageAlt) {
-    boolean valid = true;
-    if (isNotNullOrEmpty(imageAlt)) valid &=
-      isSmallerThan(imageAlt, ImageValidationRules.IMAGE_ALT_MAX_LENGTH.getValue());
+    if (isNotNullOrEmpty(imageAlt)) return isSmallerThan(
+      imageAlt,
+      ImageValidationRules.IMAGE_ALT_MAX_LENGTH.getValue()
+    );
 
-    return valid;
+    return true;
   }
 
   /**
@@ -58,10 +60,8 @@ public class ImageValidation extends BaseValidation {
    * @return True if the image alt is valid, false otherwise.
    */
   public static boolean validateImageAlts(String[] imageAlts) {
-    boolean valid = true;
+    for (String imageAlt : imageAlts) if (!validateImageAlt(imageAlt)) return false;
 
-    for (String imageAlt : imageAlts) valid &= validateImageAlt(imageAlt);
-
-    return valid;
+    return true;
   }
 }

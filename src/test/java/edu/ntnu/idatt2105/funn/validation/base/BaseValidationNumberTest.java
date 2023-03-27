@@ -83,12 +83,12 @@ public class BaseValidationNumberTest {
   }
 
   @Test
-  public void testBetweenReturnsFalseOnNumberEqualToMin() {
-    assertFalse(BaseValidation.isBetween(positive, 1, 2));
+  public void testBetweenReturnsTrueOnNumberEqualToMin() {
+    assertTrue(BaseValidation.isBetween(positive, 1, 2));
   }
 
   @Test
-  public void testBetweenReturnsFalseOnNumberEqualToMax() {
-    assertFalse(BaseValidation.isBetween(positive, 0, 1));
+  public void testBetweenReturnsTrueOnNumberEqualToMax() {
+    assertTrue(BaseValidation.isBetween(positive, 0, 1));
   }
 }
