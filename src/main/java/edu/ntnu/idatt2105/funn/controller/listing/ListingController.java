@@ -16,10 +16,12 @@ import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Role;
+import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
+import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
@@ -59,7 +61,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.3 - 25.3.2023
+ * @version 1.4 - 27.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -329,6 +331,9 @@ public class ListingController {
     }
 
     requestedListing.setImages(images);
+
+    User user = userService.getUserByUsername(listingDTO.getUsername());
+    requestedListing.setUser(user);
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
