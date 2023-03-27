@@ -4,6 +4,7 @@ import edu.ntnu.idatt2105.funn.controller.file.ImageController;
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
+import edu.ntnu.idatt2105.funn.dto.listing.ListingUpdateDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
@@ -297,21 +298,29 @@ public class ListingController {
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   public ResponseEntity<ListingDTO> updateListing(
-    @ModelAttribute ListingCreateDTO listingDTO,
+    @ModelAttribute ListingUpdateDTO listingDTO,
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
   )
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
     LOGGER.info("Auth: {}", auth);
 
-    //TODO: Use listing updateDTO?
-
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
     Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
 
     requestedListing.setId(id);
-    requestedListing.setImages(imageService.getAllFilesByListingId(id));
+
+    // Filter images on images to keep if they images to keep is defined
+    List<Image> images = imageService.getAllFilesByListingId(id);
+    if (images != null) {
+      images.stream()
+        .filter(
+          f -> listingDTO.getImagesToKeep().contains(f.getId()))
+        .collect(Collectors.toList());
+    }
+
+    requestedListing.setImages(images);
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
