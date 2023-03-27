@@ -15,8 +15,8 @@ spring:
         format_sql: true
   servlet:
     multipart:
-      maxFileSize: 51200KB
-      maxRequestSize: 51200KB
+      maxFileSize: 10485760B
+      maxRequestSize: 52428800B
 
 springdoc:
   swagger-ui:
