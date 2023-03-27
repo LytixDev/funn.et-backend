@@ -59,7 +59,7 @@ public class CategoryServiceIntegrationTest {
     when(categoryRepository.save(newCategory)).thenReturn(newCategory);
 
     when(categoryRepository.findById(existingCategory.getId()))
-        .thenReturn(java.util.Optional.of(existingCategory));
+      .thenReturn(java.util.Optional.of(existingCategory));
     when(categoryRepository.findById(newCategory.getId())).thenReturn(java.util.Optional.empty());
 
     when(categoryRepository.findAll()).thenReturn(List.of(existingCategory));
@@ -91,7 +91,10 @@ public class CategoryServiceIntegrationTest {
 
   @Test
   public void testCategorySaveExistingCategory() {
-    assertThrows(CategoryAlreadyExistsException.class, () -> categoryService.createCategory(existingCategory));
+    assertThrows(
+      CategoryAlreadyExistsException.class,
+      () -> categoryService.createCategory(existingCategory)
+    );
   }
 
   @Test
@@ -109,7 +112,10 @@ public class CategoryServiceIntegrationTest {
 
   @Test
   public void testGetCategoryNewCategory() {
-    assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategoryById(newCategory.getId()));
+    assertThrows(
+      CategoryNotFoundException.class,
+      () -> categoryService.getCategoryById(newCategory.getId())
+    );
   }
 
   @Test
@@ -127,7 +133,10 @@ public class CategoryServiceIntegrationTest {
 
   @Test
   public void testUpdateCategoryNewCategory() {
-      assertThrows(CategoryNotFoundException.class, () -> categoryService.updateCategory(newCategory));
+    assertThrows(
+      CategoryNotFoundException.class,
+      () -> categoryService.updateCategory(newCategory)
+    );
   }
 
   @Test
@@ -150,4 +159,3 @@ public class CategoryServiceIntegrationTest {
     }
   }
 }
-
