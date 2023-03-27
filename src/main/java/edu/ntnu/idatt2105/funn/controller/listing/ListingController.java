@@ -21,7 +21,6 @@ import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
-import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
@@ -61,7 +60,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.4 - 27.3.2023
+ * @version 1.5 - 27.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -259,7 +258,7 @@ public class ListingController {
     final String username = auth != null ? auth.getUsername() : null;
 
     LOGGER.info("Recieved request to create listing: {}", listingDTO);
-    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+    Listing requestedListing = listingMapper.listingCreateUpdateDTOToListing(listingDTO);
 
     requestedListing.setUser(userService.getUserByUsername(username));
 
@@ -314,7 +313,7 @@ public class ListingController {
 
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
-    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+    Listing requestedListing = listingMapper.listingCreateUpdateDTOToListing(listingDTO);
 
     requestedListing.setId(id);
 

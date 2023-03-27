@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * Data transfer object for updating listing.
  * Used to transfer listing data between the backend and the application.
- * Contains a list of images which is deleted in backend
+ * Contains a list of images which should be kept
  * @author Carl G.
  * @version 1.0 - 27.3.2023
  */
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListingUpdateDTO extends ListingCreateDTO {
+public class ListingUpdateDTO extends ListingCreateUpdateDTO {
 
   private String username;
 
