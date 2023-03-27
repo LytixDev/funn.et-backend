@@ -8,6 +8,14 @@ package edu.ntnu.idatt2105.funn.exceptions;
 public class BadInputException extends Exception {
 
   /**
+   * Constructor for BadInputException.
+   * @param message The message to be displayed.
+   */
+  public BadInputException(String message) {
+    super(message);
+  }
+
+  /**
    * The message to be displayed when the exception is thrown.
    */
   public BadInputException() {

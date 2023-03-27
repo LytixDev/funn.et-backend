@@ -5,7 +5,6 @@ import edu.ntnu.idatt2105.funn.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
-import edu.ntnu.idatt2105.funn.exceptions.user.BadAuthPrincipleException;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
@@ -175,6 +174,7 @@ public class ImageController {
    * @throws FileNotFoundException If the image could not be found.
    * @throws IOException If the image could not be read.
    * @throws DatabaseException If the image could not be deleted.
+   * @throws PermissionDeniedException If the user does not have permission to delete the image.
    */
   @DeleteMapping("/private/images/{id}")
   @Operation(summary = "Deletes an image from the server", 
@@ -194,7 +194,7 @@ public class ImageController {
         Role.ADMIN,
         listingService.getListing(tmp.getListingId()).getUser().getUsername()
       )
-    ) throw new AccessDeniedException("You do not have access to this resource");
+    ) throw new PermissionDeniedException("You do not have access to this resource");
 
     imageService.deleteFile(id);
 
