@@ -90,6 +90,10 @@ To run this application you will need
    ```sh
    cp .env.example .env
    ```
+3. Start the database (note: docker must be running)
+   ```sh
+   make database
+   ```
 3. Start the application
    ```sh
    make
