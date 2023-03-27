@@ -11,7 +11,6 @@ spring:
       ddl-auto: update
     show-sql: true
     properties:
-      dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
@@ -22,7 +21,6 @@ spring:
   sql:
     init:
       mode: always
-      continue-on-error: true
 
 
 springdoc:

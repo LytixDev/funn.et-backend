@@ -12,13 +12,13 @@ insert into user values ('Johnny45', 'Johnny@email.com', 'Johnny', 'Johnson', 'P
 insert into user values ('SoulGoodman89', 'SoulG@email.com', 'Soul', 'Goodman', 'Password', 'USER');
 insert into user values ('MannyMansen42', 'Manny@email.com', 'Manny', 'Mansen', 'Password', 'USER');
 
-insert into postcodes values (7034, 'Trondheim');
+insert into postcode_tbl values (7034, 'Trondheim');
 
-insert into location values (1, 'Realfagsbygget 1', 63.415370, 10.406508, 1);
+insert into location values (1, 'Realfagsbygget 1', 63.415370, 10.406508, 7034);
 
-insert into listing values (1, 'Used Apple iPhone 6', 2023-12-12, 'A somewhat used Apple Iphone 6, some scratches else nice condition', 5000, 2023-03-26, 'Active', 'Iphone 6', 1, 1, 'Mathilda27');
-insert into listing values (2, 'Rich Dad Poor Dad', 2023-12-12, 'A book about how to become rich', 1000, 2023-03-26, 'Active', 'Rich Dad Poor Dad', 2, 1, 'MannyMansen42');
-insert into listing values (3, 'White T-Shirt', 2023-12-12, 'A white t-shirt', 1000, 2023-03-26, 'Active', 'White T-Shirt', 3, 1, 'Johnny45');
-insert into listing values (4, 'Red T-Shirt', 2023-12-12, 'A red t-shirt', 1000, 2023-03-26, 'Active', 'Red T-Shirt', 3, 1, 'SoulGoodman89');
-insert into listing values (5, 'Couche', 2023-12-12, 'A couche', 1000, 2023-03-26, 'Active', 'Couche', 5, 1, 'MannyMansen42');
+insert into listing values (1, 'Used Apple iPhone 6', '2023-12-12', 'A somewhat used Apple Iphone 6, some scratches else nice condition', 5000, '2023-03-26', 'ACTIVE', 'Iphone 6'         , 1, 1, 'Mathilda27');
+insert into listing values (2, 'Rich Dad Poor Dad'  , '2023-12-12', 'A book about how to become rich'                                   , 1000, '2023-03-26', 'ACTIVE', 'Rich Dad Poor Dad', 2, 1, 'MannyMansen42');
+insert into listing values (3, 'White T-Shirt'      , '2023-12-12', 'A white t-shirt'                                                   , 1000, '2023-03-26', 'ACTIVE', 'White T-Shirt'    , 3, 1, 'Johnny45');
+insert into listing values (4, 'Red T-Shirt'        , '2023-12-12', 'A red t-shirt'                                                     , 1000, '2023-03-26', 'SOLD', 'Red T-Shirt'      , 3, 1, 'SoulGoodman89');
+insert into listing values (5, 'Couche'             , '2023-12-12,', 'A couche'                                                          , 1000, '2023-03-26', 'ACTIVE', 'Couche'           , 5, 1, 'MannyMansen42');
 
