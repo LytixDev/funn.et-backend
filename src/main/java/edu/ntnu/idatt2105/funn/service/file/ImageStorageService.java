@@ -2,7 +2,6 @@ package edu.ntnu.idatt2105.funn.service.file;
 
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
