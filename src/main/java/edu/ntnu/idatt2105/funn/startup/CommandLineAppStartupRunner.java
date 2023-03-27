@@ -2,10 +2,8 @@ package edu.ntnu.idatt2105.funn.startup;
 
 import edu.ntnu.idatt2105.funn.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.funn.mapper.user.RegisterMapper;
-import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
-import edu.ntnu.idatt2105.funn.repository.user.UserRepository;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
