@@ -3,6 +3,7 @@ package edu.ntnu.idatt2105.funn.controller.user;
 import edu.ntnu.idatt2105.funn.dto.user.ChatDTO;
 import edu.ntnu.idatt2105.funn.dto.user.MessageDTO;
 import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
+import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.mapper.user.MessageMapper;
@@ -167,7 +168,7 @@ public class ChatController {
     @PathVariable("id") Long listingId,
     @PathVariable("username") String pathUsername,
     @AuthenticationPrincipal Auth auth
-  ) throws UserDoesNotExistsException, NullPointerException {
+  ) throws UserDoesNotExistsException, NullPointerException, PermissionDeniedException {
     LOGGER.info("Getting chat by listing {} and user {}", listingId, pathUsername);
 
     final String username = auth.getUsername();
@@ -175,8 +176,8 @@ public class ChatController {
     Listing listing = listingService.getListing(listingId);
 
     if (
-      !username.equals(pathUsername) && !listing.getUser().getUsername().equals(pathUsername)
-    ) throw new IllegalAccessError("Forbidden");
+      !username.equals(pathUsername) && !listing.getUser().getUsername().equals(username)
+    ) throw new PermissionDeniedException("Cannot access a chat you are not a part of.");
 
     User user = userService.getUserByUsername(pathUsername);
 
