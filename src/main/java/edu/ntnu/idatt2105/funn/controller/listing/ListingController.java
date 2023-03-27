@@ -320,11 +320,12 @@ public class ListingController {
     List<Image> images = imageService.getAllFilesByListingId(id);
     List<Long> imagesToKeep = listingDTO.getImagesToKeep();
     if (imagesToKeep != null) {
-      images.stream()
-      .filter(
-        f -> imagesToKeep.contains(f.getId()))
-        .collect(Collectors.toList());
-      LOGGER.info("Updated images: Before filter: {}, After filter: {}", images.size(), imagesToKeep.size());
+      images.stream().filter(f -> imagesToKeep.contains(f.getId())).collect(Collectors.toList());
+      LOGGER.info(
+        "Updated images: Before filter: {}, After filter: {}",
+        images.size(),
+        imagesToKeep.size()
+      );
     }
 
     requestedListing.setImages(images);

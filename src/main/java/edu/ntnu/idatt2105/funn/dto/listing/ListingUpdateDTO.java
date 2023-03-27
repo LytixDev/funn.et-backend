@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.funn.dto.listing;
 
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListingUpdateDTO extends ListingCreateDTO {
 
-    private String username;
+  private String username;
 
-    private List<Long> imagesToKeep;
+  private List<Long> imagesToKeep;
 }
