@@ -7,6 +7,7 @@ import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingUpdateDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -184,6 +185,8 @@ public class ListingController {
       .boxed()
       .collect(Collectors.toMap(i -> images[i], i -> imageAlts[i]));
 
+    LOGGER.info("Uploading {} images", imageAltMap.size());
+
     imageAltMap.forEach((image, alt) -> {
       LOGGER.info("Image upload request received");
 
@@ -311,28 +314,38 @@ public class ListingController {
       (!auth.getUsername().equals(listingDTO.getUsername()) && auth.getRole() != Role.ADMIN)
     ) throw new AccessDeniedException("You do not have permission to update this listing");
 
-    LOGGER.info("Recieveed request to update listing: {}", listingDTO);
+    LOGGER.info("Received request to update listing: {}", listingDTO);
 
     Listing requestedListing = listingMapper.listingCreateUpdateDTOToListing(listingDTO);
 
     requestedListing.setId(id);
+    User user = userService.getUserByUsername(listingDTO.getUsername());
+    requestedListing.setUser(user);
 
     // Filter images on images to keep if they images to keep is defined
     List<Image> images = imageService.getAllFilesByListingId(id);
-    List<Long> imagesToKeep = listingDTO.getImagesToKeep();
-    if (imagesToKeep != null) {
-      images.stream().filter(f -> imagesToKeep.contains(f.getId())).collect(Collectors.toList());
-      LOGGER.info(
-        "Updated images: Before filter: {}, After filter: {}",
-        images.size(),
-        imagesToKeep.size()
-      );
+    List<Image> imagesToKeep = new ArrayList<>();
+    List<Long> keepImageIds = listingDTO.getImagesToKeep();
+    LOGGER.info("KeepImageIds: {}", keepImageIds);
+    if (keepImageIds != null) {
+      images.forEach(i -> {
+        LOGGER.info("Image: {}", i);
+        if (!keepImageIds.contains(i.getId())) {
+          try {
+            imageService.deleteFile(i.getId());
+          } catch (FileNotFoundException | DatabaseException e) {
+            LOGGER.error("Could not delete image: {}.\nError: {}", i.getId(), e.getMessage());
+          }
+        } else {
+          imagesToKeep.add(i);
+        }
+      });
+      images = imagesToKeep;
     }
+    LOGGER.info("Images that are kept: {}", images);
+    LOGGER.info("Images left in database", imageService.getAllFilesByListingId(id));
 
     requestedListing.setImages(images);
-
-    User user = userService.getUserByUsername(listingDTO.getUsername());
-    requestedListing.setUser(user);
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
@@ -341,7 +354,10 @@ public class ListingController {
     LOGGER.info("Saved updated listing to database");
     ListingDTO updatedListingDTO = listingMapper.listingToListingDTO(updatedListing);
 
+    LOGGER.info("ListingDTO: {}", updatedListingDTO);
+
     if (listingDTO.getImages() != null) {
+      LOGGER.info("Uploading images: ");
       if (listingDTO.getImageAlts() == null) {
         String[] imageAlts = new String[listingDTO.getImages().length];
         for (int i = 0; i < listingDTO.getImages().length; i++) {
