@@ -26,6 +26,14 @@ public enum ListingValidationRules {
      */
     FULL_DESCRIPTION_MAX_LENGTH(512),
     /**
+     * Minimum length of a brief description.
+     */
+    BRIEF_DESCRIPTION_MIN_LENGTH(1),
+    /**
+     * Maximum length of a brief description.
+     */
+    BRIEF_DESCRIPTION_MAX_LENGTH(255),
+    /**
      * Minimum value of a price.
      */
     PRICE_MIN_VALUE(0),
@@ -36,7 +44,15 @@ public enum ListingValidationRules {
     /**
      * Maximum value of a quantity.
      */
-    CATEGORY_MAX_LENGTH(255);
+    CATEGORY_MAX_LENGTH(255),
+    /**
+     * Maximum amount of images.
+     */
+    IMAGE_AMOUNT_MAX(5),
+    /**
+     * Maximum size of an image.
+     */
+    IMAGE_SIZE_MAX(5242880);
 
     private final int value;
 

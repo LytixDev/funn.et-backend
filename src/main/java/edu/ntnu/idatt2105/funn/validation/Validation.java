@@ -1,5 +1,7 @@
 package edu.ntnu.idatt2105.funn.validation;
 
+import java.time.chrono.ChronoLocalDate;
+
 /**
  * Class for validating user input.
  * Base class for validation of user input for different models.
@@ -37,6 +39,7 @@ public abstract class Validation {
 
   /**
    * Checks if the given number is smaller than the given number.
+   * @param <T>    A subclass of the class number.
    * @param number The number to check.
    * @param max    The maximum number to check against.
    * @return True if the number is smaller than the length, false otherwise.
@@ -47,6 +50,7 @@ public abstract class Validation {
 
   /**
    * Check if the given number is smaller than or equal to the given number.
+   * @param <T>    A subclass of the class number.
    * @param number The number to check.
    * @return True if the number is smaller than or equal to the length, false otherwise.
    */
@@ -56,6 +60,7 @@ public abstract class Validation {
 
   /**
    * Checks if the given number is larger than the given number.
+   * @param <T>    The type of the number.
    * @param number The number to check.
    * @param min    The minimum number to check against.
    * @return True if the number is larger than the length, false otherwise.
@@ -66,6 +71,7 @@ public abstract class Validation {
 
   /**
    * Check if the given number is larger than or equal to the given number.
+   * @param <T>    A subclass of the class number.
    * @param number The number to check.
    * @return True if the number is larger than or equal to the length, false otherwise.
    */
@@ -106,12 +112,33 @@ public abstract class Validation {
 
   /**
    * Check if the given number is smaller than the given number.
-   * The subclass T must extend Number.
+   * @param <T>    A subclass of the class number.
    * @param number The number to check.
    * @param min    The minimum number to check against.
    * @return True if the number is smaller than the minimum, false otherwise.
    */
   public static <T extends Number> boolean isBetween(T number, T min, T max) {
     return number.doubleValue() >= min.doubleValue() && number.doubleValue() <= max.doubleValue();
+  }
+
+  /**
+   * Check if the given date is after the given date.
+   * @param <T>       The subclass of ChronoLocalDate.
+   * @param afterDate The date to check.
+   * @param beforeDate The date to check against.
+   * @return True if the date is after the given date, false otherwise.
+   */
+  public static <T extends ChronoLocalDate> boolean isAfter(T afterDate, T beforeDate) {
+    return afterDate.isAfter(beforeDate);
+  }
+
+  /**
+   * Check if a generic array is not null and not empty.
+   * @param <T> The type of the array.
+   * @param array The array to check.
+   * @return True if the array is empty, false otherwise.
+   */
+  public static <T> boolean isNotNullOrEmpty(T[] array) {
+    return !array == null && !array.length == 0;
   }
 }

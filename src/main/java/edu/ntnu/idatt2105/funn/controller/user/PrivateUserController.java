@@ -10,7 +10,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
-import edu.ntnu.idatt2105.funn.validation.Validation;
+import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -79,7 +79,7 @@ public class PrivateUserController {
   )
     throws UserDoesNotExistsException, PermissionDeniedException, BadCredentialsException, BadInputException {
     if (
-      !Validation.validatePartialUserUpdate(
+      !UserValidation.validatePartialUserUpdate(
         userUpdateDTO.getEmail(),
         userUpdateDTO.getFirstName(),
         userUpdateDTO.getLastName(),

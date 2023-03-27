@@ -38,10 +38,6 @@ public enum RegexPattern {
    */
   ADDRESS("^[a-zA-Z0-9]+(([',. -][a-zA-Z0-9 ])?[a-zA-Z0-9]*)*$"),
   /**
-   * Title regex pattern.
-   */
-  TITLE("^[a-zA-Z0-9]+(([',. -][a-zA-Z0-9 ])?[a-zA-Z0-9]*)*$"),
-  /**
    * Java variable name regex pattern.
    * Must be of characters a-z, A-Z, 0-9 and _.
    * Must start with a lowercase letter or _.

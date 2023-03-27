@@ -7,7 +7,7 @@ import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
-import edu.ntnu.idatt2105.funn.validation.Validation;
+import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.time.Duration;
 import java.time.Instant;
@@ -60,7 +60,7 @@ public class TokenController {
   @ResponseStatus(value = HttpStatus.CREATED)
   public String generateToken(@RequestBody AuthenticateDTO authenticate)
     throws UserDoesNotExistsException, BadCredentialsException, ResponseStatusException, BadInputException {
-    if (!Validation.validateUsername(authenticate.getUsername())) throw new BadInputException();
+    if (!UserValidation.validateUsername(authenticate.getUsername())) throw new BadInputException();
 
     LOGGER.info("Authenticating user: {}", authenticate.getUsername());
 

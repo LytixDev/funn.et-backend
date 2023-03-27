@@ -9,7 +9,7 @@ import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
-import edu.ntnu.idatt2105.funn.validation.Validation;
+import edu.ntnu.idatt2105.funn.validation.ListingValidation;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +99,7 @@ public class CategoryController {
     @RequestBody CategoryCreateDTO category,
     @AuthenticationPrincipal Auth auth
   ) throws CategoryAlreadyExistsException, BadInputException {
-    if (!Validation.validateCategory(category.getName())) throw new BadInputException();
+    if (!ListingValidation.validateCategory(category.getName())) throw new BadInputException();
 
     LOGGER.info("Auth: {}", auth);
 
@@ -139,7 +139,7 @@ public class CategoryController {
       "You do not have permission to delete a category"
     );
 
-    if (!Validation.validateCategory(category.getName())) throw new BadInputException();
+    if (!ListingValidation.validateCategory(category.getName())) throw new BadInputException();
 
     LOGGER.info("Updating category with id: {}", id);
 

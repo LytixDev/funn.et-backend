@@ -11,7 +11,7 @@ import edu.ntnu.idatt2105.funn.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
-import edu.ntnu.idatt2105.funn.validation.Validation;
+import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -83,7 +83,7 @@ public class PublicUserController {
   public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser)
     throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException, BadInputException {
     if (
-      !Validation.validateRegistrationForm(
+      !UserValidation.validateRegistrationForm(
         registerUser.getUsername(),
         registerUser.getEmail(),
         registerUser.getFirstName(),

@@ -14,7 +14,7 @@ import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.location.LocationService;
 import edu.ntnu.idatt2105.funn.service.location.PostCodeService;
-import edu.ntnu.idatt2105.funn.validation.Validation;
+import edu.ntnu.idatt2105.funn.validation.LocationValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -121,7 +121,7 @@ public class LocationController {
     );
 
     if (
-      !Validation.validateLocation(
+      !LocationValidation.validateLocation(
         locationResponseDTO.getAddress(),
         locationResponseDTO.getLatitude(),
         locationResponseDTO.getLongitude(),
@@ -181,7 +181,7 @@ public class LocationController {
     @RequestBody LocationCreateDTO locationCreateDTO
   ) throws LocationAlreadyExistsException, DatabaseException, BadInputException {
     if (
-      !Validation.validateLocation(
+      !LocationValidation.validateLocation(
         locationCreateDTO.getAddress(),
         locationCreateDTO.getLatitude(),
         locationCreateDTO.getLongitude(),
