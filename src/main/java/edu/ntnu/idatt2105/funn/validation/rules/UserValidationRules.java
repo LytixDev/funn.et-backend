@@ -35,7 +35,7 @@ public enum UserValidationRules {
   /**
    * Maximum length of an email.
    */
-  EMAIL_MAX_LENGTH(64);
+  EMAIL_MAX_LENGTH(128);
 
   private final int value;
 
