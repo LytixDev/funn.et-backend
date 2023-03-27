@@ -433,19 +433,21 @@ public class ListingController {
    * @throws ListingNotFoundException if a listing with the given id is not found
    * @throws NullPointerException if a listing is invalid
    * @throws DatabaseException if the database could not run an sql operation
+   * @throws PermissionDeniedException
    */
   @DeleteMapping(value = "/private/listings/{id}")
   public ResponseEntity<Void> deleteListing(
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
-  ) throws ListingNotFoundException, NullPointerException, DatabaseException, FileNotFoundException {
+  )
+    throws ListingNotFoundException, NullPointerException, DatabaseException, FileNotFoundException, PermissionDeniedException {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
     if (
       auth == null ||
       (!auth.getUsername().equals(listing.getUser().getUsername()) && auth.getRole() != Role.ADMIN)
-    ) throw new AccessDeniedException("You do not have permission to delete this listing");
+    ) throw new PermissionDeniedException("You do not have permission to delete this listing");
 
     listing
       .getImages()
