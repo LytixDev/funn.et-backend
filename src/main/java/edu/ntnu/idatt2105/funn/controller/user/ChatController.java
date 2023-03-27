@@ -56,7 +56,7 @@ public class ChatController {
    * @param username The username of the user.
    * @return The created chat.
    */
-  @PostMapping(value = "/listing/{id}/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PostMapping(value = "/listings/{id}/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ChatDTO> createChat(
     @PathVariable("id") Long id,
     @AuthenticationPrincipal Auth auth
@@ -158,7 +158,7 @@ public class ChatController {
    * @return The chat.
    */
   @GetMapping(
-    value = "/listing/{id}/chat/{username}",
+    value = "/listings/{id}/chat/{username}",
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   public ResponseEntity<ChatDTO> getChatByListingAndUser(

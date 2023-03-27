@@ -110,7 +110,7 @@ public class ListingController {
    * @return A list of all listings in the database.
    */
   @GetMapping(
-    value = "/public/listings/user/{username}",
+    value = "/public/listings/users/{username}",
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   @Operation(
