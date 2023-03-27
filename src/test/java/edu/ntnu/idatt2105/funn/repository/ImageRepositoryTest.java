@@ -12,11 +12,9 @@ import edu.ntnu.idatt2105.funn.model.location.PostCode;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.repository.file.ImageRepository;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,19 +83,19 @@ public class ImageRepositoryTest {
 
     user = entityManager.persist(user);
     entityManager.flush();
-    
+
     user2 = entityManager.persist(user2);
     entityManager.flush();
 
     postCode = entityManager.persist(postCode);
     entityManager.flush();
-    
+
     category = entityManager.persist(category);
     entityManager.flush();
-    
+
     category2 = entityManager.persist(category2);
     entityManager.flush();
-        
+
     Location location = Location
       .builder()
       .id(null)
@@ -123,41 +121,43 @@ public class ImageRepositoryTest {
     location2 = entityManager.persist(location2);
     entityManager.flush();
 
-    listing = Listing
-      .builder()
-      .id(null)
-      .title("Test")
-      .briefDescription("Test")
-      .fullDescription("Test")
-      .price(1000)
-      .category(category)
-      .expirationDate(LocalDate.of(2021, 12, 31))
-      .publicationDate(LocalDate.of(2020, 12, 31))
-      .user(user)
-      .status(Status.ACTIVE)
-      .location(location)
-      .build();
+    listing =
+      Listing
+        .builder()
+        .id(null)
+        .title("Test")
+        .briefDescription("Test")
+        .fullDescription("Test")
+        .price(1000)
+        .category(category)
+        .expirationDate(LocalDate.of(2021, 12, 31))
+        .publicationDate(LocalDate.of(2020, 12, 31))
+        .user(user)
+        .status(Status.ACTIVE)
+        .location(location)
+        .build();
 
-    listing2 = Listing
-      .builder()
-      .id(null)
-      .title("Test2")
-      .briefDescription("Test2")
-      .fullDescription("Test2")
-      .price(2000)
-      .category(category2)
-      .expirationDate(LocalDate.of(2021, 12, 31))
-      .publicationDate(LocalDate.of(2020, 12, 31))
-      .user(user2)
-      .status(Status.ACTIVE)
-      .location(location2)
-      .build();
-      
+    listing2 =
+      Listing
+        .builder()
+        .id(null)
+        .title("Test2")
+        .briefDescription("Test2")
+        .fullDescription("Test2")
+        .price(2000)
+        .category(category2)
+        .expirationDate(LocalDate.of(2021, 12, 31))
+        .publicationDate(LocalDate.of(2020, 12, 31))
+        .user(user2)
+        .status(Status.ACTIVE)
+        .location(location2)
+        .build();
+
     entityManager.persist(listing);
     entityManager.flush();
     entityManager.persist(listing2);
     entityManager.flush();
-    
+
     image = Image.builder().alt("Alt").listingId(1L).build();
     image2 = Image.builder().alt("Alt2").listingId(1L).build();
     image3 = Image.builder().alt("Alt3").listingId(1L).build();
@@ -178,12 +178,15 @@ public class ImageRepositoryTest {
     List<Image> images = null;
 
     try {
-      images = imageRepository.findAllByListingId(1L).orElseThrow(() -> new RuntimeException("No images found"));
+      images =
+        imageRepository
+          .findAllByListingId(1L)
+          .orElseThrow(() -> new RuntimeException("No images found"));
     } catch (Exception e) {
-        fail();
-        return;
+      fail();
+      return;
     }
-      
+
     assertEquals(3, images.size());
     assertEquals(image.getAlt(), images.get(0).getAlt());
     assertEquals(image2.getAlt(), images.get(1).getAlt());
