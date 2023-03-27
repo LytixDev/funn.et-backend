@@ -1,3 +1,8 @@
 package edu.ntnu.idatt2105.funn.validation;
 
-public class ImageValidation {}
+import edu.ntnu.idatt2105.funn.model.file.ImageFileTypes;
+
+public class ImageValidation {
+
+    
+}
