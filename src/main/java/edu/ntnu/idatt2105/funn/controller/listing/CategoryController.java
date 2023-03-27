@@ -2,10 +2,10 @@ package edu.ntnu.idatt2105.funn.controller.listing;
 
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
-import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.CategoryNotFoundException;
+import edu.ntnu.idatt2105.funn.exceptions.validation.BadInputException;
 import edu.ntnu.idatt2105.funn.mapper.listing.CategoryMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
@@ -19,10 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +49,7 @@ public class CategoryController {
   private final CategoryService categoryService;
 
   /**
-   * Get all categories
+   * Get all categories.
    * @return List of all categories
    */
   @GetMapping(value = "/public/categories", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,9 +72,10 @@ public class CategoryController {
   }
 
   /**
-   * Get category by id
-   * @param id
-   * @return Category
+   * Get category by id if it exists.
+   * @param id Id of category.
+   * @return the category with the given id.
+   * @throws CategoryNotFoundException if category does not exist.
    */
   @GetMapping(value = "/public/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
@@ -97,10 +96,12 @@ public class CategoryController {
   }
 
   /**
-   * Create category if it does not already exist
-   * @param category Category to create
-   * @return created category
-   * @throws CategoryAlreadyExistsException if category already exists
+   * Create category if it does not already existing in the database.
+   * @param category Category to create as a CategoryCreateDTO.
+   * @return The created category.
+   * @throws CategoryAlreadyExistsException if category already exists in the database.
+   * @throws BadInputException if category name is invalid.
+   * @throws PermissionDeniedException if user is not an admin.
    */
   @PostMapping(
     value = "/private/categories",
@@ -114,10 +115,10 @@ public class CategoryController {
   public ResponseEntity<CategoryDTO> createCategory(
     @RequestBody CategoryCreateDTO category,
     @AuthenticationPrincipal Auth auth
-  ) throws CategoryAlreadyExistsException, BadInputException {
+  ) throws CategoryAlreadyExistsException, BadInputException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
       "You do not have permission to create a category"
     );
 
@@ -160,7 +161,7 @@ public class CategoryController {
   ) throws CategoryNotFoundException, BadInputException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
       "You do not have permission to update a category"
     );
 
@@ -184,6 +185,7 @@ public class CategoryController {
   /**
    * Delete category if it exists
    * @param id Id of category to delete
+   * @return 204 No Content with no body.
    * @throws CategoryNotFoundException if category does not exist
    * @throws PermissionDeniedException if user is not an admin
    */
@@ -198,7 +200,7 @@ public class CategoryController {
   ) throws CategoryNotFoundException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new PermissionDeniedException(
       "You do not have permission to delete a category"
     );
 
@@ -208,6 +210,6 @@ public class CategoryController {
 
     LOGGER.info("Deleted category with id: {}", id);
 
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Image deleted");
+    return ResponseEntity.noContent().build();
   }
 }

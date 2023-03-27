@@ -2,9 +2,9 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
 import edu.ntnu.idatt2105.funn.dto.user.UserPatchDTO;
-import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.funn.exceptions.validation.BadInputException;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.model.user.User;

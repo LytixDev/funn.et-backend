@@ -1,7 +1,6 @@
 package edu.ntnu.idatt2105.funn.controller.file;
 
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
-import edu.ntnu.idatt2105.funn.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
@@ -14,11 +13,12 @@ import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.zalando.fauxpas.FauxPas;
 
 /**
  * Controller for image endpoints.
@@ -63,7 +64,7 @@ public class ImageController {
   /**
    * Gets a specific image from the server.
    * @param id The id of the image to get.
-   * @return The image.
+   * @return The image as a resource.
    * @throws IOException If the image could not be read.
    * @throws MalformedURLException If the image could not be found.
    */
@@ -74,11 +75,9 @@ public class ImageController {
   )
   public ResponseEntity<Resource> getImage(@PathVariable Long id)
     throws IOException, MalformedURLException {
-    Resource resource;
-
     LOGGER.info("Image download request received for id {}", id);
 
-    resource = imageStorageService.loadFile(id);
+    Resource resource = imageStorageService.loadFile(id);
 
     LOGGER.info("Image download successful");
 
@@ -117,35 +116,31 @@ public class ImageController {
       .boxed()
       .collect(Collectors.toMap(i -> images[i], i -> alts[i]));
 
-    imageAltMap.forEach((image, alt) -> {
-      ImageUploadDTO imageUploadDTO = new ImageUploadDTO();
-      imageUploadDTO.setAlt(alt);
-      imageUploadDTO.setImage(image);
+    // Allows for throwing checked exceptions in a lambda.
+    Function<Image, Image> saveImage = FauxPas.throwingFunction(imageService::saveFile);
 
+    // Allows for throwing checked exceptions in a lambda.
+    BiConsumer<MultipartFile, Long> storeImage = FauxPas.throwingBiConsumer((image, id) -> {
+      imageStorageService.init();
+      imageStorageService.store(image, id);
+    });
+
+    imageAltMap.forEach((image, alt) -> {
       LOGGER.info("Image upload request received");
 
       ImageResponseDTO dto = new ImageResponseDTO();
 
       Image imageFile = new Image();
 
-      imageFile.setAlt(imageUploadDTO.getAlt());
+      imageFile.setAlt(alt);
 
       LOGGER.info("Saving image file");
 
-      try {
-        imageFile = imageService.saveFile(imageFile);
-      } catch (DatabaseException e) {
-        throw new RuntimeException(e);
-      }
+      saveImage.apply(imageFile);
 
       LOGGER.info("Storing image file");
 
-      try {
-        imageStorageService.init();
-        imageStorageService.store(imageUploadDTO.getImage(), imageFile.getId());
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
-      }
+      storeImage.accept(image, imageFile.getId());
 
       LOGGER.info("Image upload successful");
 
@@ -171,7 +166,7 @@ public class ImageController {
   /**
    * Deletes an image from the server.
    * @param id The id of the image to delete.
-   * @return A response entity.
+   * @return 204 No Content with no body.
    * @throws FileNotFoundException If the image could not be found.
    * @throws IOException If the image could not be read.
    * @throws DatabaseException If the image could not be deleted.
@@ -182,7 +177,7 @@ public class ImageController {
     summary = "Deletes an image from the server",
     description = "Deletes an image from the server and returns a response entity."
   )
-  public ResponseEntity<String> deleteImage(
+  public ResponseEntity<Void> deleteImage(
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
   ) throws FileNotFoundException, IOException, DatabaseException, PermissionDeniedException {
@@ -206,6 +201,6 @@ public class ImageController {
 
     LOGGER.info("Image deleted from storage");
 
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Image deleted");
+    return ResponseEntity.noContent().build();
   }
 }

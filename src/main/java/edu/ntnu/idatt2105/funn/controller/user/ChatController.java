@@ -2,10 +2,10 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.ChatDTO;
 import edu.ntnu.idatt2105.funn.dto.user.MessageDTO;
-import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
+import edu.ntnu.idatt2105.funn.exceptions.validation.BadInputException;
 import edu.ntnu.idatt2105.funn.mapper.user.MessageMapper;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;

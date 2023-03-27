@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.funn.exceptions;
+package edu.ntnu.idatt2105.funn.exceptions.validation;
 
 /**
  * Exception thrown when the user inputs invalid data.

@@ -32,7 +32,7 @@ public class ListingValidation extends BaseValidation {
    * @return True if the category is valid, false otherwise.
    */
   public static boolean validateCategory(String categoryName) {
-    return validateCategory(categoryName);
+    return validateCategoryName(categoryName);
   }
 
   /**

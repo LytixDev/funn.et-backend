@@ -2,11 +2,11 @@ package edu.ntnu.idatt2105.funn.controller.user;
 
 import edu.ntnu.idatt2105.funn.dto.user.RegisterDTO;
 import edu.ntnu.idatt2105.funn.dto.user.UserDTO;
-import edu.ntnu.idatt2105.funn.exceptions.BadInputException;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.exceptions.validation.BadInputException;
 import edu.ntnu.idatt2105.funn.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.User;
