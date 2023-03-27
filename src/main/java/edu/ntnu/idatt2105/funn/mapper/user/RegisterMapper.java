@@ -22,7 +22,13 @@ public interface RegisterMapper {
    * @return A user object with the USER role
    */
   @Mappings(
-    { @Mapping(target = "role", constant = "USER"), @Mapping(target = "listings", ignore = true) }
+    {
+      @Mapping(target = "role", constant = "USER"),
+      @Mapping(target = "listings", ignore = true),
+      @Mapping(target = "chats", ignore = true),
+      @Mapping(target = "messages", ignore = true),
+      @Mapping(target = "favoriteListings", ignore = true),
+    }
   )
   User registerDTOtoUser(RegisterDTO registerDTO);
 }

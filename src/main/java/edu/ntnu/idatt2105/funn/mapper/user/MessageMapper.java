@@ -28,6 +28,7 @@ public interface MessageMapper {
    * @return A message object.
    */
   @Mapping(target = "sender", ignore = true)
+  @Mapping(target = "chat", ignore = true)
   Message messageDTOToMessage(MessageDTO messageDTO);
 
   /**

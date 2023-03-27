@@ -150,6 +150,7 @@ public abstract class ListingMapper {
       @Mapping(source = "location", target = "location", qualifiedByName = "getLocationId"),
       @Mapping(source = "user", target = "username", qualifiedByName = "getUsername"),
       @Mapping(source = "images", target = "imageResponse", qualifiedByName = "getImages"),
+      @Mapping(target = "isFavorite", ignore = true),
     }
   )
   public abstract ListingDTO listingToListingDTO(Listing listing);
@@ -164,6 +165,8 @@ public abstract class ListingMapper {
       @Mapping(source = "location", target = "location", qualifiedByName = "getLocation"),
       @Mapping(source = "username", target = "user", qualifiedByName = "getUser"),
       @Mapping(source = "imageResponse", target = "images", qualifiedByName = "getImages"),
+      @Mapping(target = "favoritedBy", ignore = true),
+      @Mapping(target = "chats", ignore = true),
     }
   )
   public abstract Listing listingDTOToListing(ListingDTO listingDTO)
@@ -180,6 +183,9 @@ public abstract class ListingMapper {
       @Mapping(target = "images", ignore = true),
       @Mapping(target = "id", ignore = true),
       @Mapping(source = "status", target = "status", qualifiedByName = "getStatus"),
+      @Mapping(target = "favoritedBy", ignore = true),
+      @Mapping(target = "chats", ignore = true),
+      @Mapping(target = "user", ignore = true),
     }
   )
   public abstract Listing listingCreateUpdateDTOToListing(ListingCreateUpdateDTO listingDTO)
