@@ -9,20 +9,22 @@ public enum RegexPattern {
   /**
    * Email regex pattern.
    * Must be of characters a-z, A-Z, 0-9, +, _, -, . and {@literal @}.
+   * Must contain {@literal @} and at least one character after {@literal @}.
    */
-  EMAIL("^[A-Za-z0-9+_.-]+@(.+)$"),
+  EMAIL("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"),
   /**
    * Password regex pattern.
-   * Must contain 1 uppercase letter, 1 lowercase letter, 1 number and be at least 8 characters long.
+   * Must contain 1 uppercase letter, 1 lowercase letter, 1 number.
    */
-  PASSWORD("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{9,64}$"),
+  PASSWORD("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$"),
   /**
    * Username regex pattern.
-   * Must be of characters a-z, A-Z, 0-9, ., _, - and be between 3 and 32 characters long.
+   * Atleast 3 characters.
+   * Must be of characters a-z, A-Z, 0-9, ., _, -.
    * Must not start or end with ., _, -.
-   * Must not contain two or more consecutive ., _, -.
+   * Must not contain two or more consecutive ., _, -.pr
    */
-  USERNAME("^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,30}[a-zA-Z0-9]$"),
+  USERNAME("^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,}[a-zA-Z0-9]$"),
   /**
    * Name regex pattern.
    * Must be of characters a-z, A-Z, ', ., -.
@@ -30,13 +32,6 @@ public enum RegexPattern {
    * Must not contain two or more consecutive ', ., -.
    */
   NAME("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"),
-  /**
-   * Image alt text regex pattern.
-   * Must be of characters a-z, A-Z, 0-9, ', . and -.
-   * Must not start or end with ', ., -.
-   * Must not contain two or more consecutive ', ., -.
-   */
-  IMAGE_ALT("^[a-zA-Z0-9]+(([',. -][a-zA-Z0-9 ])?[a-zA-Z0-9]*)*$"),
   /**
    * Address regex pattern.
    * Must be of characters a-z, A-Z, 0-9, ', . and -.
