@@ -43,6 +43,7 @@ public class ChatValidationTest {
     "message message message " +
     "message message message " +
     "message message message ";
+
   private final String nullMessage = null;
   private final String emptyMessage = "";
 
