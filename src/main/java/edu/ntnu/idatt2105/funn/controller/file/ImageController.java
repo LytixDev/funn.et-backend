@@ -69,7 +69,7 @@ public class ImageController {
    */
   @GetMapping("/public/images/{id}")
   @Operation(
-    summary = "Returns an image from the server.", 
+    summary = "Returns an image from the server.",
     description = "Returns an image from the server as a resource to be downloaded."
   )
   public ResponseEntity<Resource> getImage(@PathVariable Long id)
@@ -100,7 +100,8 @@ public class ImageController {
    * @throws DatabaseException If the images could not be saved.
    */
   @PostMapping("/private/images")
-  @Operation(summary = "Uploads images to the server", 
+  @Operation(
+    summary = "Uploads images to the server",
     description = "Uploads images to the server and returns a list of image response DTOs."
   )
   public ResponseEntity<List<ImageResponseDTO>> uploadImages(
@@ -177,7 +178,8 @@ public class ImageController {
    * @throws PermissionDeniedException If the user does not have permission to delete the image.
    */
   @DeleteMapping("/private/images/{id}")
-  @Operation(summary = "Deletes an image from the server", 
+  @Operation(
+    summary = "Deletes an image from the server",
     description = "Deletes an image from the server and returns a response entity."
   )
   public ResponseEntity<String> deleteImage(

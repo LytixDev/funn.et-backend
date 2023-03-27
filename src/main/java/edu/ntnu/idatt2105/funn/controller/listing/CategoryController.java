@@ -13,7 +13,6 @@ import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
 import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import edu.ntnu.idatt2105.funn.validation.ListingValidation;
 import io.swagger.v3.oas.annotations.Operation;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -56,9 +55,11 @@ public class CategoryController {
    * @return List of all categories
    */
   @GetMapping(value = "/public/categories", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Gets all categories", description = "Gets all categories that are available in the database.")
+  @Operation(
+    summary = "Gets all categories",
+    description = "Gets all categories that are available in the database."
+  )
   public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-
     LOGGER.info("Getting all categories");
 
     List<CategoryDTO> categories = categoryService
@@ -78,10 +79,12 @@ public class CategoryController {
    * @return Category
    */
   @GetMapping(value = "/public/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Gets a category by id.", description = "Gets a category by id that is given if it is available in the database.")
+  @Operation(
+    summary = "Gets a category by id.",
+    description = "Gets a category by id that is given if it is available in the database."
+  )
   public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id)
     throws CategoryNotFoundException {
-    
     LOGGER.info("Getting category with id: {}", id);
 
     CategoryDTO category = CategoryMapper.INSTANCE.categoryToCategoryDTO(
@@ -104,18 +107,23 @@ public class CategoryController {
     consumes = { MediaType.APPLICATION_JSON_VALUE },
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
-  @Operation(summary = "Creates a category.", description = "Creates a category if it does not already exist in the database.")
+  @Operation(
+    summary = "Creates a category.",
+    description = "Creates a category if it does not already exist in the database."
+  )
   public ResponseEntity<CategoryDTO> createCategory(
     @RequestBody CategoryCreateDTO category,
     @AuthenticationPrincipal Auth auth
   ) throws CategoryAlreadyExistsException, BadInputException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) 
-      throw new AccessDeniedException("You do not have permission to create a category");
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+      "You do not have permission to create a category"
+    );
 
-    if (!ListingValidation.validateCategory(category.getName())) 
-      throw new BadInputException("The category name is invalid");
+    if (!ListingValidation.validateCategory(category.getName())) throw new BadInputException(
+      "The category name is invalid"
+    );
 
     LOGGER.info("Creating category with name: {}", category);
 
@@ -141,7 +149,10 @@ public class CategoryController {
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE
   )
-  @Operation(summary = "Updates a category.", description = "Updates a category if it exists in the database.")
+  @Operation(
+    summary = "Updates a category.",
+    description = "Updates a category if it exists in the database."
+  )
   public ResponseEntity<CategoryDTO> updateCategory(
     @PathVariable Long id,
     @RequestBody CategoryDTO category,
@@ -149,11 +160,13 @@ public class CategoryController {
   ) throws CategoryNotFoundException, BadInputException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) 
-      throw new AccessDeniedException("You do not have permission to update a category");
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+      "You do not have permission to update a category"
+    );
 
-    if (!ListingValidation.validateCategory(category.getName())) 
-      throw new BadInputException("The category name is invalid");
+    if (!ListingValidation.validateCategory(category.getName())) throw new BadInputException(
+      "The category name is invalid"
+    );
 
     LOGGER.info("Updating category with id: {}", id);
 
@@ -175,15 +188,19 @@ public class CategoryController {
    * @throws PermissionDeniedException if user is not an admin
    */
   @DeleteMapping(value = "/private/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Deletes a category.", description = "Deletes a category if it exists in the database.")
+  @Operation(
+    summary = "Deletes a category.",
+    description = "Deletes a category if it exists in the database."
+  )
   public ResponseEntity<String> deleteCategory(
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
   ) throws CategoryNotFoundException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
 
-    if (!AuthValidation.hasRole(auth, Role.ADMIN)) 
-      throw new AccessDeniedException("You do not have permission to delete a category");
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException(
+      "You do not have permission to delete a category"
+    );
 
     LOGGER.info("Deleting category with id: {}", id);
 
