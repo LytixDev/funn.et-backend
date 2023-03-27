@@ -48,7 +48,7 @@ public class PublicUserControllerTest {
     try {
       mvc
         .perform(
-          MockMvcRequestBuilders.get("/api/v1/public/user/test").accept(MediaType.APPLICATION_JSON)
+          MockMvcRequestBuilders.get("/api/v1/public/users/test").accept(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());
     } catch (Exception e) {
@@ -63,7 +63,7 @@ public class PublicUserControllerTest {
     try {
       mvc
         .perform(
-          MockMvcRequestBuilders.get("/api/v1/public/user/test").accept(MediaType.APPLICATION_JSON)
+          MockMvcRequestBuilders.get("/api/v1/public/users/test").accept(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isNotFound());
     } catch (Exception e) {
@@ -90,7 +90,7 @@ public class PublicUserControllerTest {
       mvc
         .perform(
           MockMvcRequestBuilders
-            .post("/api/v1/public/user")
+            .post("/api/v1/public/users")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(
@@ -129,7 +129,7 @@ public class PublicUserControllerTest {
   //    mvc
   //      .perform(
   //        MockMvcRequestBuilders
-  //          .post("/api/v1/public/user")
+  //          .post("/api/v1/public/users")
   //          .accept(MediaType.APPLICATION_JSON)
   //          .contentType(MediaType.APPLICATION_JSON)
   //          .content(

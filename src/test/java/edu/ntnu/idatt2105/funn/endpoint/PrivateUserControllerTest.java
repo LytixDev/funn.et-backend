@@ -55,7 +55,7 @@ public class PrivateUserControllerTest {
       mvc
         .perform(
           MockMvcRequestBuilders
-            .get("/api/v1/private/user/me")
+            .get("/api/v1/private/users/me")
             .with(SecurityMockMvcRequestPostProcessors.user(user))
             .accept(MediaType.APPLICATION_JSON)
         )
@@ -74,7 +74,7 @@ public class PrivateUserControllerTest {
   //     mvc
   //       .perform(
   //         MockMvcRequestBuilders
-  //           .get("/api/v1/private/user/me")
+  //           .get("/api/v1/private/users/me")
   //           .with(SecurityMockMvcRequestPostProcessors.user("test"))
   //           .accept(MediaType.APPLICATION_JSON)
   //       )
