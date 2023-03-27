@@ -21,7 +21,7 @@ public interface FileStorageService {
 
   Resource loadFile(Long id) throws IOException, MalformedURLException, FileNotFoundException;
 
-  void deleteFile(Long id) throws IOException;
+  void deleteFile(Long id) throws IOException, FileNotFoundException;
 
   Stream<Path> loadFiles(List<Long> fileIds) throws IOException;
 }

@@ -2,7 +2,7 @@ package edu.ntnu.idatt2105.funn.mapper.listing;
 
 import edu.ntnu.idatt2105.funn.controller.file.ImageController;
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
-import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateUpdateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
@@ -32,7 +32,7 @@ import org.zalando.fauxpas.FauxPas;
 /**
  * Class used to map between Listing and ListingDTO.
  * @author Nicolai H. B, Callum G.
- * @version 1.1 - 18.3.2023
+ * @version 1.2 - 27.3.2023
  */
 @RequiredArgsConstructor
 @Mapper(componentModel = "spring")
@@ -182,6 +182,6 @@ public abstract class ListingMapper {
       @Mapping(source = "status", target = "status", qualifiedByName = "getStatus"),
     }
   )
-  public abstract Listing listingCreateDTOToListing(ListingCreateDTO listingDTO)
+  public abstract Listing listingCreateUpdateDTOToListing(ListingCreateUpdateDTO listingDTO)
     throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException;
 }

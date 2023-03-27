@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import edu.ntnu.idatt2105.funn.dto.listing.CategoryDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
+import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateUpdateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -175,7 +176,7 @@ public class ListingMapperTest {
 
   @Test
   public void testMapCreateDTOToListing() {
-    ListingCreateDTO dto = ListingCreateDTO
+    ListingCreateUpdateDTO dto = ListingCreateUpdateDTO
       .builder()
       .title("title")
       .price(1000)
@@ -191,7 +192,7 @@ public class ListingMapperTest {
     Listing listing;
 
     try {
-      listing = listingMapper.listingCreateDTOToListing(dto);
+      listing = listingMapper.listingCreateUpdateDTOToListing(dto);
     } catch (Exception e) {
       fail(e.getMessage());
       return;
