@@ -74,6 +74,8 @@ public class UserServiceIntegrationTest {
 
     when(userRepository.findByUsername(existingUser.getUsername()))
       .thenReturn(Optional.of(existingUser));
+    
+    when(userRepository.existsById(existingUser.getUsername())).thenReturn(true);
 
     when(userRepository.findByEmail(existingUser.getEmail())).thenReturn(Optional.of(existingUser));
 

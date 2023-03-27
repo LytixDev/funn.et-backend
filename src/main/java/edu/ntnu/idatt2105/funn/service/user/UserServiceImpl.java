@@ -135,10 +135,11 @@ public class UserServiceImpl implements UserService {
    * @throws NullPointerException if user is null.
    */
   public User updateUser(@NonNull User user) throws UserDoesNotExistsException {
-    // TODO: Fix This Method
+    if (!userRepository.existsById(user.getUsername())) 
+      throw new UserDoesNotExistsException();
     user.setPassword(hashPassword(user.getPassword()));
 
-    return userRepository.save(getUserByUsername(user.getUsername()));
+    return userRepository.save(user);
   }
 
   @Override

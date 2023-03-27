@@ -15,6 +15,8 @@ import edu.ntnu.idatt2105.funn.repository.listing.CategoryRepository;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryServiceImpl;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,17 +48,26 @@ public class CategoryServiceIntegrationTest {
 
   private Category newCategory;
 
+  private Category newNewCategory;
+
   @Before
   public void setUp() {
     existingCategory = Category.builder().id(1L).name("ExistingCategory").build();
+
+    newNewCategory = Category.builder().name("New").build();
 
     newCategory = Category.builder().id(2L).name("NewCategory").build();
 
     when(categoryRepository.existsById(existingCategory.getId())).thenReturn(true);
     when(categoryRepository.existsById(newCategory.getId())).thenReturn(false);
+    when(categoryRepository.existsByName(existingCategory.getName())).thenReturn(true);
+    when(categoryRepository.existsByName(newCategory.getName())).thenReturn(false);
 
     when(categoryRepository.save(existingCategory)).thenReturn(existingCategory);
     when(categoryRepository.save(newCategory)).thenReturn(newCategory);
+    when(categoryRepository.save(newNewCategory)).thenReturn(newNewCategory);
+
+    when(categoryRepository.existsByName(newCategory.getName())).thenReturn(false);
 
     when(categoryRepository.findById(existingCategory.getId()))
       .thenReturn(java.util.Optional.of(existingCategory));
@@ -79,14 +90,14 @@ public class CategoryServiceIntegrationTest {
   public void testCategorySaveNewCategory() {
     Category found;
     try {
-      found = categoryService.createCategory(newCategory);
+      found = categoryService.createCategory(newNewCategory);
     } catch (Exception e) {
       e.printStackTrace();
       fail();
       return;
     }
-    assertEquals(found.getId(), newCategory.getId());
-    assertEquals(found.getName(), newCategory.getName());
+    assertEquals(found.getId(), newNewCategory.getId());
+    assertEquals(found.getName(), newNewCategory.getName());
   }
 
   @Test
