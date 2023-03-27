@@ -6,10 +6,12 @@ import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.user.EmailAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UserDoesNotExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.user.UsernameAlreadyExistsException;
+import edu.ntnu.idatt2105.funn.exceptions.validation.BadInputException;
 import edu.ntnu.idatt2105.funn.mapper.user.RegisterMapper;
 import edu.ntnu.idatt2105.funn.mapper.user.UserMapper;
 import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
+import edu.ntnu.idatt2105.funn.validation.UserValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -53,7 +55,9 @@ public class PublicUserController {
     tags = { "user" }
   )
   public ResponseEntity<UserDTO> getUser(@PathVariable String username)
-    throws UserDoesNotExistsException {
+    throws BadInputException, UserDoesNotExistsException {
+    if (!UserValidation.validateUsername(username)) throw new BadInputException("Invalid username");
+
     LOGGER.info("GET request for user: {}", username);
     User user = userService.getUserByUsername(username);
 
@@ -79,7 +83,17 @@ public class PublicUserController {
   )
   @Operation(summary = "Create a new user", description = "Create a new user", tags = { "user" })
   public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser)
-    throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
+    throws BadInputException, UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
+    if (
+      !UserValidation.validateRegistrationForm(
+        registerUser.getUsername(),
+        registerUser.getEmail(),
+        registerUser.getFirstName(),
+        registerUser.getLastName(),
+        registerUser.getPassword()
+      )
+    ) throw new BadInputException();
+
     LOGGER.info("POST request for user: {}", registerUser);
 
     User user = RegisterMapper.INSTANCE.registerDTOtoUser(registerUser);

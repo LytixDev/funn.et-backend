@@ -32,5 +32,6 @@ public interface ListingService {
 
   List<Listing> getListingsByUser(@NonNull String username) throws NullPointerException;
 
-  Page<Listing> searchListingsPaginated(SearchRequest searchRequest) throws NullPointerException;
+  Page<Listing> searchListingsPaginated(@NonNull SearchRequest searchRequest)
+    throws NullPointerException;
 }

@@ -25,9 +25,9 @@ public class SearchRequest implements Serializable {
 
   private List<SortRequest> sortRequests;
 
-  private int page;
+  private Integer page;
 
-  private int size;
+  private Integer size;
 
   public List<FilterRequest> getFilterRequests() {
     if (filterRequests == null) {

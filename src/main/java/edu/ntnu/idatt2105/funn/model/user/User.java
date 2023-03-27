@@ -27,7 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
   @Id
-  @Column(name = "`username`", length = 64, nullable = false)
+  @Column(name = "`username`", length = 32, nullable = false)
   @NonNull
   private String username;
 

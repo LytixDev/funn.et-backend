@@ -156,6 +156,7 @@
 			<version>5.2.2</version>
 		</dependency>
 
+		<!-- Faux Pas -->
 		<dependency>
 			<groupId>org.zalando</groupId>
 			<artifactId>faux-pas</artifactId>

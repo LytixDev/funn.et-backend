@@ -71,7 +71,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     Exception ex,
     HttpStatus status
   ) {
-    ex.printStackTrace();
     LOGGER.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage());
     ExceptionResponse response = new ExceptionResponse(ex.getClass().getSimpleName());
     return new ResponseEntity<>(response, new HttpHeaders(), status);

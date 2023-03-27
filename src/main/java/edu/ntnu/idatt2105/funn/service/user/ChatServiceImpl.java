@@ -57,15 +57,10 @@ public class ChatServiceImpl implements ChatService {
    * @return The chat.
    */
   @Override
-  public Chat getChat(@NonNull User user, @NonNull Long id) {
+  public Chat getChat(@NonNull Long id) {
     Chat chat = chatRepository
       .findById(id)
       .orElseThrow(() -> new IllegalArgumentException("Chat does not exist"));
-
-    if (
-      !chat.getMessager().getUsername().equals(user.getUsername()) &&
-      !chat.getListing().getUser().getUsername().equals(user.getUsername())
-    ) throw new IllegalArgumentException("Cannot get chat you are not a part of");
 
     return chat;
   }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public interface ChatService {
   Chat createChat(User user, Listing listing) throws IllegalArgumentException;
 
-  Chat getChat(User user, Long id);
+  Chat getChat(Long id);
 
   Chat getChat(User user, Listing listing);
 
