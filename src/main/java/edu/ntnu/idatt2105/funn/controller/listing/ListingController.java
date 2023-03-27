@@ -4,8 +4,10 @@ import edu.ntnu.idatt2105.funn.controller.file.ImageController;
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
+import edu.ntnu.idatt2105.funn.dto.listing.ListingUpdateDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
 import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
+import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -17,6 +19,7 @@ import edu.ntnu.idatt2105.funn.mapper.listing.ListingMapper;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Role;
+import edu.ntnu.idatt2105.funn.model.user.User;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
@@ -65,7 +68,7 @@ import org.zalando.fauxpas.FauxPas;
  * Mappings for getting all, getting one,
  * creating, updating and deleting listings.
  * @author Nicolai H. B., Carl G., Callum G.
- * @version 1.3 - 25.3.2023
+ * @version 1.5 - 27.3.2023
  */
 @RestController
 @EnableAutoConfiguration
@@ -223,6 +226,8 @@ public class ListingController {
     );
 
     imageStorageService.init();
+    
+    LOGGER.info("Uploading {} images", imageAltMap.size());
 
     imageAltMap.forEach((image, alt) -> {
       LOGGER.info("Image upload request received");
@@ -319,8 +324,8 @@ public class ListingController {
 
     final String username = auth.getUsername();
 
-    LOGGER.info("{] requested to create listing: {}", username, listingDTO);
-    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+    LOGGER.info("Recieved request to create listing: {}", listingDTO);
+    Listing requestedListing = listingMapper.listingCreateUpdateDTOToListing(listingDTO);
 
     requestedListing.setUser(userService.getUserByUsername(username));
 
@@ -368,21 +373,49 @@ public class ListingController {
     produces = { MediaType.APPLICATION_JSON_VALUE }
   )
   public ResponseEntity<ListingDTO> updateListing(
-    @ModelAttribute ListingCreateDTO listingDTO,
+    @ModelAttribute ListingUpdateDTO listingDTO,
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
   )
-    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
+    if (
+      auth == null ||
+      (!auth.getUsername().equals(listingDTO.getUsername()) && auth.getRole() != Role.ADMIN)
+    ) throw new PermissionDeniedException("You do not have permission to update this listing");
 
-    //TODO: Use listing updateDTO?
+    LOGGER.info("Received request to update listing: {}", listingDTO);
 
-    LOGGER.info("Recieveed request to update listing: {}", listingDTO);
-
-    Listing requestedListing = listingMapper.listingCreateDTOToListing(listingDTO);
+    Listing requestedListing = listingMapper.listingCreateUpdateDTOToListing(listingDTO);
 
     requestedListing.setId(id);
-    requestedListing.setImages(imageService.getAllFilesByListingId(id));
+    User user = userService.getUserByUsername(listingDTO.getUsername());
+    requestedListing.setUser(user);
+
+    // Filter images on images to keep if they images to keep is defined
+    List<Image> images = imageService.getAllFilesByListingId(id);
+    List<Image> imagesToKeep = new ArrayList<>();
+    List<Long> keepImageIds = listingDTO.getImagesToKeep();
+    LOGGER.info("KeepImageIds: {}", keepImageIds);
+    if (keepImageIds != null) {
+      images.forEach(i -> {
+        LOGGER.info("Image: {}", i);
+        if (!keepImageIds.contains(i.getId())) {
+          try {
+            imageStorageService.init();
+            imageStorageService.deleteFile(i.getId());
+          } catch (FileNotFoundException | IOException e) {
+            LOGGER.error("Could not delete image: {}.\nError: {}", i.getId(), e.getMessage());
+          }
+        } else {
+          imagesToKeep.add(i);
+        }
+      });
+      images = imagesToKeep;
+    }
+    LOGGER.info("Images that are kept: {}", images);
+
+    requestedListing.setImages(images);
 
     LOGGER.info("Mapped DTO to listing: {}", requestedListing);
 
@@ -501,6 +534,7 @@ public class ListingController {
    * @throws PermissionDeniedException if the user is not an admin or the owner of the listing.
    * @throws NullPointerException if a listing is invalid
    * @throws DatabaseException if the database could not run an sql operation
+   * @throws PermissionDeniedException
    */
   @DeleteMapping(value = "/private/listings/{id}")
   @Operation(
@@ -511,7 +545,7 @@ public class ListingController {
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
   )
-    throws ListingNotFoundException, PermissionDeniedException, NullPointerException, DatabaseException {
+    throws ListingNotFoundException, PermissionDeniedException, NullPointerException, FileNotFoundException, DatabaseException {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
@@ -527,6 +561,8 @@ public class ListingController {
           imageStorageService.deleteFile(image.getId());
         } catch (IOException e) {
           throw new UncheckedIOException(e);
+        } catch (FileNotFoundException e) {
+          LOGGER.error("File not found: {}", image.getId());
         }
       });
 

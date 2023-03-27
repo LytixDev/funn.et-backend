@@ -90,13 +90,13 @@ To run this application you will need
    ```sh
    cp .env.example .env
    ```
-3. Start the database
+3. Start the database (note: docker must be running)
    ```sh
    make database
    ```
-4. Start the application
+3. Start the application
    ```sh
-   make run
+   make
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
