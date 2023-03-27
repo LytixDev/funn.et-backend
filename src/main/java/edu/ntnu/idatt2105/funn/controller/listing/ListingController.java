@@ -313,11 +313,13 @@ public class ListingController {
 
     // Filter images on images to keep if they images to keep is defined
     List<Image> images = imageService.getAllFilesByListingId(id);
-    if (images != null) {
+    List<Long> imagesToKeep = listingDTO.getImagesToKeep();
+    if (imagesToKeep != null) {
       images.stream()
-        .filter(
-          f -> listingDTO.getImagesToKeep().contains(f.getId()))
+      .filter(
+        f -> imagesToKeep.contains(f.getId()))
         .collect(Collectors.toList());
+      LOGGER.info("Updated images: Before filter: {}, After filter: {}", images.size(), imagesToKeep.size());
     }
 
     requestedListing.setImages(images);
