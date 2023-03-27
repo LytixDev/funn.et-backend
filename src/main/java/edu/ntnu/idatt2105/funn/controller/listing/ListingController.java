@@ -551,7 +551,12 @@ public class ListingController {
 
     if (
       !AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, listing.getUser().getUsername())
-    ) throw new PermissionDeniedException("You do not have permission to delete this listing");
+    ) throw new PermissionDeniedException("User is not an admin or the owner of the listing");
+
+    BiConsumer<String, Listing> saveImage = FauxPas.throwingBiConsumer(
+      userService::favoriteOrUnfavoriteListing
+    );
+    listing.getFavoritedBy().forEach(user -> saveImage.accept(user.getUsername(), listing));
 
     listing
       .getImages()
