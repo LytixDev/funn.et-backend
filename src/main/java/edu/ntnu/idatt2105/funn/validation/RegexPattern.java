@@ -12,7 +12,7 @@ public enum RegexPattern {
    * Must contain {@literal @} and at least one character after {@literal @}.
    */
   EMAIL(
-    "^(?=.{1,}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+    "^(?=.{1,}@)[ÆØÅæøåA-Za-z0-9_-]+(\\.[ÆØÅæøåA-Za-z0-9_-]+)*@[^-][ÆØÅæøåA-Za-z0-9-]+(\\.[ÆØÅæøåA-Za-z0-9-]+)*(\\.[ÆØÅæøåA-Za-z]{2,})$"
   ),
   /**
    * Password regex pattern.
@@ -33,14 +33,14 @@ public enum RegexPattern {
    * Must not start or end with ', ., -.
    * Must not contain two or more consecutive ', ., -.
    */
-  NAME("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"),
+  NAME("^[ÆØÅæøåa-zA-Z]+(([',. -][ÆØÅæøåa-zA-Z ])?[a-zA-Z]*)*$"),
   /**
    * Address regex pattern.
    * Must be of characters a-z, A-Z, 0-9, ', . and -.
    * Must not start or end with ', ., -.
    * Must not contain two or more consecutive ', ., -.
    */
-  ADDRESS("^[a-zA-Z0-9]+(([',. -][a-zA-Z0-9 ])?[a-zA-Z0-9]*)*$"),
+  ADDRESS("^[ÆØÅæøåa-zA-Z0-9]+(([',. -][ÆØÅæøåa-zA-Z0-9 ])?[ÆØÅæøåa-zA-Z0-9]*)*$"),
   /**
    * Java variable name regex pattern.
    * Must be of characters a-z, A-Z, 0-9 and _.

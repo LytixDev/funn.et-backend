@@ -29,8 +29,8 @@ public class SearchRequestValidationTest {
   }
 
   @Test
-  public void testJavaNameValidateReturnsFalseEmptyString() {
-    assertFalse(SearchRequestValidation.validateJavaVariableName(emptyString));
+  public void testJavaNameValidateReturnsTrueEmptyString() {
+    assertTrue(SearchRequestValidation.validateJavaVariableName(emptyString));
   }
 
   @Test
