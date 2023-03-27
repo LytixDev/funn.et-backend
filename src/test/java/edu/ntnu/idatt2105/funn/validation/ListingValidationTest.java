@@ -42,7 +42,6 @@ public class ListingValidationTest {
     "message message message ";
 
   private final String goodCategoryName = "category";
-  private final String badCategoryName = "category&&&category!";
 
   private final String goodDescription = "description";
 
@@ -56,12 +55,7 @@ public class ListingValidationTest {
   public void testCategoryNameValidateReturnsTrue() {
     assertTrue(ListingValidation.validateCategoryName(goodCategoryName));
   }
-
-  @Test
-  public void testCategoryNameValidateReturnsFalse() {
-    assertFalse(ListingValidation.validateCategoryName(badCategoryName));
-  }
-
+  
   @Test
   public void testCategoryNameValidateReturnsFalseOnEmptyString() {
     assertFalse(ListingValidation.validateCategoryName(emptyString));

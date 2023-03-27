@@ -21,7 +21,6 @@ public class ListingValidation extends BaseValidation {
   public static boolean validateCategoryName(String categoryName) {
     return (
       isNotNullOrEmpty(categoryName) &&
-      categoryName.matches(RegexPattern.NAME.getPattern()) &&
       isSmallerThan(categoryName, ListingValidationRules.CATEGORY_MAX_LENGTH.getValue())
     );
   }
