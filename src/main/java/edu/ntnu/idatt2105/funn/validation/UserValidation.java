@@ -7,7 +7,7 @@ import edu.ntnu.idatt2105.funn.validation.rules.UserValidationRules;
  * @author Callum G.
  * @version 1.0 - 27.03.2023
  */
-public class UserValidation extends Validation {
+public class UserValidation extends BaseValidation {
 
   /**
    * Checks if the given string is a valid email.

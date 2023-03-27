@@ -16,7 +16,7 @@ spring:
   servlet:
     multipart:
       maxFileSize: 10485760B
-      maxRequestSize: 52428800B
+      maxRequestSize: 524288000B
 
 springdoc:
   swagger-ui:

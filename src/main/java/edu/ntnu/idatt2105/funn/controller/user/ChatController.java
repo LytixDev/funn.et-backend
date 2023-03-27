@@ -16,7 +16,6 @@ import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
 import edu.ntnu.idatt2105.funn.validation.ChatValidation;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -257,7 +256,7 @@ public class ChatController {
   ) throws UserDoesNotExistsException, BadInputException, NullPointerException {
     if (!ChatValidation.validateMessage(messageDTO.getMessage())) throw new BadInputException();
 
-    final String username =  auth.getUsername();
+    final String username = auth.getUsername();
     User sender = userService.getUserByUsername(username);
 
     LOGGER.info("Message to send: {}", messageDTO.getMessage());

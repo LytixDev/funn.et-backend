@@ -10,7 +10,7 @@ import edu.ntnu.idatt2105.funn.validation.rules.SearchRequestValidationRules;
  * @author Callum G.
  * @version 1.0 - 27.03.2023
  */
-public class SearchRequestValidation extends Validation {
+public class SearchRequestValidation extends BaseValidation {
 
   /**
    * Validate a key word.

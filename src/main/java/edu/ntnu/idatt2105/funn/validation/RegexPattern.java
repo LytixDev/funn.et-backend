@@ -31,6 +31,13 @@ public enum RegexPattern {
    */
   NAME("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"),
   /**
+   * Image alt text regex pattern.
+   * Must be of characters a-z, A-Z, 0-9, ', . and -.
+   * Must not start or end with ', ., -.
+   * Must not contain two or more consecutive ', ., -.
+   */
+  IMAGE_ALT("^[a-zA-Z0-9]+(([',. -][a-zA-Z0-9 ])?[a-zA-Z0-9]*)*$"),
+  /**
    * Address regex pattern.
    * Must be of characters a-z, A-Z, 0-9, ', . and -.
    * Must not start or end with ', ., -.

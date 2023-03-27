@@ -8,7 +8,7 @@ import java.time.chrono.ChronoLocalDate;
  * @author Callum G.
  * @version 1.0 - 27.03.2023
  */
-public abstract class Validation {
+public abstract class BaseValidation {
 
   /**
    * Checks if the given string is null or empty.
@@ -139,6 +139,13 @@ public abstract class Validation {
    * @return True if the array is empty, false otherwise.
    */
   public static <T> boolean isNotNullOrEmpty(T[] array) {
-    return !array == null && !array.length == 0;
+    return array != null && array.length != 0;
+  }
+
+  public static <T extends Number> boolean validatePositive(T[] array) {
+    boolean valid = true;
+    for (T t : array) valid &= isLargerThan(t, 0);
+
+    return valid;
   }
 }

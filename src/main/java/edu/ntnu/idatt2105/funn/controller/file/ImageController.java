@@ -3,13 +3,16 @@ package edu.ntnu.idatt2105.funn.controller.file;
 import edu.ntnu.idatt2105.funn.dto.file.ImageResponseDTO;
 import edu.ntnu.idatt2105.funn.dto.file.ImageUploadDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
+import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.file.FileNotFoundException;
+import edu.ntnu.idatt2105.funn.exceptions.user.BadAuthPrincipleException;
 import edu.ntnu.idatt2105.funn.model.file.Image;
 import edu.ntnu.idatt2105.funn.model.user.Role;
 import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.file.ImageService;
 import edu.ntnu.idatt2105.funn.service.file.ImageStorageService;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
+import edu.ntnu.idatt2105.funn.validation.AuthValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -39,6 +42,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+/**
+ * Controller for image endpoints.
+ * @author Callum G.
+ * @version 1.2 - 27.03.2023
+ */
 @RestController
 @RequestMapping(value = "/api/v1")
 @EnableAutoConfiguration
@@ -61,7 +69,10 @@ public class ImageController {
    * @throws MalformedURLException If the image could not be found.
    */
   @GetMapping("/public/images/{id}")
-  @Operation(summary = "Gets a specific image from the server")
+  @Operation(
+    summary = "Returns an image from the server.", 
+    description = "Returns an image from the server as a resource to be downloaded."
+  )
   public ResponseEntity<Resource> getImage(@PathVariable Long id)
     throws IOException, MalformedURLException {
     Resource resource;
@@ -90,11 +101,16 @@ public class ImageController {
    * @throws DatabaseException If the images could not be saved.
    */
   @PostMapping("/private/images")
-  @Operation(summary = "Uploads images to the server")
+  @Operation(summary = "Uploads images to the server", 
+    description = "Uploads images to the server and returns a list of image response DTOs."
+  )
   public ResponseEntity<List<ImageResponseDTO>> uploadImages(
     @RequestParam("images") MultipartFile[] images,
-    @RequestParam("alts") String[] alts
+    @RequestParam("alts") String[] alts,
+    @AuthenticationPrincipal Auth auth
   ) throws IOException, DatabaseException {
+    if (!AuthValidation.hasRole(auth, Role.ADMIN)) throw new AccessDeniedException("Access denied");
+
     List<ImageResponseDTO> dtos = new ArrayList<>();
     Map<MultipartFile, String> imageAltMap = IntStream
       .range(0, images.length)
@@ -161,22 +177,23 @@ public class ImageController {
    * @throws DatabaseException If the image could not be deleted.
    */
   @DeleteMapping("/private/images/{id}")
-  @Operation(summary = "Deletes an image from the server")
+  @Operation(summary = "Deletes an image from the server", 
+    description = "Deletes an image from the server and returns a response entity."
+  )
   public ResponseEntity<String> deleteImage(
     @PathVariable Long id,
     @AuthenticationPrincipal Auth auth
-  ) throws FileNotFoundException, IOException, DatabaseException {
+  ) throws FileNotFoundException, IOException, DatabaseException, PermissionDeniedException {
     LOGGER.info("Image delete request received for id {}", id);
 
     Image tmp = imageService.getFile(id);
 
     if (
-      !listingService
-        .getListing(tmp.getListingId())
-        .getUser()
-        .getUsername()
-        .equals(auth.getUsername()) &&
-      auth.getRole() != Role.ADMIN
+      !AuthValidation.hasRoleOrIsUser(
+        auth,
+        Role.ADMIN,
+        listingService.getListing(tmp.getListingId()).getUser().getUsername()
+      )
     ) throw new AccessDeniedException("You do not have access to this resource");
 
     imageService.deleteFile(id);

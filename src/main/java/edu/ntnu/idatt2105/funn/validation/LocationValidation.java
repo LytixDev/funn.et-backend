@@ -7,7 +7,7 @@ import edu.ntnu.idatt2105.funn.validation.rules.LocationValidationRules;
  * @author Callum G.
  * @version 1.0 - 27.03.2023
  */
-public class LocationValidation extends Validation {
+public class LocationValidation extends BaseValidation {
 
   /**
    * Validate an address.
@@ -54,7 +54,11 @@ public class LocationValidation extends Validation {
    * @return True if the post code is valid, false otherwise.
    */
   public static boolean validatePostcode(int postcode) {
-    return isBetween(postcode, LocationValidationRules.POSTCODE_MIN_VALUE.getValue(), LocationValidationRules.POSTCODE_MAX_VALUE.getValue());
+    return isBetween(
+      postcode,
+      LocationValidationRules.POSTCODE_MIN_VALUE.getValue(),
+      LocationValidationRules.POSTCODE_MAX_VALUE.getValue()
+    );
   }
 
   /**

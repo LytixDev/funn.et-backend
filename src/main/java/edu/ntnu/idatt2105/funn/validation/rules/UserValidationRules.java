@@ -48,7 +48,7 @@ public enum UserValidationRules {
   }
 
   /**
-   * Getter for value.
+   * Getter for the value.
    * @return The value.
    */
   public int getValue() {

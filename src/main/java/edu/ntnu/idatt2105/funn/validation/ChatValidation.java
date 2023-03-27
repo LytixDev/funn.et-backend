@@ -6,8 +6,8 @@ package edu.ntnu.idatt2105.funn.validation;
  * @author Callum G.
  * @version 1.0 - 27.03.2023
  */
-public class ChatValidation extends Validation {
-    
+public class ChatValidation extends BaseValidation {
+
   /**
    * Validate a message.
    * @param message The message to validate.
