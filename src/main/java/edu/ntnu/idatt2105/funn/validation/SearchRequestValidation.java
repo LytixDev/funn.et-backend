@@ -19,7 +19,10 @@ public class SearchRequestValidation extends BaseValidation {
    * @return True if the key word is valid, false otherwise.
    */
   public static boolean validateJavaVariableName(String keyWord) {
-    return (isNotNullOrEmpty(keyWord) && keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern()));
+    if (isNotNullOrEmpty(keyWord)) 
+      return keyWord.matches(RegexPattern.JAVA_VARIABLE.getPattern());
+
+    return true;
   }
 
   /**
@@ -46,10 +49,9 @@ public class SearchRequestValidation extends BaseValidation {
    */
   public static boolean validatePageNumber(int pageNumber) {
     return (
-      isBetween(
+      isLargerThanOrEqual(
         pageNumber,
-        SearchRequestValidationRules.PAGE_MIN_SIZE.getValue(),
-        SearchRequestValidationRules.PAGE_MAX_SIZE.getValue()
+        SearchRequestValidationRules.PAGE_MIN_NUMBER.getValue()
       )
     );
   }
@@ -68,9 +70,12 @@ public class SearchRequestValidation extends BaseValidation {
     for (SortRequest sort : request.getSortRequests()) valid &=
       validateJavaVariableName(sort.getKeyWord());
 
-    valid &= validatePageSize(request.getSize());
-    valid &= validatePageNumber(request.getPage());
+    if (request.getPage() != null)
+      valid &= validatePageNumber(request.getPage());
 
+    if (request.getSize() != null)
+      valid &= validatePageSize(request.getSize());
+    
     return valid;
   }
 }

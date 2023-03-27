@@ -52,8 +52,8 @@ public class SearchSpecification<T> implements Specification<T> {
 
   public static Pageable getPageable(SearchRequest searchRequest) {
     return PageRequest.of(
-      searchRequest.getPage() > 0 ? searchRequest.getPage() : 0,
-      searchRequest.getSize() > 0 ? searchRequest.getSize() : 20
+      searchRequest.getPage() != null && searchRequest.getPage() > 0 ? searchRequest.getPage() : 0,
+      searchRequest.getSize() != null && searchRequest.getSize() > 0 ? searchRequest.getSize() : 20
     );
   }
 }
