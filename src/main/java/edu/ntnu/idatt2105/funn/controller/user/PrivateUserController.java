@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.2 - 24.03.2023
  */
 @RestController
-@RequestMapping(value = "/api/v1/private/user")
+@RequestMapping(value = "/api/v1/private/users")
 @EnableAutoConfiguration
 @RequiredArgsConstructor
 public class PrivateUserController {

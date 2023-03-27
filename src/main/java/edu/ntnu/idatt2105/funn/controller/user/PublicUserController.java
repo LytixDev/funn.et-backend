@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.1 - 22.03.2023
  */
 @RestController
-@RequestMapping(value = "/api/v1/public/user")
+@RequestMapping(value = "/api/v1/public/users")
 @EnableAutoConfiguration
 @RequiredArgsConstructor
 public class PublicUserController {
