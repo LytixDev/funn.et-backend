@@ -549,9 +549,11 @@ public class ListingController {
     LOGGER.info("Received request to delete listing with id: {}", id);
     Listing listing = listingService.getListing(id);
 
-    if (
-      !AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, listing.getUser().getUsername())
-    ) throw new PermissionDeniedException("You do not have permission to delete this listing");
+    if (!AuthValidation.hasRoleOrIsUser(auth, Role.ADMIN, listing.getUser().getUsername()))
+      throw new PermissionDeniedException("User is not an admin or the owner of the listing");
+
+    BiConsumer<String, Listing> saveImage = FauxPas.throwingBiConsumer(userService::favoriteOrUnfavoriteListing);
+    listing.getFavoritedBy().forEach(user -> saveImage.accept(user.getUsername(), listing));
 
     listing
       .getImages()
