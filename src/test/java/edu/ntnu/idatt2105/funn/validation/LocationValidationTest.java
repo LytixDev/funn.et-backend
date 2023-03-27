@@ -9,17 +9,20 @@ public class LocationValidationTest {
 
   private final String emptyString = "";
   private final String longString =
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message ";
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage";
 
   private final String goodAddress = "address";
   private final String badAddress = "address&&&address!";

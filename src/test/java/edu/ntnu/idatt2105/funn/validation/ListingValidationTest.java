@@ -41,17 +41,16 @@ public class ListingValidationTest {
     "message message message " +
     "message message message ";
 
-  private String goodCategoryName = "category";
-  private String badCategoryName = "category&&&category!";
+  private final String goodCategoryName = "category";
+  private final String badCategoryName = "category&&&category!";
 
-  private String goodDescription = "description";
+  private final String goodDescription = "description";
 
-  private double goodPrice = 100.0;
-  private double badPrice = -100.0;
+  private final double goodPrice = 100.0;
+  private final double badPrice = -100.0;
 
-  LocalDate dateBefore = LocalDate.now().minusMonths(1);
-  LocalDate dateNow = LocalDate.now();
-  LocalDate dateAfter = LocalDate.now().plusMonths(1);
+  private final LocalDate dateNow = LocalDate.now();
+  private final LocalDate dateAfter = LocalDate.now().plusMonths(1);
 
   @Test
   public void testCategoryNameValidateReturnsTrue() {

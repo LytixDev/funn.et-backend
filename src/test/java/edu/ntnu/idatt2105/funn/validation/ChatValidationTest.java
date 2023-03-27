@@ -15,16 +15,16 @@ import org.mockito.MockitoAnnotations;
 public class ChatValidationTest {
 
   @Mock
-  Chat mockChat;
+  private Chat mockChat;
 
   @Mock
-  User mockUser;
+  private User mockUser;
 
   @Mock
-  User mockUser2;
+  private User mockUser2;
 
   @Mock
-  Listing mockListing;
+  private Listing mockListing;
 
   private final String goodName = "goodName";
   private final String ownerName = "ownerName";
@@ -32,17 +32,20 @@ public class ChatValidationTest {
 
   private final String goodMessage = "goodMessage";
   private final String longMessage =
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message ";
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage" +
+    "messagemessagemessage";
 
   private final String nullMessage = null;
   private final String emptyMessage = "";

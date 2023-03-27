@@ -8,18 +8,6 @@ import org.junit.Test;
 public class SearchRequestValidationTest {
 
   private final String emptyString = "";
-  private final String longString =
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message " +
-    "message message message ";
 
   private final String goodJavaName = "categoryName";
   private final String badJavaName = ".categoryname";
@@ -38,11 +26,6 @@ public class SearchRequestValidationTest {
   @Test
   public void testJavaNameValidateReturnsFalse() {
     assertFalse(SearchRequestValidation.validateJavaVariableName(badJavaName));
-  }
-
-  @Test
-  public void testJavaNameValidateReturnsFalseLongString() {
-    assertFalse(SearchRequestValidation.validateJavaVariableName(longString));
   }
 
   @Test

@@ -20,6 +20,7 @@ public class RegexTest {
   private final String passwordMissingLowercase = "PASSWORD1";
 
   private final String usernameGood = "username";
+  private final String usernameUpperCase = "Username";
   private final String usernameBadChar = "user name";
   private final String usernameConsecutive = "user__name";
 
@@ -97,6 +98,11 @@ public class RegexTest {
   @Test
   public void testUsernameRegexWorksOnNormalUsername() {
     assertTrue(usernameGood.matches(RegexPattern.USERNAME.getPattern()));
+  }
+
+  @Test
+  public void testUsernameRegexWorksOnUpperCase() {
+    assertTrue(usernameUpperCase.matches(RegexPattern.USERNAME.getPattern()));
   }
 
   @Test

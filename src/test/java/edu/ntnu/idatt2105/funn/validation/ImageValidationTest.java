@@ -10,46 +10,46 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ImageValidationTest {
 
-  private MultipartFile jpgFile = new MockMultipartFile(
+  private final MultipartFile jpgFile = new MockMultipartFile(
     "test.jpg",
     "test.jpg",
     "image/jpeg",
     "test".getBytes()
   );
 
-  private MultipartFile pngFile = new MockMultipartFile(
+  private final MultipartFile pngFile = new MockMultipartFile(
     "test.png",
     "test.png",
     "image/png",
     "test".getBytes()
   );
 
-  private MultipartFile illegalFile = new MockMultipartFile(
+  private final MultipartFile illegalFile = new MockMultipartFile(
     "test.txt",
     "test.txt",
     "text/plain",
     "test".getBytes()
   );
 
-  private MultipartFile[] legaFiles = { jpgFile, pngFile };
+  private final MultipartFile[] legaFiles = { jpgFile, pngFile };
 
-  private MultipartFile[] illegalFiles = { jpgFile, pngFile, illegalFile };
+  private final MultipartFile[] illegalFiles = { jpgFile, pngFile, illegalFile };
 
-  private MultipartFile[] nullFiles = { jpgFile, pngFile, null };
+  private final MultipartFile[] nullFiles = { jpgFile, pngFile, null };
 
-  private MultipartFile[] emptyFiles = {
+  private final MultipartFile[] emptyFiles = {
     jpgFile,
     pngFile,
     new MockMultipartFile("test2.jpg", "test2.jpg", "image/jpeg", new byte[0]),
   };
 
-  private String imageAlt1 = "image1";
+  private final String imageAlt1 = "image1";
 
-  private String imageAlt2 = "image2";
+  private final String imageAlt2 = "image2";
 
-  private String imageAlt3 = "image3";
+  private final String imageAlt3 = "image3";
 
-  private String longString =
+  private final String longString =
     "message message message" +
     "message message message " +
     "message message message " +

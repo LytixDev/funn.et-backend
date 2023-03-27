@@ -12,7 +12,7 @@ public enum RegexPattern {
    * Must contain {@literal @} and at least one character after {@literal @}.
    */
   EMAIL(
-    "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+    "^(?=.{1,}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
   ),
   /**
    * Password regex pattern.
@@ -26,7 +26,7 @@ public enum RegexPattern {
    * Must not start or end with ., _, -.
    * Must not contain two or more consecutive ., _, -.pr
    */
-  USERNAME("^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,}[a-zA-Z0-9]$"),
+  USERNAME("^[a-zA-Z0-9](_(?!(.|_))|.(?!(_|.))|[a-zA-Z0-9]){1,}[a-zA-Z0-9]$"),
   /**
    * Name regex pattern.
    * Must be of characters a-z, A-Z, ', ., -.
