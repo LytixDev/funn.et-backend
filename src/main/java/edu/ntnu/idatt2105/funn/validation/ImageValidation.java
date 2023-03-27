@@ -46,8 +46,8 @@ public class ImageValidation extends BaseValidation {
    */
   public static boolean validateImageAlt(String imageAlt) {
     boolean valid = true;
-    if (isNotNullOrEmpty(imageAlt))
-      valid &= isSmallerThan(imageAlt, ImageValidationRules.IMAGE_ALT_MAX_LENGTH.getValue());
+    if (isNotNullOrEmpty(imageAlt)) valid &=
+      isSmallerThan(imageAlt, ImageValidationRules.IMAGE_ALT_MAX_LENGTH.getValue());
 
     return valid;
   }

@@ -26,10 +26,13 @@ public class ChatValidation extends BaseValidation {
    * @return True if the user is in the chat, false otherwise.
    */
   public static boolean isUserInChat(String username, Chat chat) {
-    return (
-      chat.getMessager().getUsername().equals(username) ||
-      chat.getListing().getUser().getUsername().equals(username)
-    );
+    if (isNotNullOrEmpty(username) && chat != null)
+      return (
+        chat.getMessager().getUsername().equals(username) ||
+        chat.getListing().getUser().getUsername().equals(username)
+      );
+    
+    return false;
   }
 
   /**
@@ -40,6 +43,9 @@ public class ChatValidation extends BaseValidation {
    * @return True if the user is in the chat, false otherwise.
    */
   public static boolean isUserInChat(String username, String chatMessager, String chatListingUser) {
-    return chatMessager.equals(username) || chatListingUser.equals(username);
+    if (isNotNullOrEmpty(username) && isNotNullOrEmpty(chatMessager) && isNotNullOrEmpty(chatListingUser))
+      return chatMessager.equals(username) || chatListingUser.equals(username);
+    
+    return false;
   }
 }

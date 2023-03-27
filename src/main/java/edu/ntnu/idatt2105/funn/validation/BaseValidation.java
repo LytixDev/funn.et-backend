@@ -154,9 +154,7 @@ public abstract class BaseValidation {
   }
 
   public static <T extends Number> boolean validatePositive(T[] array) {
-    for (T t : array)
-      if (!isLargerThan(t, 0))
-        return false;
+    for (T t : array) if (!isLargerThan(t, 0)) return false;
 
     return true;
   }

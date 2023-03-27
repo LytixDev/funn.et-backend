@@ -30,12 +30,11 @@ public class AuthValidation extends BaseValidation {
    * @return True if the Auth object is valid and has the correct role, false otherwise.
    */
   public static boolean hasRole(Auth auth, Role role) {
-    if (validateAuth(auth))
-      return auth.getRole() == role;
+    if (validateAuth(auth)) return auth.getRole() == role;
 
     return false;
   }
-  
+
   /**
    * Validates the Auth object and checks if the Auth object has the correct role or is the correct user.
    * @param auth The Auth object to validate.
@@ -44,8 +43,7 @@ public class AuthValidation extends BaseValidation {
    * @return True if the Auth object is valid and has the correct role or is the correct user, false otherwise.
    */
   public static boolean hasRoleOrIsUser(Auth auth, Role role, String username) {
-    if (validateAuth(auth))
-      return auth.getRole() == role || auth.getUsername().equals(username);
+    if (validateAuth(auth)) return auth.getRole() == role || auth.getUsername().equals(username);
 
     return false;
   }
@@ -57,8 +55,7 @@ public class AuthValidation extends BaseValidation {
    * @return True if the Auth object is valid and is not the specified user, false otherwise.
    */
   public static boolean isNotUser(Auth auth, String username) {
-    if (validateAuth(auth))
-      return !auth.getUsername().equals(username);
+    if (validateAuth(auth)) return !auth.getUsername().equals(username);
 
     return false;
   }
