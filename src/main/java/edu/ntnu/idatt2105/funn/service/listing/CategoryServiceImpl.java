@@ -52,8 +52,9 @@ public class CategoryServiceImpl implements CategoryService {
       throw new CategoryAlreadyExistsException();
     }
 
-    if (categoryRepository.existsByName(category.getName()))
-      throw new CategoryAlreadyExistsException();
+    if (
+      categoryRepository.existsByName(category.getName())
+    ) throw new CategoryAlreadyExistsException();
 
     return categoryRepository.save(category);
   }

@@ -15,7 +15,6 @@ import edu.ntnu.idatt2105.funn.repository.listing.CategoryRepository;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryService;
 import edu.ntnu.idatt2105.funn.service.listing.CategoryServiceImpl;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
