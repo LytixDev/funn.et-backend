@@ -28,39 +28,10 @@
 </div>
 
 
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is a project task made for the course IDATT2105 at NTNU. This repository is for the API part of the task.
+This is a project task made for the course IDATT2105 at NTNU. This repository is for the API part of the task. The frontend for the project can be found [here](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-frontend/). 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -86,47 +57,70 @@ To run this application you will need
    ```sh
    git clone git@gitlab.stud.idi.ntnu.no:ntcc/fullstack-backend.git
    ```
-2. Add the environment variables to a .env file, see .env.example for an example
+2. Change directory into the repo
+   ```sh
+   cd fullstack-backend
+   ```
+3. Add the environment variables to a .env file, see .env.example for an example
    ```sh
    cp .env.example .env
    ```
-3. Start the database (note: docker must be running)
+4. Start the database (note: docker must be running)
    ```sh
    make database
    ```
-3. Start the application
+5. Start the application
    ```sh
    make
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Other commands
+- `make database-down` - Deletes the database
+- `make test`- Runs all tests
+- `make install` - Installs the project
+- `make compile` - Compiles the source code
+- `make prettier` - Format source code
 
+
+### Project structure
+
+- [docker](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/docker) - Dockerfile
+- [test](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/test/java/edu/ntnu/idatt2105/funn) - Unit and integration tests
+- [resources](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/resources) - Spring boot config file and test data
+- [controller](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/controller) - REST Controller classes.
+- [dto](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/dto) - Data transfer objects
+- [exceptions](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/exceptions) - Custom created exceptions
+- [mapper](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/mapper) - Classes that map dto's to model classes
+- [model](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/model) - Model classes. Also known as entities in the spring world.
+- [repository](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/repository) - Repository interfaces that manages the model classes data
+- [security](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/security) - JWT security implementation and configuration
+- [service](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/tree/main/src/main/java/edu/ntnu/idatt2105/funn/service) - All services
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
+Some issues are marked with the `further-work` label. These are features we would have liked to include in the final project, but were not implemented due to time constraits. Some features may also require changes in the [frontend](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-frontend).
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+Some issues are marked with the `known-bug` label. These are bugs we have identified and are yet to fix.
 
 See the [open issues](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend/-/issues) for a full list of proposed features (and known issues).
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
 1. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-2. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+2. Commit your Changes (`git commit -m 'Add some AmazingFeature'`). Remember to run `make prettier` to format the code.
 3. Push to the Branch (`git push origin feature/AmazingFeature`)
 4. Open a Pull Request
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,15 +139,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 Thomas H. Svendal - thosve@stud.ntnu.no
 
 Project Link: [https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend](https://gitlab.stud.idi.ntnu.no/ntcc/fullstack-backend)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
