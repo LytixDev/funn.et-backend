@@ -47,7 +47,7 @@ public class TokenController {
   private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(
     Dotenv.load().get("JWT_TOKEN_VALIDITY") != null
       ? Long.parseLong(Dotenv.load().get("JWT_TOKEN_VALIDITY"))
-      : 30
+      : 240
   );
 
   /**
