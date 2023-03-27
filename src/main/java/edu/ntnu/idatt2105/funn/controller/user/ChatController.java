@@ -10,6 +10,7 @@ import edu.ntnu.idatt2105.funn.model.listing.Listing;
 import edu.ntnu.idatt2105.funn.model.user.Chat;
 import edu.ntnu.idatt2105.funn.model.user.Message;
 import edu.ntnu.idatt2105.funn.model.user.User;
+import edu.ntnu.idatt2105.funn.security.Auth;
 import edu.ntnu.idatt2105.funn.service.listing.ListingService;
 import edu.ntnu.idatt2105.funn.service.user.ChatService;
 import edu.ntnu.idatt2105.funn.service.user.UserService;
@@ -58,8 +59,9 @@ public class ChatController {
   @PostMapping(value = "/listing/{id}/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ChatDTO> createChat(
     @PathVariable("id") Long id,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws ListingNotFoundException, UserDoesNotExistsException, NullPointerException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Creating chat between user {} and listing {}", username, id);
 
     Listing listing = null;
@@ -121,8 +123,9 @@ public class ChatController {
   @GetMapping(value = "/chat/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<ChatDTO> getChat(
     @PathVariable("id") Long chatId,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws UserDoesNotExistsException, NullPointerException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Getting chat {}", chatId);
 
     User user = userService.getUserByUsername(username);
@@ -160,8 +163,9 @@ public class ChatController {
   public ResponseEntity<ChatDTO> getChatByListingAndUser(
     @PathVariable("id") Long listingId,
     @PathVariable("username") String pathUsername,
-    @AuthenticationPrincipal String username
+    @AuthenticationPrincipal Auth auth
   ) throws UserDoesNotExistsException, NullPointerException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Getting chat by listing {} and user {}", listingId, pathUsername);
 
     Listing listing = listingService.getListing(listingId);
@@ -198,8 +202,9 @@ public class ChatController {
    * @return The chats.
    */
   @GetMapping(value = "/chat", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public ResponseEntity<List<ChatDTO>> getChats(@AuthenticationPrincipal String username)
+  public ResponseEntity<List<ChatDTO>> getChats(@AuthenticationPrincipal Auth auth)
     throws UserDoesNotExistsException, NullPointerException {
+    final String username = auth != null ? auth.getUsername() : null;
     LOGGER.info("Getting chats for user {}", username);
 
     User user = userService.getUserByUsername(username);
@@ -241,9 +246,10 @@ public class ChatController {
   )
   public ResponseEntity<MessageDTO> sendMessage(
     @PathVariable("id") Long chatId,
-    @AuthenticationPrincipal String username,
+    @AuthenticationPrincipal Auth auth,
     @RequestBody MessageDTO messageDTO
   ) throws UserDoesNotExistsException, NullPointerException {
+    final String username = auth != null ? auth.getUsername() : null;
     User sender = userService.getUserByUsername(username);
 
     LOGGER.info("Message to send: {}", messageDTO.getMessage());

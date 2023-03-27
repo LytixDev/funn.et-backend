@@ -80,6 +80,7 @@ public class PublicUserController {
   @Operation(summary = "Create a new user", description = "Create a new user", tags = { "user" })
   public ResponseEntity<String> createUser(@RequestBody RegisterDTO registerUser)
     throws UsernameAlreadyExistsException, EmailAlreadyExistsException, DatabaseException {
+    
     LOGGER.info("POST request for user: {}", registerUser);
 
     User user = RegisterMapper.INSTANCE.registerDTOtoUser(registerUser);
