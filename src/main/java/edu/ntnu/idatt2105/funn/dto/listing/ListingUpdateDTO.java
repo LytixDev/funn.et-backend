@@ -20,5 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListingUpdateDTO extends ListingCreateDTO {
 
+    private String username;
+
     private List<Long> imagesToKeep;
 }

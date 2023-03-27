@@ -6,6 +6,7 @@ import edu.ntnu.idatt2105.funn.dto.listing.ListingCreateDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingDTO;
 import edu.ntnu.idatt2105.funn.dto.listing.ListingUpdateDTO;
 import edu.ntnu.idatt2105.funn.exceptions.DatabaseException;
+import edu.ntnu.idatt2105.funn.exceptions.PermissionDeniedException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingAlreadyExistsException;
 import edu.ntnu.idatt2105.funn.exceptions.listing.ListingNotFoundException;
 import edu.ntnu.idatt2105.funn.exceptions.location.LocationDoesntExistException;
@@ -302,8 +303,12 @@ public class ListingController {
     @PathVariable long id,
     @AuthenticationPrincipal Auth auth
   )
-    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException {
+    throws LocationDoesntExistException, DatabaseException, UserDoesNotExistsException, RuntimeException, IOException, PermissionDeniedException {
     LOGGER.info("Auth: {}", auth);
+    if (
+      auth == null ||
+      (!auth.getUsername().equals(listingDTO.getUsername()) && auth.getRole() != Role.ADMIN)
+    ) throw new AccessDeniedException("You do not have permission to update this listing");
 
     LOGGER.info("Recieveed request to update listing: {}", listingDTO);
 
