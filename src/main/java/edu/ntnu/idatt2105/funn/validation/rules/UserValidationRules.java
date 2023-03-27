@@ -15,7 +15,7 @@ public enum UserValidationRules {
   /**
    * Minimum length of a username.
    */
-  USERNAME_MIN_LENGTH(3),
+  USERNAME_MIN_LENGTH(4),
   /**
    * Maximum length of a username.
    */
